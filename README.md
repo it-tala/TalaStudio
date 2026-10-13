@@ -32,6 +32,24 @@ Copy `.env.example` to `.env`. Never commit `.env`.
 
 Until Supabase is live, set `PUBLIC_USE_SAMPLE_DATA=true` in `.env`. The site then shows a made-up catalog from `src/data/sample-catalog.ts` (4 collections, 19 products, no prices). It only applies when Supabase is not configured. **Never set this on Cloudflare Pages.**
 
+## Preview screenshots
+
+Full-page screenshots of the current build are in `docs/preview/`, for sharing with the team. They use the **sample catalog** (invented collections and placeholder images), so they show the layout, not final content.
+
+| File | Page |
+| --- | --- |
+| `01-home.png` | Home (desktop) |
+| `02-collections.png` | Collections |
+| `03-collection-kenari.png` | A collection page |
+| `04-product-bench.png` | A product page |
+| `05-about.png` | About (brand story) |
+| `06-the-studio.png` | The Studio, Jepara |
+| `07-request-catalog.png` | Request catalog form |
+| `08-home-mobile.png` | Home (phone, 390px) |
+| `09-collections-mobile.png` | Collections (phone) |
+
+Captured on 13 October 2026. Retake them after big layout or copy changes: build, run `npm run preview`, and capture each page full-page at 1440px wide (desktop) and 390px wide (phone).
+
 ## Structure
 
 ```
