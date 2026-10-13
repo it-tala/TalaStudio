@@ -15,20 +15,38 @@ const nav = [
   nav { display: none; gap: 1.6rem; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
   nav a { text-decoration: none; color: var(--text-soft); }
   nav a:hover { color: var(--text); }
-  details { position: relative; }
-  summary { cursor: pointer; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; list-style: none; }
-  .menu { position: absolute; right: 0; top: 2.2rem; background: var(--bg); border: 1px solid var(--line); padding: 1rem 1.4rem; display: grid; gap: .8rem; min-width: 14rem; }
-  .menu a { text-decoration: none; }
-  @media (min-width: 1000px) { nav { display: flex; } details { display: none; } }
+  nav .navcta { color: var(--accent); border-bottom: 1px solid currentColor; }
+
+  /* Mobile: logo + three-line menu button only */
+  details { position: static; }
+  summary { list-style: none; cursor: pointer; width: 2.75rem; height: 2.75rem; display: grid; place-content: center; gap: 5px; }
+  summary::-webkit-details-marker { display: none; }
+  summary span { display: block; width: 24px; height: 2px; background: var(--text); transition: transform .2s ease, opacity .2s ease; }
+  details[open] summary span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  details[open] summary span:nth-child(2) { opacity: 0; }
+  details[open] summary span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .menu { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--line); padding: 1.25rem 1.25rem 1.75rem; display: grid; gap: 1.1rem; }
+  .menu a { text-decoration: none; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
+  .menu .btn { text-align: center; margin-top: .5rem; color: #fff; font-size: .85rem; }
+
+  @media (min-width: 1000px) {
+    nav { display: flex; }
+    details { display: none; }
+  }
 </style>
 <header>
   <div class="wrap bar">
     <a class="logo" href="/">TalaStudio</a>
-    <nav aria-label="Main">{nav.map(([t, h]) => <a href={h}>{t}</a>)}</nav>
-    <a class="btn" href="/request-catalog" style="padding:.6rem 1.2rem;font-size:.75rem">Request catalog</a>
+    <nav aria-label="Main">
+      {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+      <a class="navcta" href="/request-catalog">Request catalog</a>
+    </nav>
     <details>
-      <summary>Menu</summary>
-      <div class="menu">{nav.map(([t, h]) => <a href={h}>{t}</a>)}</div>
+      <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+      <div class="menu">
+        {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+        <a class="btn" href="/request-catalog">Request catalog</a>
+      </div>
     </details>
   </div>
 </header>

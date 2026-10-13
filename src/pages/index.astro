@@ -90,7 +90,7 @@ const materials = [
       <p>A selection from the range. The full range is in the catalog.</p>
     </div>
     {collections.length > 0 ? (
-      <div class="coll-grid">
+      <div class="coll-grid scroll-x">
         {collections.map((c) => (
           <a class="coll-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
@@ -147,11 +147,6 @@ const materials = [
         <p class="eyebrow">For buyers</p>
         <h2>Mix collections in one container.</h2>
         <p class="text">For retailers, buying groups and distributors. Regional exclusivity is available and agreed case by case.</p>
-        <ul class="dash">
-          <li>Minimum orders and lead times on every product page</li>
-          <li>Carton, CBM and pieces per 40HQ for easy load planning</li>
-          <li>QC photos and shipping updates in your dashboard</li>
-        </ul>
         <div class="btns">
           <a class="btn" href="/how-a-container-works">How a container works</a>
           <a class="btn ghost" href="/partner-with-us">Partner with us</a>
