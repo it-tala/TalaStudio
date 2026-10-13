@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
+
+const points = [
+  ['Design', 'Collections are drawn here, by the team that will build them.'],
+  ['Engineering', 'Joints, finishes and cartons are worked out while we design, not after.'],
+  ['Costing', 'We cost each piece as it takes shape, so there are no surprises later.'],
+  ['Inspection', 'Every piece is checked before it is packed.'],
+];
+---
+<Base
+  title="The Studio, Jepara"
+  description="Our Jepara factory, turned into a design studio and showroom. See how TalaStudio designs, engineers and checks every piece, and book a visit by appointment."
+>
+  <section class="section dark">
+    <div class="wrap fade">
+      <p class="eyebrow">Jepara, Central Java</p>
+      <h1>We turned our factory into a studio.</h1>
+      <p class="lede">When we draw a new bed, the person who will build it is in the room. Design, engineering and costing happen in one place, so you get the forward look at a value price.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <Ph label="Studio shot: workshop floor" wide />
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <h2>One room, four jobs.</h2>
+      <div class="pts">
+        {points.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid-2">
+      <div>
+        <p class="eyebrow">The showroom</p>
+        <h2>See, sit and feel the range.</h2>
+        <p class="lede">Our showroom is in the studio. Visits are by appointment, so we can walk you through the collections at your pace.</p>
+        <a class="btn" href="/contact" style="margin-top:2rem">Book a visit</a>
+      </div>
+      <Ph label="Showroom" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pts { display: grid; gap: 2.5rem; margin-top: 3rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+  .pts p { color: var(--text-soft); margin-top: .6rem; }
+</style>

@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { story } from '../data/story';
+
+const steps = [
+  ['Design', 'The studio draws each collection in Jepara.'],
+  ['Engineer', 'Construction, materials and hardware are worked out while we draw.'],
+  ['Cost', 'Every line is priced before the design is final.'],
+  ['Build', 'Pieces are made a few steps from the design desks.'],
+  ['Check', 'We inspect every piece, not a sample.'],
+  ['Show', 'You follow orders, QC photos and shipping online.'],
+];
+---
+<Base
+  title="How we work"
+  description="TalaStudio engineers and costs each piece as it designs it, checks every piece, and shows buyers their orders online. The forward look at a value price."
+>
+  <PageHero eyebrow="How we work" title={story.title} lede="We are on the factory floor. We do not design a piece and then hand it off." />
+
+  <section class="section">
+    <div class="wrap">
+      <h2>How we do it</h2>
+      <div class="two">
+        {story.how.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <h2>Six steps, one place.</h2>
+      <ol class="steps">
+        {steps.map(([t, d], i) => <li><span>{String(i + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What you can count on</h2>
+      <div class="two four">
+        {story.counts.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .two { display: grid; gap: 2.5rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+  .two > div { border-top: 1px solid var(--line); padding-top: 1.2rem; }
+  .two p { color: var(--text-soft); margin-top: .5rem; }
+  .steps { list-style: none; padding: 0; display: grid; gap: 2.5rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .steps li { border-top: 1px solid var(--line); padding-top: 1.2rem; }
+  .steps span { font-size: .75rem; letter-spacing: .18em; color: var(--text-soft); }
+  .steps h3 { margin-top: .5rem; }
+  .steps p { color: var(--text-soft); margin-top: .5rem; }
+</style>

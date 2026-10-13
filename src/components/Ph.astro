@@ -1,0 +1,9 @@
+---
+// Placeholder until renders arrive. Pass `watermark` for product images.
+interface Props { label: string; wide?: boolean; watermark?: boolean }
+const { label, wide = false, watermark = false } = Astro.props;
+---
+<div class:list={['ph', { wide }]} role="img" aria-label={label}>
+  {watermark && <div class="wm" aria-hidden="true">TALASTUDIO</div>}
+  <span>{label}</span>
+</div>

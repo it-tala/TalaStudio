@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
+import { getCollection } from 'astro:content';
+import { getCollections, imageUrl } from '../lib/supabase';
+import { story } from '../data/story';
+
+const collections = (await getCollections()).slice(0, 6);
+const posts = (await getCollection('insights', (p) => !p.data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const proof = [
+  ['One place', 'Design, engineering, costing'],
+  ['Every piece checked', 'Inspected before it ships'],
+  ['Fully visible', 'Orders and QC photos online'],
+  ['Container direct', 'Jepara to your warehouse'],
+];
+const rooms = [
+  ['Bedroom', 'Rest, in calm shapes', 'bedroom'],
+  ['Living', 'Seating made to be sat in', 'living'],
+  ['Dining', 'Tables made to gather round', 'dining'],
+];
+const materials = [
+  ['Solid wood', 'Worked in Jepara, where the craft is local.'],
+  ['Finishes', 'Developed and tested in the studio.'],
+  ['Joinery', 'Engineered while we design, not after.'],
+];
+---
+<Base
+  title="TalaStudio | Furniture designed and made in Jepara"
+  description="TalaStudio designs bedroom, living and dining collections in Jepara, Indonesia, and sells them by the container to retailers, buying groups and distributors."
+>
+  <!-- 1. Hero -->
+  <section class="hero-full">
+    <div class="media" role="img" aria-label="Hero render placeholder"></div>
+    <div class="inner fade">
+      <p class="eyebrow">Jepara, Indonesia</p>
+      <h1>{story.headline}</h1>
+      <p class="text">{story.promise}</p>
+      <div class="btns">
+        <a class="btn" href="/request-catalog">Request catalog</a>
+        <a class="btn ghost" href="/collections">View collections</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Proof strip -->
+  <section class="proof-strip">
+    <ul>{proof.map(([t, d]) => <li><b>{t}</b><span>{d}</span></li>)}</ul>
+  </section>
+
+  <!-- 3. Shop by space (overlay tiles) -->
+  <section class="section">
+    <div class="tiles-head">
+      <div><h2>By space</h2></div>
+      <a class="link" style="margin:0" href="/collections">All collections</a>
+    </div>
+    <ul class="tiles">
+      {rooms.map(([n, d]) => (
+        <li>
+          <a class="tile" href="/collections">
+            <Ph label={`${n} render`} watermark />
+            <div class="cap"><small>{d}</small><h3>{n}</h3><em>Explore</em></div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 4. Studio story -->
+  <section class="section alt">
+    <div class="split">
+      <div class="media"><Ph label="Jepara studio" /></div>
+      <div>
+        <p class="eyebrow">The studio</p>
+        <h2 class="statement">{story.title}</h2>
+        <p class="text">{story.paragraphs[2]}</p>
+        <a class="link" href="/the-studio">See the studio</a>
+        <a class="link" style="margin-left:2rem" href="/about">Our story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Collections -->
+  <section class="section">
+    <div class="coll-intro">
+      <p class="eyebrow">Collections</p>
+      <h2>Designed in-house.</h2>
+      <p>A selection from the range. The full range is in the catalog.</p>
+    </div>
+    {collections.length > 0 ? (
+      <div class="coll-grid">
+        {collections.map((c) => (
+          <a class="coll-card" href={`/collections/${c.slug}`}>
+            {imageUrl(c.hero_image_path)
+              ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
+              : <Ph label={`${c.name} render`} watermark />}
+            <small>{c.room}</small>
+            <h3>{c.name}</h3>
+            <p>{c.description}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="coll-intro">First collections arrive soon. <a href="/request-catalog">Request the catalog</a> to be first to see them.</p>
+    )}
+    <p style="text-align:center"><a class="link" href="/collections">Explore every collection</a></p>
+  </section>
+
+  <!-- 6. Materials -->
+  <section class="section alt">
+    <div class="tiles-head">
+      <div><p class="eyebrow">Materials and finishes</p><h2>Built to be used, made to last.</h2></div>
+    </div>
+    <ul class="tiles">
+      {materials.map(([n, d]) => (
+        <li>
+          <div class="tile">
+            <Ph label={`${n} detail`} />
+            <div class="cap"><h3>{n}</h3><small style="margin-top:6px;text-transform:none;letter-spacing:0;font-size:14px">{d}</small></div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 7. Journal -->
+  {posts.length > 0 && (
+    <section class="section">
+      <div class="tiles-head"><div><h2>Insights</h2></div><a class="link" style="margin:0" href="/insights">All articles</a></div>
+      <div class="journal">
+        {posts.map((p) => (
+          <a href={`/insights/${p.id}`}>
+            <time datetime={p.data.date.toISOString()}>{p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            <h3>{p.data.title}</h3><p>{p.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- 8. For buyers (dark split) -->
+  <section class="section dark">
+    <div class="split">
+      <div>
+        <p class="eyebrow">For buyers</p>
+        <h2>Mix collections in one container.</h2>
+        <p class="text">For retailers, buying groups and distributors. Regional exclusivity is available and agreed case by case.</p>
+        <ul class="dash">
+          <li>Minimum orders and lead times on every product page</li>
+          <li>Carton, CBM and pieces per 40HQ for easy load planning</li>
+          <li>QC photos and shipping updates in your dashboard</li>
+        </ul>
+        <div class="btns">
+          <a class="btn" href="/how-a-container-works">How a container works</a>
+          <a class="btn ghost" href="/partner-with-us">Partner with us</a>
+        </div>
+      </div>
+      <div class="media"><Ph label="Container load" /></div>
+    </div>
+  </section>
+
+  <!-- 9. Visit -->
+  <section class="section">
+    <div class="split right">
+      <div class="media"><Ph label="Showroom" /></div>
+      <div>
+        <p class="eyebrow">Visit us</p>
+        <h2>See, sit and feel the range.</h2>
+        <p class="text">Our showroom is the Jepara studio. Visits are by appointment.</p>
+        <div class="btns"><a class="btn" href="/contact">Book a visit</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Catalog -->
+  <section class="section alt">
+    <div class="split">
+      <div class="media"><Ph label="Catalog cover" /></div>
+      <div>
+        <p class="eyebrow">Catalog</p>
+        <h2>The full range, in one catalog.</h2>
+        <p class="text">Sizes, materials, finishes and container data for every piece. Tell us who you are and we will send it.</p>
+        <div class="btns"><a class="btn" href="/request-catalog">Request catalog</a></div>
+      </div>
+    </div>
+  </section>
+</Base>

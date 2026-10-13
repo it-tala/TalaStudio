@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Ph from '../components/Ph.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { demo } from '../data/demo-dashboard';
+---
+<Base
+  title="Buyer dashboard demo"
+  description="See how TalaStudio buyers follow orders, QC inspection photos and shipping online. A demo with sample data."
+>
+  <PageHero eyebrow="Demo" title="Follow your order, step by step." lede="Buyers see status, QC photos and shipping in one place. Everything below is sample data." />
+
+  <section class="section">
+    <div class="wrap">
+      <p class="badge">Sample data. Not a real order.</p>
+      <div class="head">
+        <div><p class="eyebrow">{demo.company}</p><h2>Order {demo.order}</h2></div>
+        <strong>{demo.status}</strong>
+      </div>
+
+      <ol class="stages">
+        {demo.stages.map((s, i) => <li class:list={{ done: i <= demo.current }}>{s}</li>)}
+      </ol>
+
+      <div class="panels">
+        <div>
+          <h3>Items</h3>
+          <table>
+            <thead><tr><th>Item</th><th>Qty</th><th>Status</th></tr></thead>
+            <tbody>{demo.items.map((i) => <tr><td>{i.name}</td><td>{i.qty}</td><td>{i.state}</td></tr>)}</tbody>
+          </table>
+        </div>
+        <div>
+          <h3>QC inspections</h3>
+          <div class="qc">
+            {demo.qc.map((q) => (
+              <div><Ph label={`QC photo: ${q.item}`} wide /><p>{q.date} · {q.result}</p></div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h3>Shipping</h3>
+          <dl>
+            <dt>Container</dt><dd>{demo.shipment.container}</dd>
+            <dt>ETD</dt><dd>{demo.shipment.etd}</dd>
+            <dt>ETA</dt><dd>{demo.shipment.eta}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Want this for your orders?" text="Every buyer gets a dashboard like this." />
+</Base>
+
+<style>
+  .badge { display: inline-block; background: var(--accent); color: #fff; padding: .3rem .8rem; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+  .head { display: flex; justify-content: space-between; align-items: end; margin-top: 1.5rem; gap: 1rem; flex-wrap: wrap; }
+  .stages { list-style: none; padding: 0; margin: 2rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .5rem; }
+  .stages li { border-top: 3px solid var(--line); padding-top: .6rem; font-size: .85rem; color: var(--text-soft); }
+  .stages li.done { border-color: var(--accent); color: var(--text); }
+  .panels { display: grid; gap: 3rem; margin-top: 3rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  th, td { text-align: left; padding: .7rem .5rem; border-bottom: 1px solid var(--line); }
+  th { font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); }
+  .qc { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin-top: 1rem; }
+  .qc p { color: var(--text-soft); font-size: .9rem; margin-top: .4rem; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 2rem; margin-top: 1rem; }
+  dt { color: var(--text-soft); } dd { margin: 0; }
+</style>

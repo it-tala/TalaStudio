@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ph from '../../components/Ph.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollections, getProducts, getProductImages, imageUrl } from '../../lib/supabase';
+
+export async function getStaticPaths() {
+  const [collections, products, images] = await Promise.all([getCollections(), getProducts(), getProductImages()]);
+  return collections.map((collection) => {
+    const pieces = products
+      .filter((p) => p.collection_id === collection.id)
+      .map((p) => ({ ...p, image: imageUrl(images.find((i) => i.product_id === p.id)?.image_path) }));
+    return { params: { slug: collection.slug }, props: { collection, pieces } };
+  });
+}
+
+const { collection, pieces } = Astro.props;
+const hero = imageUrl(collection.hero_image_path);
+const materials = [...new Set(pieces.flatMap((p) => p.materials ?? []))];
+const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
+---
+<Base
+  title={collection.name}
+  description={`${collection.name}: a TalaStudio ${collection.room} collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 160)}
+  image={hero ?? undefined}
+>
+  <section class="hero dark">
+    {hero ? <img src={hero} alt={`${collection.name} collection render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    <div class="wrap over fade">
+      <p class="eyebrow">{collection.room} collection</p>
+      <h1>{collection.name}</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">The collection</p>
+      <p class="intro">{collection.description}</p>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <h2>The {collection.name} pieces</h2>
+      <div class="cards">
+        {pieces.map((p) => (
+          <a class="card" href={`/products/${p.slug}`}>
+            {p.image ? <img src={p.image} alt={p.name} loading="lazy" /> : <Ph label={p.name} watermark />}
+            <h3>{p.name}</h3>
+            <p>{(p.finishes ?? []).length > 0 ? `${p.finishes!.length} finishes` : p.sku}</p>
+            <span class="link">View details</span>
+          </a>
+        ))}
+      </div>
+      {pieces.length === 0 && <p class="lede">Pieces are added as they are finalised.</p>}
+    </div>
+  </section>
+
+  {(materials.length > 0 || finishes.length > 0) && (
+    <section class="section">
+      <div class="wrap mats">
+        {materials.length > 0 && <div><h3>Materials</h3><ul>{materials.map((m) => <li>{m}</li>)}</ul></div>}
+        {finishes.length > 0 && <div><h3>Finishes</h3><ul>{finishes.map((f) => <li>{f}</li>)}</ul></div>}
+      </div>
+    </section>
+  )}
+
+  <CtaBand title={`The full ${collection.name} range is in the catalog.`} />
+</Base>
+
+<style>
+  .hero { position: relative; }
+  .hero :global(.ph), .hero img { aspect-ratio: 21 / 9; width: 100%; object-fit: cover; min-height: 22rem; }
+  .over { position: absolute; inset: auto 0 2.5rem 0; margin-inline: auto; }
+  .intro { font: 400 clamp(1.5rem, 3vw, 2.2rem)/1.35 'Cormorant Garamond', Georgia, serif; max-width: 48rem; }
+  .cards { display: grid; gap: 2rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .card { text-decoration: none; }
+  .card h3 { margin-top: 1rem; font-size: 1.35rem; }
+  .card p { color: var(--text-soft); font-size: .9rem; }
+  .card .link { margin-top: .6rem; font-size: .75rem; }
+  .mats { display: grid; gap: 3rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .mats ul { list-style: none; padding: 0; margin-top: 1rem; display: grid; gap: .4rem; color: var(--text-soft); }
+</style>

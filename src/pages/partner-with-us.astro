@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+---
+<Base
+  title="Partner with us"
+  description="TalaStudio offers regional exclusivity to retailers, buying groups and distributors. Terms are negotiated case by case."
+>
+  <PageHero eyebrow="Partner with us" title="Your region. Your range." lede="We offer regional exclusivity to the right partners. Terms are negotiated case by case." />
+
+  <section class="section">
+    <div class="wrap grid-2" style="align-items:start">
+      <div>
+        <h2>Who we work with</h2>
+        <ul class="list">
+          <li>Retailers</li>
+          <li>Buying groups</li>
+          <li>Distributors</li>
+        </ul>
+      </div>
+      <div>
+        <h2>What exclusivity means</h2>
+        <p class="lede" style="margin-top:1rem">A named territory where you are our only partner for an agreed range. We agree scope, duration and volumes together. There is no standard deal.</p>
+        <a class="btn" href="/contact" style="margin-top:2rem">Start the conversation</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { list-style: none; padding: 0; margin-top: 1.5rem; font: 400 1.8rem 'Cormorant Garamond', Georgia, serif; display: grid; gap: .6rem; }
+  .list li { border-bottom: 1px solid var(--line); padding-bottom: .6rem; }
+</style>

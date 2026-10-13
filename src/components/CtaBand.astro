@@ -1,0 +1,11 @@
+---
+interface Props { title?: string; text?: string }
+const { title = 'See the full range.', text = 'Tell us who you are and we will send the catalog.' } = Astro.props;
+---
+<section class="section alt">
+  <div class="wrap" style="text-align:center">
+    <h2>{title}</h2>
+    <p class="lede" style="margin-inline:auto">{text}</p>
+    <a class="btn" href="/request-catalog" style="margin-top:2rem">Request catalog</a>
+  </div>
+</section>

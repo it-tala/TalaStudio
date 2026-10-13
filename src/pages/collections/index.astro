@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ph from '../../components/Ph.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollections, imageUrl } from '../../lib/supabase';
+
+const all = await getCollections();
+const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining']] as const;
+const present = groups.filter(([r]) => all.some((c) => c.room === r));
+---
+<Base
+  title="Collections"
+  description="TalaStudio bedroom, living and dining collections, designed and engineered in Jepara, Indonesia. The full range is in the catalog."
+>
+  <section class="section" style="padding-bottom:2rem">
+    <div class="coll-intro">
+      <p class="eyebrow">Collections</p>
+      <h1>Designed in-house.</h1>
+      <p>Each collection is drawn, engineered and costed in our Jepara studio. A selection is shown here. The full range is in the catalog.</p>
+    </div>
+    {present.length > 0 && (
+      <nav class="chips" aria-label="Rooms">
+        <a class="chip" href="#all">All</a>
+        {present.map(([r, l]) => <a class="chip" href={`#${r}`}>{l}</a>)}
+      </nav>
+    )}
+  </section>
+
+  {all.length === 0 && (
+    <section class="section alt"><p class="coll-intro" style="margin:0 auto">Collections are being rendered now. They appear here as each one is ready.</p></section>
+  )}
+
+  {present.map(([room, label]) => (
+    <section class="section" id={room} style="padding-top:2rem">
+      <div class="tiles-head"><div><h2>{label}</h2></div></div>
+      <div class="coll-grid">
+        {all.filter((c) => c.room === room).map((c) => (
+          <a class="coll-card" href={`/collections/${c.slug}`}>
+            {imageUrl(c.hero_image_path)
+              ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
+              : <Ph label={`${c.name} render`} watermark />}
+            <small>{label}</small>
+            <h3>{c.name}</h3>
+            <p>{c.description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <CtaBand />
+</Base>
