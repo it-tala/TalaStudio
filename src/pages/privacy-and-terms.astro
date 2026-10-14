@@ -2,44 +2,56 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 
-// DRAFT FOR LEGAL REVIEW. Written to the usual standard for a B2B furniture manufacturer's site.
-// Have a lawyer check it, and update the legal entity and governing law once the Hong Kong company is set up.
-const updated = '13 October 2026';
+// DRAFT v2 FOR LEGAL REVIEW. Built from the stack's real data flows (see README, "Privacy and terms").
+// Still needs: the legal entity and address, retention periods, governing law (README open questions 1, 4, 5).
+const updated = '14 October 2026';
 
 const privacy = [
   ['who-we-are', 'Who we are', [
-    'TalaStudio ("we", "us") designs furniture collections in Jepara, Indonesia, and sells them by the container to trade buyers: retailers, buying groups and distributors.',
-    'We are the controller of the personal data described here. Contact us at hello@talastudio.net for any privacy question.',
+    'TalaStudio ("we", "us") is a furniture design and engineering studio in Jepara, Indonesia. We design bedroom, living and dining collections, have them built by partner factories, and sell them by the container to trade buyers: retailers, buying groups and distributors.',
+    'We are responsible for the personal data described here. Contact us at hello@talastudio.net for any privacy question. The company that deals with you is named in your quote or sales agreement.',
   ]],
   ['what-we-collect', 'What we collect', [
     'Catalog request form: your full name, company, country, email address, phone number (optional), buyer type and message.',
-    'Emails and calls with us: the content of what you send, and notes we keep about the conversation.',
+    'Buyer accounts and orders: if you become a buyer, your login details, the names and work contact details of your team, orders, production status, inspection photos, shipping details and the emails and notes about your account.',
+    'Emails, calls and meetings with us: what you send, and notes we keep about the conversation.',
     'Website usage: page views, referrer, country, device and browser type, collected by privacy-friendly analytics without advertising cookies.',
+    'Social media: if you message or interact with our LinkedIn, Instagram or Pinterest accounts, we see what you send us and your public profile name.',
     'We do not run a shop and we do not collect payment card details on this site.',
+  ]],
+  ['where-it-comes-from', 'Where it comes from', [
+    'Mostly from you: the form, your emails, your orders.',
+    'For business outreach, we may also receive business contact details (name, job title, company, work email) from public sources and business contact databases. We use them only to contact you about our collections.',
   ]],
   ['why-we-use-it', 'Why we use it', [
     'To send you the catalog and reply to your request.',
-    'To follow up about your interest and manage our relationship with your company.',
+    'To manage our relationship with your company and run your orders, including inspection and shipping.',
+    'To send business-to-business messages about our collections, with a clear way to opt out (see Marketing emails).',
     'To keep the website secure, prevent spam and understand which pages are useful.',
     'To meet legal obligations.',
-    'Where the law requires a legal basis, we rely on our legitimate interest in responding to business enquiries and running a trade website, on steps taken at your request before an agreement, and on legal obligation. We do not rely on consent for the form, and you can ask us to stop contacting you at any time.',
+    'Where the law requires a legal basis, we rely on our legitimate interest in responding to business enquiries and promoting our products to businesses, on steps taken at your request before or under an agreement, and on legal obligation. We do not rely on consent for the form.',
+  ]],
+  ['marketing-emails', 'Marketing emails', [
+    'We may email business contacts about our collections. Every commercial email identifies us, includes our contact details and has an unsubscribe link or a plain way to ask us to stop. We act on opt-outs promptly and keep a note so we do not contact you again.',
+    'You can also write to hello@talastudio.net at any time.',
   ]],
   ['sharing', 'Who we share it with', [
     'Our sales team has access. We do not sell or rent your personal data.',
-    'Service providers process data for us only to run the site and our communications: database and hosting (Supabase, Cloudflare), email (Google Workspace and our email delivery provider), spam protection (Cloudflare Turnstile) and analytics (Cloudflare Web Analytics, Google Search Console).',
-    'We may disclose data if required by law, or to protect our rights, or in a sale or restructuring of the business.',
+    'Service providers process data for us only to run the site, our communications and our sales work: database and hosting (Supabase, Cloudflare), email (Google Workspace and our email delivery provider), spam protection (Cloudflare Turnstile), analytics (Cloudflare Web Analytics, Google Search Console), and tools for business outreach and social media scheduling.',
+    'Partner factories receive the product and order specifications they need to build and ship your order. We do not give them your personal data beyond what that requires.',
+    'We may disclose data if required by law, to protect our rights, or in a sale or restructuring of the business.',
   ]],
   ['transfers', 'International transfers', [
-    'We operate from Indonesia and sell mainly to buyers in the United States. Your data may be processed in countries other than your own, including by providers in the United States and the European Union. Where required, we use appropriate safeguards such as standard contractual clauses.',
+    'We operate from Indonesia and sell mainly to buyers in the United States. Your data may be processed in other countries, including by providers in the United States and the European Union. Where required, we use appropriate safeguards such as standard contractual clauses.',
   ]],
   ['retention', 'How long we keep it', [
-    'We keep catalog requests and related records for as long as we have a business relationship or a reasonable prospect of one, then delete or anonymise them. We keep records for longer where the law requires it, for example order and tax records.',
+    'We keep catalog requests, prospect records and account data for as long as we have a business relationship or a reasonable prospect of one, then delete or anonymise them. We keep order, tax and accounting records for as long as the law requires. If you ask us to stop contacting you, we keep only enough to honour that request.',
   ]],
   ['security', 'Security', [
-    'Data is stored in a managed database with row-level access controls, and access is limited to staff with a business need and protected by two-step login. No system is perfectly secure, but we take reasonable steps to protect your data.',
+    'Data is stored in a managed database with row-level access controls. Access is limited to staff with a business need and protected by two-step login. Prices and financial records are restricted to named owners. No system is perfectly secure, but we take reasonable steps to protect your data.',
   ]],
-  ['rights', 'Your rights', [
-    'Depending on where you live, you may have the right to access, correct, delete or export your personal data, to object to or restrict our use of it, and to withdraw consent where we rely on it. This includes rights under the GDPR and UK GDPR for people in Europe and the UK, and under US state laws such as the California Consumer Privacy Act.',
+  ['rights', 'Your rights and choices', [
+    'Depending on where you live, you may have the right to access, correct, delete or export your personal data, to object to or restrict our use of it, to opt out of direct marketing, and to withdraw consent where we rely on it. This includes rights under data protection laws in Hong Kong, Indonesia, the EU and UK (GDPR and UK GDPR), and US state laws such as California\'s.',
     'Email hello@talastudio.net and we will respond within the time the law requires. You can also complain to your local data protection authority. We do not sell personal data and we do not use it for cross-context advertising.',
   ]],
   ['cookies', 'Cookies and analytics', [
@@ -61,20 +73,24 @@ const terms = [
     'Content on this site is for information only and is not an offer to sell. We do not publish prices. Prices, minimum order quantities, lead times and availability are provided in quotes and our catalog, and apply only when confirmed in writing.',
   ]],
   ['orders', 'Orders and sales terms', [
-    'Orders are governed by a separate written agreement or accepted quote between you and us. It will set out the price, Incoterms (typically FOB Indonesia), payment terms, production and delivery schedule, inspection, warranty and dispute resolution. Where it conflicts with these terms, the agreement prevails.',
+    'Orders are governed by a separate written agreement or accepted quote between you and us. It sets out the price, Incoterms (typically FOB Indonesia), payment terms, production and delivery schedule, inspection, warranty and dispute resolution. Where it conflicts with these terms, the agreement prevails.',
+  ]],
+  ['exclusivity', 'Regional exclusivity', [
+    'We offer regional exclusivity to selected partners, agreed case by case. Nothing on this site grants or promises exclusivity. It exists only in a written agreement signed by us.',
+  ]],
+  ['accounts', 'Buyer accounts and dashboard', [
+    'Approved buyers may receive an account to follow their orders, inspection photos and shipping. Keep your login private, tell us if you think it has been used without permission, and use the information only for your own orders. We may suspend an account that is misused.',
+    'The buyer dashboard page on this site is a demo with sample data. It does not show real orders, customers or shipments.',
   ]],
   ['accuracy', 'Product information', [
     'We take care to show our products accurately. Sizes, weights, carton data, colours and finishes shown online are approximate. Colours on screens vary, and natural materials such as wood differ in grain and tone. Confirm specifications and request samples before ordering.',
   ]],
   ['ip', 'Intellectual property', [
-    'All designs, drawings, renders, photographs, text, logos and other content on this site are owned by us or our licensors and are protected by copyright, design rights and other laws. You may view the site and share a link to it, but you may not copy, reproduce, modify, publish or use it to make products without our written permission.',
+    'All designs, drawings, renders, photographs, text, logos and other content on this site, and the TalaStudio name and logo, are owned by us or our licensors and are protected by copyright and other laws. You may view the site and share a link to it, but you may not copy, reproduce, modify, publish or use it to make products without our written permission.',
     'Product images are watermarked. Do not remove or hide a watermark.',
   ]],
   ['confidentiality', 'Confidential materials', [
-    'The catalog, drawings and any unreleased designs we share are confidential. Do not share them with third parties, and do not use them to have copies made, without our written consent. We may require a signed confidentiality agreement before sharing full collections.',
-  ]],
-  ['dashboard', 'Buyer dashboard demo', [
-    'The buyer dashboard page uses sample data to show how order tracking works. It does not show real orders, customers or shipments.',
+    'The catalog, drawings and any unreleased designs we share are confidential. Do not share them with third parties, including factories, and do not use them to have copies made, without our written consent. We may require a signed confidentiality agreement before sharing full collections.',
   ]],
   ['acceptable-use', 'Acceptable use', [
     'Do not misuse the site: do not attempt to gain unauthorised access, disrupt it, scrape it at scale, submit false or spam enquiries, or use it for anything unlawful.',
@@ -97,7 +113,7 @@ const toc = [['Privacy policy', privacy], ['Terms of use', terms]] as const;
 ---
 <Base
   title="Privacy and terms"
-  description="TalaStudio's privacy policy and terms of use: what we collect through the catalog form, how we protect it, your rights, and the terms for using this trade website."
+  description="TalaStudio's privacy policy and terms of use: what the catalog form collects, how we protect it, your rights, and the terms for using this site."
 >
   <PageHero eyebrow="Legal" title="Privacy and terms." lede={`Last updated ${updated}.`} />
 
@@ -116,7 +132,7 @@ const toc = [['Privacy policy', privacy], ['Terms of use', terms]] as const;
 
       <div class="body">
         <h2 id="privacy">Privacy policy</h2>
-        <p class="intro">This policy explains how TalaStudio handles personal data collected through this website, in particular the catalog request form.</p>
+        <p class="intro">This policy explains how TalaStudio handles personal data collected through this website, our catalog requests, our buyer accounts and our business outreach.</p>
         {privacy.map(([id, title, paras], i) => (
           <section id={id}>
             <h3>{i + 1}. {title}</h3>
