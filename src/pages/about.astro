@@ -20,7 +20,7 @@ const team = [
     <div class="wrap grid-2" style="align-items:start">
       <Ph label="Studio shot" />
       <div class="prose">
-        <p class="eyebrow">Our story</p>
+        <h2>Our story</h2>
         {story.paragraphs.map((p) => <p>{p}</p>)}
         <p class="close">{story.close}</p>
         <a class="btn" href="/request-catalog" style="margin-top:1.5rem">Request catalog</a>
@@ -51,7 +51,7 @@ const team = [
 
 <style>
   .prose p { margin-top: 1rem; font-size: 1.15rem; color: var(--text-soft); max-width: 40rem; }
-  .prose .eyebrow { margin-top: 0; font-size: .75rem; }
+  .prose h2 { margin-bottom: .4rem; }
   .prose .close { color: var(--text); font: 500 1.7rem/1.25 'Cormorant Garamond', Georgia, serif; margin-top: 1.8rem; }
   .counts, .team { display: grid; gap: 2rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
   .counts > div, .team > div { border-top: 1px solid var(--line); padding-top: 1rem; }

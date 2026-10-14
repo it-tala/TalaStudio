@@ -20,6 +20,7 @@ const topics = [
 
   <section class="section">
     <div class="wrap">
+      <h2>What to expect.</h2>
       <div class="grid">
         {topics.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
       </div>
@@ -32,7 +33,7 @@ const topics = [
       <ol class="flow">
         <li>Request the catalog and choose your pieces.</li>
         <li>We send a quote and confirm lead time.</li>
-        <li>We build, check and photograph each piece.</li>
+        <li>Our partner factories build to our drawings. We check and photograph each piece.</li>
         <li>You review the QC photos online.</li>
         <li>The container is loaded and ships.</li>
       </ol>
@@ -43,7 +44,7 @@ const topics = [
 </Base>
 
 <style>
-  .grid { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .grid { display: grid; gap: 2.5rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
   .grid > div { border-top: 1px solid var(--line); padding-top: 1.2rem; }
   .grid p { color: var(--text-soft); margin-top: .5rem; }
   .flow { margin-top: 2rem; padding-left: 1.4rem; display: grid; gap: .8rem; font-size: 1.15rem; max-width: 40rem; }

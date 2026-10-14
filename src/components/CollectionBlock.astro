@@ -10,7 +10,7 @@ const { name, slug, room, description, image, flip = false } = Astro.props;
 </style>
 <article class:list={[{ flip }]}>
   <a class="img" href={`/collections/${slug}`}>
-    {image ? <img src={image} alt={`${name} collection render`} loading="lazy" /> : <Ph label={`${name} render`} wide watermark />}
+    {image ? <img src={image} alt={`${name} collection, ${room.toLowerCase()} render`} loading="lazy" /> : <Ph label={`${name} render`} wide watermark />}
   </a>
   <div class="txt">
     <p class="eyebrow" style="margin:0">{room}</p>

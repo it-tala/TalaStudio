@@ -21,11 +21,11 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
 ---
 <Base
   title={collection.name}
-  description={`${collection.name}: a TalaStudio ${collection.room} collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 160)}
+  description={`${collection.name}: a TalaStudio ${collection.room} collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 155)}
   image={hero ?? undefined}
 >
   <section class="hero dark">
-    {hero ? <img src={hero} alt={`${collection.name} collection render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    {hero ? <img src={hero} alt={`${collection.name} collection, ${collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
     <div class="wrap over fade">
       <p class="eyebrow">{collection.room} collection</p>
       <h1>{collection.name}</h1>
