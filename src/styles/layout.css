@@ -63,7 +63,8 @@
 .coll-card { display: flex; flex-direction: column; text-decoration: none; }
 .coll-card .ph { aspect-ratio: 4 / 5; }
 .frame { position: relative; display: block; aspect-ratio: 1448 / 1086; overflow: hidden; background: var(--bg-alt); }
-.frame img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; }
+.frame img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
+.coll-card .frame img { object-fit: cover; }
 .coll-card small { margin-top: 16px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
 .coll-card h3 { font-size: 28px; margin: 6px 0; }
 .coll-card p { color: var(--text-soft); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
