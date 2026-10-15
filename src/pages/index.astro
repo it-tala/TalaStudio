@@ -4,10 +4,12 @@ import Ph from '../components/Ph.astro';
 import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
+import { edgeBackground } from '../lib/edge';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 
 const collections = (await getCollections()).slice(0, 6);
+const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
@@ -100,7 +102,7 @@ const materials = [
         {collections.map((c) => (
           <a class="coll-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
-              ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
+              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
               : <Ph label={`${c.name} render`} watermark />}
             {c.room !== 'other' && <small>{c.room}</small>}
             <h3>{c.name}</h3>

@@ -30,7 +30,7 @@ export const collectionEntries: Entry[] = [
       '09': { name: 'Mirror'},
     } },
   { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: null, published: true, captions: {
-      '01': { name: 'Bed' }, '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' },
+      '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' },
     } },
   { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: null, published: true, captions: {
       '01': { name: 'Night Table' },

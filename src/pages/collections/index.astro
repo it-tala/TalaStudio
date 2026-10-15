@@ -3,8 +3,10 @@ import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getCollections, imageUrl } from '../../lib/supabase';
+import { edgeBackground } from '../../lib/edge';
 
 const all = await getCollections();
+const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(all.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining'], ['other', 'Collections']] as const;
 const present = groups.filter(([r]) => all.some((c) => c.room === r));
 ---
@@ -37,7 +39,7 @@ const present = groups.filter(([r]) => all.some((c) => c.room === r));
         {all.filter((c) => c.room === room).map((c) => (
           <a class="coll-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
-              ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
+              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
               : <Ph label={`${c.name} render`} watermark />}
             {room !== 'other' && <small>{label}</small>}
             <h3>{c.name}</h3>

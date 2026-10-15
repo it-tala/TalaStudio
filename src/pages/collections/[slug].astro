@@ -14,7 +14,9 @@ export async function getStaticPaths() {
   });
 }
 
+import { edgeBackground } from '../../lib/edge';
 const { collection, pieces } = Astro.props;
+const gallery = await Promise.all((collection.gallery ?? []).map(async (g) => ({ ...g, bg: await edgeBackground(g.src) })));
 const hero = imageUrl(collection.hero_image_path);
 const materials = [...new Set(pieces.flatMap((p) => p.materials ?? []))];
 const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
@@ -41,14 +43,16 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   </section>
   )}
 
-  {(collection.gallery ?? []).length > 0 && (
+  {gallery.length > 0 && (
     <section class="section">
       <div class="wrap">
         <h2>The {collection.name} collection</h2>
         <div class="gallery">
-          {collection.gallery!.map((g, i) => (
+          {gallery.map((g, i) => (
             <figure>
-              <img src={g.src} alt={g.name ? `${collection.name} ${g.name}` : `${collection.name} collection, view ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+              <span class="frame" style={g.bg ? `background:${g.bg}` : undefined}>
+                <img src={g.src} alt={g.name ? `${collection.name} ${g.name}` : `${collection.name} collection, view ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+              </span>
               {g.name && (
                 <figcaption>{g.name}</figcaption>
               )}
@@ -105,8 +109,7 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
 </style>
 
 <style>
-  .gallery { display: grid; gap: 1rem; margin-top: 2rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+  .gallery { display: grid; gap: 1.6rem 1rem; margin-top: 2rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); align-items: start; }
   .gallery figure { margin: 0; }
-  .gallery img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--bg-alt); display: block; }
   .gallery figcaption { padding-top: .8rem; font-size: .8rem; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: var(--text-soft); }
 </style>
