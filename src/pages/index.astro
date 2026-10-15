@@ -4,6 +4,8 @@ import Ph from '../components/Ph.astro';
 import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
+import { showSection } from '../data/sections';
+import CtaBand from '../components/CtaBand.astro';
 
 const collections = (await getCollections()).slice(0, 6);
 const posts = (await getCollection('insights', (p) => !p.data.draft))
@@ -33,7 +35,7 @@ const materials = [
 >
   <!-- 1. Hero -->
   <section class="hero-full">
-    <div class="media" role="img" aria-label="Hero render placeholder"></div>
+    <div class="media" role="img" aria-label="Doheny collection, bedroom render" style="background-image:url(/collections/doheny/hero.jpg)"></div>
     <div class="inner fade">
       <p class="eyebrow">Jepara, Indonesia</p>
       <h1>{story.headline}</h1>
@@ -51,6 +53,7 @@ const materials = [
   </section>
 
   <!-- 3. Shop by space (overlay tiles) -->
+  {showSection.home.byRoom && (
   <section class="section">
     <div class="tiles-head">
       <div><h2>By space</h2></div>
@@ -67,8 +70,10 @@ const materials = [
       ))}
     </ul>
   </section>
+  )}
 
   <!-- 4. Studio story -->
+  {showSection.home.studioStory && (
   <section class="section alt">
     <div class="split">
       <div class="media"><Ph label="Jepara studio" /></div>
@@ -81,6 +86,7 @@ const materials = [
       </div>
     </div>
   </section>
+  )}
 
   <!-- 5. Collections -->
   <section class="section">
@@ -96,9 +102,9 @@ const materials = [
             {imageUrl(c.hero_image_path)
               ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
               : <Ph label={`${c.name} render`} watermark />}
-            <small>{c.room}</small>
+            {c.room !== 'other' && <small>{c.room}</small>}
             <h3>{c.name}</h3>
-            <p>{c.description}</p>
+            {c.description && <p>{c.description}</p>}
           </a>
         ))}
       </div>
@@ -109,6 +115,7 @@ const materials = [
   </section>
 
   <!-- 6. Materials -->
+  {showSection.home.materials && (
   <section class="section alt">
     <div class="tiles-head">
       <div><p class="eyebrow">Materials and finishes</p><h2>Built to be used, made to last.</h2></div>
@@ -124,6 +131,7 @@ const materials = [
       ))}
     </ul>
   </section>
+  )}
 
   <!-- 7. Journal -->
   {posts.length > 0 && (
@@ -141,6 +149,7 @@ const materials = [
   )}
 
   <!-- 8. For buyers (dark split) -->
+  {showSection.home.forBuyers && (
   <section class="section dark">
     <div class="split">
       <div>
@@ -155,8 +164,10 @@ const materials = [
       <div class="media"><Ph label="Container load" /></div>
     </div>
   </section>
+  )}
 
   <!-- 9. Visit -->
+  {showSection.home.visit && (
   <section class="section">
     <div class="split right">
       <div class="media"><Ph label="Showroom" /></div>
@@ -168,8 +179,10 @@ const materials = [
       </div>
     </div>
   </section>
+  )}
 
   <!-- 10. Catalog -->
+  {showSection.home.catalogImage ? (
   <section class="section alt">
     <div class="split">
       <div class="media"><Ph label="Catalog cover" /></div>
@@ -181,4 +194,7 @@ const materials = [
       </div>
     </div>
   </section>
+  ) : (
+    <CtaBand title="The full range, in one catalog." text="Sizes, materials, finishes and container data for every piece. Tell us who you are and we will send it." />
+  )}
 </Base>

@@ -21,24 +21,45 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
 ---
 <Base
   title={collection.name}
-  description={`${collection.name}: a TalaStudio ${collection.room} collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 155)}
+  description={`${collection.name}: a TalaStudio ${collection.room === 'other' ? '' : collection.room + ' '}collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 155)}
   image={hero ?? undefined}
 >
   <section class="hero dark">
-    {hero ? <img src={hero} alt={`${collection.name} collection, ${collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    {hero ? <img src={hero} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
     <div class="wrap over fade">
-      <p class="eyebrow">{collection.room} collection</p>
+      <p class="eyebrow">{collection.room === 'other' ? 'Collection' : `${collection.room} collection`}</p>
       <h1>{collection.name}</h1>
     </div>
   </section>
 
+  {collection.description && (
   <section class="section">
     <div class="wrap">
       <p class="eyebrow">The collection</p>
       <p class="intro">{collection.description}</p>
     </div>
   </section>
+  )}
 
+  {(collection.gallery ?? []).length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <h2>The {collection.name} collection</h2>
+        <div class="gallery">
+          {collection.gallery!.map((g, i) => (
+            <figure>
+              <img src={g.src} alt={g.name ? `${collection.name} ${g.name}` : `${collection.name} collection, view ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+              {g.name && (
+                <figcaption>{g.name}</figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {pieces.length > 0 && (
   <section class="section alt">
     <div class="wrap">
       <h2>The {collection.name} pieces</h2>
@@ -55,6 +76,7 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
       {pieces.length === 0 && <p class="lede">Pieces are added as they are finalised.</p>}
     </div>
   </section>
+  )}
 
   {(materials.length > 0 || finishes.length > 0) && (
     <section class="section">
@@ -80,4 +102,11 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   .card .link { margin-top: .6rem; font-size: .75rem; }
   .mats { display: grid; gap: 3rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
   .mats ul { list-style: none; padding: 0; margin-top: 1rem; display: grid; gap: .4rem; color: var(--text-soft); }
+</style>
+
+<style>
+  .gallery { display: grid; gap: 1rem; margin-top: 2rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+  .gallery figure { margin: 0; }
+  .gallery img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--bg-alt); display: block; }
+  .gallery figcaption { padding-top: .7rem; font: 500 .95rem/1.4 'Inter', system-ui, sans-serif; letter-spacing: .01em; color: var(--text); }
 </style>

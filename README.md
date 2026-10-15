@@ -128,56 +128,9 @@ Images load from a public storage bucket named `public-images` (set in `src/lib/
 - Add the variables above in Pages settings. The `functions/` folder deploys as Pages Functions.
 - Add the Cloudflare Web Analytics token and submit `https://talastudio.net/sitemap-index.xml` to Google Search Console.
 
-## Privacy and terms: basis and open questions
+## Privacy and terms
 
-The privacy policy and terms (`src/pages/privacy-and-terms.astro`) are a **draft for legal review**. They are built on how the stack really handles data and how TalaStudio does business.
-
-### What the stack collects
-
-| Data | Where it lives | Who can see it | Why |
-| --- | --- | --- | --- |
-| Catalog form: name, company, country, email, phone, buyer type, message | Supabase `catalog_requests`, emailed to David | Sales team | Send the catalog, follow up |
-| Prospects and conversation stage | Supabase `leads` | Staff | Manage the relationship |
-| Buyers, orders, QC photos, shipping, communications | Supabase (phase 3) | Staff. Buyers see their own | Run orders |
-| Invoices and payments | Supabase | Evin and David only | Billing |
-| Visit statistics | Cloudflare Web Analytics, Google Search Console | Team | Understand traffic |
-| Spam checks | Cloudflare Turnstile | Cloudflare | Block bots |
-| Email and notes | Google Workspace, email delivery provider | Team | Communication |
-| Prospect data for cold outreach | Apollo (used by David) | David | Buyer outreach emails |
-| Social interactions | LinkedIn, Instagram, Pinterest, Metricool | Team | Marketing |
-
-### Business facts that shape the terms
-
-- B2B only: retailers, buying groups and distributors, mainly in the US. No shop, no prices, no card payments on the site.
-- TalaStudio designs and engineers. Partner factories build to its drawings.
-- Designs, renders and the catalog are confidential and watermarked. The full range is only in the catalog.
-- Orders are governed by a separate written agreement (FOB Indonesia). Regional exclusivity is negotiated case by case and exists only in a signed agreement.
-- Buyers get an online dashboard. The public page is a demo with sample data.
-
-### Laws to check with a lawyer
-
-- Hong Kong: Personal Data (Privacy) Ordinance, including direct marketing rules.
-- Indonesia: Personal Data Protection Law (Law 27 of 2022).
-- US: CAN-SPAM for commercial email. State privacy laws such as California apply only above certain thresholds.
-- EU and UK: GDPR and UK GDPR if buyers or prospects are there. Cold email to businesses is treated differently in each country.
-
-### Open questions (need an answer before the text is final)
-
-| # | Question | Why it matters | Owner |
-| --- | --- | --- | --- |
-| 1 | When does the Hong Kong company exist, and who is the data controller until then? | The policy must name the legal entity and its address. Governing law depends on it | Evin |
-| 2 | Is Apollo already in use, and where does its data come from? | Cold outreach data comes from outside the site. It needs notice, a legal basis and an opt-out | David |
-| 3 | Will the live buyer dashboard have customer logins, and when? | Needs account data, QC photos and order data in the policy, plus account terms | Evin, Azkia |
-| 4 | How long do we keep prospect records that never buy? | Lawyers expect a specific retention period | Evin, lawyer |
-| 5 | Which law and courts govern disputes (for example Hong Kong)? | Fills the governing law clause | Evin, lawyer |
-| 6 | Are buyers or prospects in the EU or UK targeted? | Decides whether GDPR and UK GDPR wording is required | David |
-| 7 | What do partner factories receive: only drawings and order specifications, or buyer contact details too? | Decides the sharing section and the confidentiality terms | Evin |
-| 8 | What postal address goes in marketing emails? | CAN-SPAM requires a physical address and an unsubscribe link | Evin |
-| 9 | Is "protected by copyright" true yet (copyright registrations and supplier NDAs)? | The footer and terms claim protection | Evin |
-
-### Gaps the draft closes, and what it still cannot say
-
-The draft now covers outreach data, buyer accounts and the dashboard, partner factories, marketing emails with an opt-out, and the Hong Kong and Indonesian laws. It still cannot name the legal entity, give retention periods, or set the governing law until questions 1, 4 and 5 are answered.
+The privacy policy and terms (`src/pages/privacy-and-terms.astro`) are a draft and need a lawyer's review before launch.
 
 ## Status
 

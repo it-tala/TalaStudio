@@ -5,7 +5,7 @@ import CtaBand from '../../components/CtaBand.astro';
 import { getCollections, imageUrl } from '../../lib/supabase';
 
 const all = await getCollections();
-const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining']] as const;
+const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining'], ['other', 'Collections']] as const;
 const present = groups.filter(([r]) => all.some((c) => c.room === r));
 ---
 <Base
@@ -18,7 +18,7 @@ const present = groups.filter(([r]) => all.some((c) => c.room === r));
       <h1>Designed in-house.</h1>
       <p>Each collection is drawn, engineered and costed in our Jepara studio. A selection is shown here. The full range is in the catalog.</p>
     </div>
-    {present.length > 0 && (
+    {present.length > 1 && (
       <nav class="chips" aria-label="Rooms">
         <a class="chip" href="#all">All</a>
         {present.map(([r, l]) => <a class="chip" href={`#${r}`}>{l}</a>)}
@@ -32,16 +32,16 @@ const present = groups.filter(([r]) => all.some((c) => c.room === r));
 
   {present.map(([room, label]) => (
     <section class="section" id={room} style="padding-top:2rem">
-      <div class="tiles-head"><div><h2>{label}</h2></div></div>
+      {room !== 'other' && <div class="tiles-head"><div><h2>{label}</h2></div></div>}
       <div class="coll-grid">
         {all.filter((c) => c.room === room).map((c) => (
           <a class="coll-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
               ? <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" />
               : <Ph label={`${c.name} render`} watermark />}
-            <small>{label}</small>
+            {room !== 'other' && <small>{label}</small>}
             <h3>{c.name}</h3>
-            <p>{c.description}</p>
+            {c.description && <p>{c.description}</p>}
           </a>
         ))}
       </div>

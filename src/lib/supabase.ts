@@ -10,13 +10,16 @@ export const supabase = url && key ? createClient(url, key) : null;
 const BUCKET = 'public-images';
 
 export function imageUrl(path: string | null | undefined): string | null {
-  if (!path || !url) return null;
+  if (!path) return null;
+  if (path.startsWith('/')) return path; // static file in /public (v1)
+  if (!url) return null;
   return `${url}/storage/v1/object/public/${BUCKET}/${path}`;
 }
 
 export type Collection = {
   id: string; slug: string; name: string; room: 'bedroom' | 'living' | 'dining' | 'other';
   description: string | null; hero_image_path: string | null; sort_order: number;
+  gallery?: { src: string; name?: string; code?: string }[]; // static v1 only: extra images from /public
 };
 
 export type Product = {
@@ -36,20 +39,16 @@ const PRODUCT_COLS =
   'id, sku, collection_id, slug, name, description, width_cm, depth_cm, height_cm, materials, finishes, ' +
   'carton_length_cm, carton_width_cm, carton_height_cm, carton_weight_kg, cbm, pieces_per_40hq, moq, lead_time_days, sort_order';
 
-// Preview only: an explicit flag, and only when Supabase is not configured.
-export const useSample = !supabase && import.meta.env.PUBLIC_USE_SAMPLE_DATA === 'true';
-
 export async function getCollections(): Promise<Collection[]> {
-  if (useSample) return (await import('../data/sample-catalog')).sampleCollections;
-  if (!supabase) return [];
+  // V1: without Supabase the site uses the static list in src/data/collections.ts.
+  if (!supabase) return (await import('../data/collections')).staticCollections();
   const { data, error } = await supabase.from('collections').select(COLLECTION_COLS).order('sort_order');
   if (error) { console.warn('collections:', error.message); return []; }
   return (data ?? []) as unknown as Collection[];
 }
 
 export async function getProducts(): Promise<Product[]> {
-  if (useSample) return (await import('../data/sample-catalog')).sampleProducts;
-  if (!supabase) return [];
+  if (!supabase) return []; // V1 shows collections only
   const { data, error } = await supabase.from('products').select(PRODUCT_COLS).order('sort_order');
   if (error) { console.warn('products:', error.message); return []; }
   return (data ?? []) as unknown as Product[];
