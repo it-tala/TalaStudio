@@ -8,7 +8,14 @@ import { edgeBackground } from '../lib/edge';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 
-const collections = (await getCollections()).slice(0, 6);
+// Landing page shows three collections, one per room in this order: living, dining, bedroom.
+// Dining has none yet, so bedroom fills the spare slot (living 1 + bedroom 2).
+const all = await getCollections();
+const inRoom = (room: string, n: number) => all.filter((c) => c.room === room).slice(0, n);
+const living = inRoom('living', 1);
+const dining = inRoom('dining', 1);
+const collections = [...living, ...dining, ...inRoom('bedroom', 3 - living.length - dining.length)];
+const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -94,19 +101,26 @@ const materials = [
   <section class="section">
     <div class="coll-intro">
       <p class="eyebrow">Collections</p>
-      <h2>Designed in-house.</h2>
-      <p>A selection from the range. The full range is in the catalog.</p>
+      <h2>A first look at the range.</h2>
+      <p>Living and bedroom are ready to view, and dining follows. Each collection is drawn, engineered and costed in our Jepara studio. The full range is in the catalog.</p>
     </div>
     {collections.length > 0 ? (
-      <div class="coll-grid scroll-x">
+      <div class="feat-grid">
         {collections.map((c) => (
-          <a class="coll-card" href={`/collections/${c.slug}`}>
+          <a class="feat-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
               ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
               : <Ph label={`${c.name} render`} watermark />}
-            {c.room !== 'other' && <small>{c.room}</small>}
-            <h3>{c.name}</h3>
-            {c.description && <p>{c.description}</p>}
+            <div class="feat-body">
+              {c.room !== 'other' && <small>{c.room}</small>}
+              <h3>{c.name}</h3>
+              {c.description && <p>{c.description}</p>}
+              <span class="feat-meta">
+                <span><i>Room</i>{c.room === 'other' ? 'Collection' : c.room}</span>
+                {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
+              </span>
+              <em>Explore the collection</em>
+            </div>
           </a>
         ))}
       </div>

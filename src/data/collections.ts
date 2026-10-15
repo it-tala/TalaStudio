@@ -18,7 +18,7 @@ type Caption = { name: string; code?: string };
 type Entry = { slug: string; name: string; room: Collection['room']; description: string | null; published: boolean; captions?: Record<string, Caption> };
 
 export const collectionEntries: Entry[] = [
-  { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: null, published: true, captions: {
+  { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: 'A low bed with rounded wood edges and a padded headboard, with a night table, dresser and mirror to match.', published: true, captions: {
       '01': { name: 'Bed' },
       '02': { name: '6-Drawer Dresser'},
       '03': { name: 'Drawer Console with Mirror'},
@@ -29,7 +29,7 @@ export const collectionEntries: Entry[] = [
       '08': { name: 'Drawer Console'},
       '09': { name: 'Mirror'},
     } },
-  { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: null, published: true, captions: {
+  { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table to match. Simple to live with.', published: true, captions: {
       '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' },
     } },
   { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: null, published: true, captions: {
@@ -43,7 +43,7 @@ export const collectionEntries: Entry[] = [
   { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: true, captions: {
       '01': { name: 'Bed' }, '02': { name: 'Night Table' },
     } },
-  { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: null, published: true, captions: {
+  { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: true, captions: {
       '01': { name: 'Sofa' }, '02': { name: 'Sofa' }, '03': { name: 'Single Sofa' },
     } },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: true },

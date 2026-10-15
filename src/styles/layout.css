@@ -13,12 +13,12 @@
 @media (max-width: 700px) { .hero-full .inner { padding: 72px 20px 48px; } }
 
 /* Proof strip: dark band, dividers, centred caps */
-.proof-strip { background: var(--bg-dark); color: var(--on-dark); padding: 28px 0; }
+.proof-strip { background: var(--bg-dark); color: var(--on-dark); padding: 44px 0; }
 .proof-strip ul { list-style: none; margin: 0 auto; padding: 0; max-width: 1340px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .proof-strip li { padding: 4px 24px; border-left: 1px solid rgba(255,255,255,.18); text-align: center; }
 .proof-strip li:first-child { border-left: 0; }
-.proof-strip b { display: block; font-weight: 500; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 6px; text-decoration: underline; text-underline-offset: 4px; }
-.proof-strip span { display: block; font-size: 13px; line-height: 1.5; opacity: .75; }
+.proof-strip b { display: block; font-weight: 500; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 8px; text-decoration: underline; text-underline-offset: 4px; }
+.proof-strip span { display: block; font-size: 14px; line-height: 1.5; opacity: .75; }
 @media (max-width: 800px) { .proof-strip { display: none; } }
 
 /* Tiles: heading row + 3-up grid, optional overlay text */
@@ -59,6 +59,10 @@
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 40px; padding-inline: 24px; max-width: 1048px; }
 .chip { border: 1px solid var(--line); color: var(--text-soft); padding: 9px 16px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; text-decoration: none; }
 .chip:hover { border-color: var(--text); color: var(--text); }
+.dark .coll-intro { margin-bottom: 36px; }
+.coll-hero { min-height: calc(100svh - 4.5rem); display: flex; flex-direction: column; justify-content: center; background: linear-gradient(rgba(38, 34, 30, .58), rgba(38, 34, 30, .68)), url(/collections/living/silver-lake/hero.jpg) center / cover no-repeat var(--bg-dark); }
+.coll-hero .coll-intro p { color: color-mix(in srgb, var(--on-dark) 88%, transparent); }
+
 .coll-grid { display: grid; align-items: start; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 24px; margin: 0 auto; padding-inline: 24px; max-width: 1448px; }
 .coll-card { display: flex; flex-direction: column; text-decoration: none; }
 .coll-card .ph { aspect-ratio: 4 / 5; }
@@ -85,3 +89,43 @@
 .journal h3 { font-size: 26px; margin: 8px 0; }
 .journal p { color: var(--text-soft); font-size: 15px; }
 @media (max-width: 800px) { .journal { grid-template-columns: 1fr; } }
+
+/* Collections page: one sideways strip per room, next card peeking in */
+.coll-row { --edge: 24px; display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--edge); padding: 0 var(--edge) 12px; scrollbar-width: none; cursor: grab; }
+.coll-row::-webkit-scrollbar { display: none; }
+.coll-row.dragging { cursor: grabbing; scroll-snap-type: none; }
+.coll-row .coll-card { flex: 0 0 clamp(300px, 31vw, 640px); scroll-snap-align: start; }
+@media (max-width: 1000px) { .coll-row .coll-card { flex-basis: 46vw; } }
+@media (max-width: 600px) { .coll-row .coll-card { flex-basis: 78vw; } }
+.room-head { max-width: none; padding-inline: 24px; margin-bottom: 28px; }
+.coll-intro h2 { font-size: clamp(26px, 3.4vw, 40px); line-height: 1.1; margin-bottom: 16px; }
+.coll-row .coll-card img { user-select: none; -webkit-user-drag: none; }
+.row-arrows { display: flex; gap: 8px; }
+.arrow { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--text); font-size: 26px; line-height: 1; cursor: pointer; }
+.arrow:hover:not(:disabled) { border-color: var(--text); }
+.arrow:disabled { opacity: .3; cursor: default; }
+.coll-card.soon .frame { display: grid; place-items: center; background: var(--bg-alt); border: 1px dashed var(--line); }
+.soon-label { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--text-soft); }
+.coll-card.soon h3 { color: var(--text-soft); }
+.chips-bar { padding-block: 5rem 0; }
+.chips-bar .coll-intro { margin-bottom: 28px; }
+.chips-bar .chips { margin-bottom: 0; }
+
+/* Landing page collections: wide cards edge to edge (Harbour-style) */
+.feat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding-inline: 24px; margin: 0 auto 32px; }
+.feat-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.feat-card .frame { aspect-ratio: 4 / 3; }
+.feat-card .frame img { object-fit: cover; }
+.feat-body { padding: 22px 8px 0; display: flex; flex-direction: column; flex: 1; }
+.feat-body small { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-soft); }
+.feat-body h3 { font-size: clamp(26px, 2.4vw, 34px); margin: 8px 0 10px; }
+.feat-body p { color: var(--text-soft); font-size: 15px; line-height: 1.65; max-width: 46ch; flex: 1; }
+.feat-meta { display: flex; flex-wrap: wrap; gap: 14px 36px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.feat-meta span { display: block; font-size: 14px; text-transform: capitalize; }
+.feat-meta i { display: block; font-style: normal; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 4px; }
+.feat-body em { margin-top: 18px; font-style: normal; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 5px; }
+@media (max-width: 800px) {
+  .feat-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-inline: 20px; padding-bottom: 8px; scrollbar-width: none; }
+  .feat-grid::-webkit-scrollbar { display: none; }
+  .feat-card { flex: 0 0 82%; scroll-snap-align: start; }
+}

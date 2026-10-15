@@ -52,39 +52,39 @@ Until Supabase is live, set `PUBLIC_USE_SAMPLE_DATA=true` in `.env`. The site th
 
 ## Preview screenshots
 
-Full-page screenshots of the current build are in `docs/preview/`, for sharing with the team. They use the **sample catalog** (invented collections and placeholder images), so they show the layout, not final content.
+Full-page screenshots of the current build are in `docs/preview/`, for sharing with the team. They show the real static collections (bedroom and living, with dining marked "coming soon") and the Studio photos. Retaken on 15 October 2026.
 
 **Desktop (1440px wide)**
 
 | File | Page |
 | --- | --- |
 | `01-home.png` | Home |
-| `02-collections.png` | Collections |
-| `03-collection-kenari.png` | A collection page |
-| `04-product-bench.png` | A product page |
-| `05-about.png` | About (brand story) |
-| `06-the-studio.png` | The Studio, Jepara |
-| `07-request-catalog.png` | Request catalog form |
+| `02-collections.png` | Collections (full-screen intro, a sideways strip per room) |
+| `03-collection-doheny.png` | A collection page (gallery photos open in a zoom viewer on click) |
+| `04-about.png` | About (brand story) |
+| `05-the-studio.png` | The Studio, Jepara |
+| `06-request-catalog.png` | Request catalog form |
 
 **Mobile (390px wide, phone view)**
 
 | File | Page |
 | --- | --- |
-| `08-home-mobile.png` | Home |
-| `09-collections-mobile.png` | Collections |
-| `10-collection-mobile.png` | A collection page |
-| `11-product-mobile.png` | A product page |
-| `12-request-catalog-mobile.png` | Request catalog form |
-| `13-menu-open-mobile.png` | Menu open (top of screen only) |
+| `07-home-mobile.png` | Home |
+| `08-collections-mobile.png` | Collections |
+| `09-collection-mobile.png` | A collection page |
+| `10-request-catalog-mobile.png` | Request catalog form |
+| `11-menu-open-mobile.png` | Menu open (top of screen only) |
+
+There is no product page screenshot: V1 shows collections only, and product pages return when products come from Supabase.
 
 ### How mobile differs from desktop
 
 - **Header:** the logo and a three-line menu button only. The menu holds all links and the Request catalog button.
 - **Proof strip** (the dark band of four points under the hero): hidden on phones.
-- **Home tiles and collections:** "By space", "Materials" and "Collections" swipe sideways instead of stacking, to keep the page short.
-- **Collections page:** the grid drops to two columns on tablets and one on phones.
+- **Home collections:** the three featured collections (living, then dining when it exists, then bedroom) swipe sideways instead of stacking. "Materials" and "By space" do the same.
+- **Collections page:** each room is a sideways strip. Cards are about 78% of the screen wide, so the next one shows at the edge. The grid is no longer used there.
 
-Captured on 13 October 2026. Retake them after layout or copy changes: build, run `npm run preview`, then capture each page full-page. Use a real 390px phone view with 2x pixel density. A plain headless Chrome window will not go narrower than about 500px and gives a cropped result.
+Retake them after layout or copy changes: build, run `npm run preview`, then capture each page full-page. Use a real 390px phone view with 2x pixel density. A plain headless Chrome window will not go narrower than about 500px and gives a cropped result. Scroll the page to the bottom before capturing, so lazy images load.
 
 ## Structure
 

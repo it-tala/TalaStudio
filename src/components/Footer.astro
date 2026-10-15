@@ -7,7 +7,11 @@
   .cols { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2.5rem 10px; }
   .cols > div { flex: 0 0 auto; text-align: center; }
   .cols > div:first-child { max-width: 20rem; }
-  @media (max-width: 700px) { .cols > div { flex: 1 1 calc(50% - 10px); } }
+  /* Tablet and phone: two columns, two rows, text flush left so the columns line up */
+  @media (max-width: 1000px) {
+    .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 2rem; }
+    .cols > div, .cols > div:first-child { max-width: none; text-align: left; }
+  }
   h4 { font: 500 .75rem Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; opacity: .6; margin-bottom: 1rem; }
   ul { list-style: none; padding: 0; display: grid; gap: .5rem; }
   a { text-decoration: none; opacity: .85; }

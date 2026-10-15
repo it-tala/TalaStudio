@@ -8,47 +8,112 @@ import { edgeBackground } from '../../lib/edge';
 const all = await getCollections();
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(all.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining'], ['other', 'Collections']] as const;
-const present = groups.filter(([r]) => all.some((c) => c.room === r));
+// Bedroom, living and dining always show (dining reads "coming soon" until its first collection); "other" only when it has one.
+const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room === r));
 ---
 <Base
   title="Collections"
   description="TalaStudio bedroom, living and dining collections, designed and engineered in Jepara, Indonesia. The full range is in the catalog."
 >
-  <section class="section" style="padding-bottom:2rem">
+  <section class="section dark coll-hero">
     <div class="coll-intro">
       <p class="eyebrow">Collections</p>
       <h1>Designed in-house.</h1>
       <p>Each collection is drawn, engineered and costed in our Jepara studio. A selection is shown here. The full range is in the catalog.</p>
     </div>
-    {present.length > 1 && (
-      <nav class="chips" aria-label="Rooms">
-        <a class="chip" href="#all">All</a>
-        {present.map(([r, l]) => <a class="chip" href={`#${r}`}>{l}</a>)}
-      </nav>
-    )}
   </section>
 
   {all.length === 0 && (
     <section class="section alt"><p class="coll-intro" style="margin:0 auto">Collections are being rendered now. They appear here as each one is ready.</p></section>
   )}
 
-  {present.map(([room, label]) => (
+  {present.length > 1 && (
+    <section class="section chips-bar" id="all">
+      <div class="coll-intro">
+        <p class="eyebrow">By room</p>
+        <h2>Start with the room.</h2>
+        <p>Bedroom and living are open. Dining is on its way. Every collection is built the same way: we choose the joint, the finish and the hardware with the maker while we draw, so the piece you see is the piece we build. Open a collection to see it up close.</p>
+      </div>
+      <nav class="chips" aria-label="Rooms">
+        <a class="chip" href="#all">All</a>
+        {present.map(([r, l]) => <a class="chip" href={`#${r}`}>{l}</a>)}
+      </nav>
+    </section>
+  )}
+
+  {present.map(([room, label]) => {
+    const rows = all.filter((c) => c.room === room);
+    return (
     <section class="section" id={room} style="padding-top:2rem">
-      {room !== 'other' && <div class="tiles-head"><div><h2>{label}</h2></div></div>}
-      <div class="coll-grid">
-        {all.filter((c) => c.room === room).map((c) => (
+      {room !== 'other' && (
+        <div class="tiles-head">
+          <div><h2>{label}</h2></div>
+          {rows.length > 0 && (
+            <div class="row-arrows" aria-hidden="true">
+              <button type="button" class="arrow prev" data-dir="-1" tabindex="-1">&#8249;</button>
+              <button type="button" class="arrow next" data-dir="1" tabindex="-1">&#8250;</button>
+            </div>
+          )}
+        </div>
+      )}
+      <div class="coll-row" tabindex="0" aria-label={`${label} collections`}>
+        {rows.map((c) => (
           <a class="coll-card" href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
-              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
+              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" draggable="false" /></span>
               : <Ph label={`${c.name} render`} watermark />}
             {room !== 'other' && <small>{label}</small>}
             <h3>{c.name}</h3>
             {c.description && <p>{c.description}</p>}
           </a>
         ))}
+        {rows.length === 0 && (
+          <div class="coll-card soon">
+            <span class="frame"><span class="soon-label">Coming soon</span></span>
+            <small>{label}</small>
+            <h3>New collection in progress</h3>
+          </div>
+        )}
       </div>
     </section>
-  ))}
+    );
+  })}
 
   <CtaBand />
 </Base>
+
+<script>
+  // Each room is a sideways strip: the next card peeks in so it reads as one continuous row.
+  // Touch and trackpad scroll natively; arrows step one card; a mouse can drag.
+  document.querySelectorAll<HTMLElement>('.coll-row').forEach((row) => {
+    const head = row.previousElementSibling;
+    const prev = head?.querySelector<HTMLButtonElement>('.prev');
+    const next = head?.querySelector<HTMLButtonElement>('.next');
+    const arrows = head?.querySelector<HTMLElement>('.row-arrows');
+    const sync = () => {
+      const over = row.scrollWidth > row.clientWidth + 4;
+      if (arrows) arrows.style.visibility = over ? 'visible' : 'hidden';
+      if (prev) prev.disabled = row.scrollLeft < 4;
+      if (next) next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
+    };
+    const step = (d: number) => {
+      const card = row.querySelector<HTMLElement>('.coll-card');
+      row.scrollBy({ left: d * ((card?.offsetWidth ?? 400) + 24), behavior: 'smooth' });
+    };
+    prev?.addEventListener('click', () => step(-1));
+    next?.addEventListener('click', () => step(1));
+    row.addEventListener('scroll', sync, { passive: true });
+    addEventListener('resize', sync);
+    sync();
+    let drag: { x: number; l: number } | null = null;
+    let moved = false;
+    row.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') { drag = { x: e.clientX, l: row.scrollLeft }; moved = false; } });
+    addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      if (Math.abs(e.clientX - drag.x) > 5) { moved = true; row.classList.add('dragging'); }
+      if (moved) row.scrollLeft = drag.l - (e.clientX - drag.x);
+    });
+    addEventListener('pointerup', () => { drag = null; setTimeout(() => row.classList.remove('dragging'), 0); });
+    row.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
+  });
+</script>
