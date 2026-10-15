@@ -1,6 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ph from '../components/Ph.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+// Drop workshop-floor.(jpg|png|webp) and showroom.(jpg|png|webp) into public/studio/. Placeholder shows until the file exists.
+const studioImage = (name: string) => {
+  const ext = ['jpg', 'jpeg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'studio', `${name}.${e}`)));
+  return ext ? `/studio/${name}.${ext}` : null;
+};
+const workshop = studioImage('workshop-floor');
+const showroom = studioImage('showroom');
 
 const points = [
   ['Design', 'Collections are drawn here, by our own studio.'],
@@ -23,7 +33,7 @@ const points = [
 
   <section class="section">
     <div class="wrap">
-      <Ph label="Studio shot: workshop floor" wide />
+      {workshop ? <img class="studio-img wide" src={workshop} alt="TalaStudio workshop floor" loading="lazy" /> : <Ph label="Studio shot: workshop floor" wide />}
     </div>
   </section>
 
@@ -44,7 +54,7 @@ const points = [
         <p class="lede">Our showroom is in the studio. Visits are by appointment, so we can walk you through the collections at your pace.</p>
         <a class="btn" href="/contact" style="margin-top:2rem">Book a visit</a>
       </div>
-      <Ph label="Showroom" />
+      {showroom ? <img class="studio-img" src={showroom} alt="TalaStudio showroom" loading="lazy" /> : <Ph label="Showroom" />}
     </div>
   </section>
 </Base>
@@ -52,4 +62,9 @@ const points = [
 <style>
   .pts { display: grid; gap: 2.5rem; margin-top: 3rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
   .pts p { color: var(--text-soft); margin-top: .6rem; }
+</style>
+
+<style>
+  .studio-img { display: block; width: 100%; height: auto; }
+  .studio-img.wide { aspect-ratio: 16 / 9; object-fit: cover; }
 </style>

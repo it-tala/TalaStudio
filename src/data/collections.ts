@@ -1,8 +1,8 @@
 // V1 static collections. Replaced by the Supabase table when the admin page is built.
 //
 // To show a collection:  set published: true and drop its image at
-//   public/collections/<slug>/hero.jpg   (or .png / .webp)
-// Extra pictures: gallery-01.jpg, gallery-02.jpg ... in the same folder (shown on the collection page).
+//   public/collections/<room>/<slug>/hero.jpg   (or .png / .webp)   <room> = bedroom | living | dining (| other)
+// Extra pictures: gallery-01.jpg, gallery-02.jpg ... in the same folder (page URL stays /collections/<slug>) (shown on the collection page).
 // Only watermarked images go in public/. Keep the originals outside the repo.
 // To hide a collection:  set published: false. Nothing else changes.
 //
@@ -46,17 +46,17 @@ export const collectionEntries: Entry[] = [
 
 const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
-function heroPath(slug: string): string | null {
+function heroPath(room: string, slug: string): string | null {
   for (const ext of EXTENSIONS) {
-    if (existsSync(join(process.cwd(), 'public', 'collections', slug, `hero.${ext}`))) {
-      return `/collections/${slug}/hero.${ext}`;
+    if (existsSync(join(process.cwd(), 'public', 'collections', room, slug, `hero.${ext}`))) {
+      return `/collections/${room}/${slug}/hero.${ext}`;
     }
   }
   return null;
 }
 
-function galleryItems(slug: string, captions: Record<string, Caption> = {}): { src: string; name?: string; code?: string }[] {
-  const dir = join(process.cwd(), 'public', 'collections', slug);
+function galleryItems(room: string, slug: string, captions: Record<string, Caption> = {}): { src: string; name?: string; code?: string }[] {
+  const dir = join(process.cwd(), 'public', 'collections', room, slug);
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((f) => /^gallery-.*\.(jpe?g|png|webp)$/i.test(f))
@@ -64,7 +64,7 @@ function galleryItems(slug: string, captions: Record<string, Caption> = {}): { s
     .map((f) => {
       const n = f.match(/^gallery-(\d+)/i)?.[1];
       const cap = n ? captions[n] : undefined;
-      return { src: `/collections/${slug}/${f}`, name: cap?.name, code: cap?.code };
+      return { src: `/collections/${room}/${slug}/${f}`, name: cap?.name, code: cap?.code };
     });
 }
 
@@ -77,8 +77,8 @@ export function staticCollections(): Collection[] {
       name: c.name,
       room: c.room,
       description: c.description,
-      hero_image_path: heroPath(c.slug),
-      gallery: galleryItems(c.slug, c.captions),
+      hero_image_path: heroPath(c.room, c.slug),
+      gallery: galleryItems(c.room, c.slug, c.captions),
       sort_order: i + 1,
     }));
 }
