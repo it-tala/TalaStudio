@@ -108,5 +108,5 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   .gallery { display: grid; gap: 1rem; margin-top: 2rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
   .gallery figure { margin: 0; }
   .gallery img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--bg-alt); display: block; }
-  .gallery figcaption { padding-top: .7rem; font: 500 .95rem/1.4 'Inter', system-ui, sans-serif; letter-spacing: .01em; color: var(--text); }
+  .gallery figcaption { padding-top: .8rem; font-size: .8rem; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: var(--text-soft); }
 </style>

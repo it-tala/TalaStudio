@@ -1,20 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
-
-const url = import.meta.env.PUBLIC_SUPABASE_URL;
-const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
-// Null until the Supabase project exists. Pages show an empty state then.
-export const supabase = url && key ? createClient(url, key) : null;
-
-// Storage bucket for public (watermarked) images. Create it as public in Supabase.
-const BUCKET = 'public-images';
-
-export function imageUrl(path: string | null | undefined): string | null {
-  if (!path) return null;
-  if (path.startsWith('/')) return path; // static file in /public (v1)
-  if (!url) return null;
-  return `${url}/storage/v1/object/public/${BUCKET}/${path}`;
-}
+import { supabase, imageUrl } from './client';
+export { supabase, imageUrl };
 
 export type Collection = {
   id: string; slug: string; name: string; room: 'bedroom' | 'living' | 'dining' | 'other';
@@ -44,7 +29,19 @@ export async function getCollections(): Promise<Collection[]> {
   if (!supabase) return (await import('../data/collections')).staticCollections();
   const { data, error } = await supabase.from('collections').select(COLLECTION_COLS).order('sort_order');
   if (error) { console.warn('collections:', error.message); return []; }
-  return (data ?? []) as unknown as Collection[];
+  const collections = (data ?? []) as unknown as Collection[];
+  const { data: imgs, error: imgError } = await supabase
+    .from('collection_images')
+    .select('collection_id, image_path, caption, sort_order, created_at')
+    .order('sort_order')
+    .order('created_at');
+  if (imgError) console.warn('collection_images:', imgError.message);
+  for (const c of collections) {
+    c.gallery = (imgs ?? [])
+      .filter((i) => i.collection_id === c.id)
+      .map((i) => ({ src: imageUrl(i.image_path)!, name: i.caption || undefined }));
+  }
+  return collections;
 }
 
 export async function getProducts(): Promise<Product[]> {

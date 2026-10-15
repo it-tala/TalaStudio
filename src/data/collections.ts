@@ -21,11 +21,12 @@ export const collectionEntries: Entry[] = [
   { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: null, published: true, captions: {
       '01': { name: 'Bed' },
       '02': { name: '6-Drawer Dresser'},
-      '03': { name: 'Drawer Console'},
+      '03': { name: 'Drawer Console with Mirror'},
       '04': { name: 'Bed' },
       '05': { name: 'Bed' },
       '06': { name: 'Night Table' },
       '07': { name: '6-Drawer Dresser'},
+      '08': { name: 'Drawer Console'},
       '09': { name: 'Mirror'},
     } },
   { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: null, published: true, captions: {
@@ -33,10 +34,14 @@ export const collectionEntries: Entry[] = [
     } },
   { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: null, published: true, captions: {
       '01': { name: 'Night Table' },
+      '02': { name: 'Bed' },
     } },
-  { slug: 'beachwood', name: 'Beachwood', room: 'bedroom', description: null, published: true },
+  { slug: 'beechwood', name: 'Beechwood', room: 'bedroom', description: null, published: true, captions: {
+      '01': { name: 'Night Table' },
+      '02': { name: 'Bed' },
+    } },
   { slug: 'silver-lake', name: 'Silver Lake', room: 'other', description: null, published: false }, // no renders yet
-  { slug: 'brentwood', name: 'Brentwood', room: 'other', description: null, published: false }, // no renders yet
+  { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: true },
 ];
 
 const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
