@@ -40,7 +40,12 @@ export const collectionEntries: Entry[] = [
       '01': { name: 'Night Table' },
       '02': { name: 'Bed' },
     } },
-  { slug: 'silver-lake', name: 'Silver Lake', room: 'other', description: null, published: false }, // no renders yet
+  { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: true, captions: {
+      '01': { name: 'Bed' }, '02': { name: 'Night Table' },
+    } },
+  { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: null, published: true, captions: {
+      '01': { name: 'Sofa' }, '02': { name: 'Sofa' }, '03': { name: 'Single Sofa' },
+    } },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: true },
 ];
 
