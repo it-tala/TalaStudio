@@ -50,13 +50,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!save.ok) return new Response('Could not save', { status: 500 });
 
   // Email is best effort: the request is already saved.
-  if (env.RESEND_API_KEY && env.DAVID_EMAIL) {
+  if (env.RESEND_API_KEY) {
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         from: 'TalaStudio Website <hello@talastudio.net>',
-        to: [env.DAVID_EMAIL],
+        to: [env.DAVID_EMAIL || 'david@talastudio.net'],
+        reply_to: row.email,
         subject: `Catalog request: ${row.company}`,
         text: FIELDS.map((k) => `${k}: ${row[k]}`).join('\n'),
       }),
