@@ -4,14 +4,22 @@
 interface Env {
   TURNSTILE_SECRET_KEY?: string;
   SUPABASE_URL: string;
-  SUPABASE_ANON_KEY: string;
-  RESEND_API_KEY?: string;
+  SUPABASE_SERVICE_ROLE_KEY: string;
+  EMAIL?: {
+    send(message: {
+      to: string;
+      from: string;
+      replyTo?: string;
+      subject: string;
+      text?: string;
+    }): Promise<unknown>;
+  };
   DAVID_EMAIL?: string;
 }
 
 const FIELDS = ['full_name', 'company', 'email', 'phone', 'country', 'buyer_type', 'message'] as const;
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost = async ({ request, env }: { request: Request; env: Env }) => {
   const form = await request.formData();
 
   // Honeypot: bots fill this. Pretend success.
@@ -36,12 +44,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return new Response('Missing fields', { status: 400 });
   }
 
-  // The anon role can insert only. RLS blocks reads, so no return=representation.
+  // Migration 002 removed public inserts, so this uses the service role key (server-side secret only).
   const save = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_requests`, {
     method: 'POST',
     headers: {
-      apikey: env.SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${env.SUPABASE_ANON_KEY}`,
+      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
       'Content-Type': 'application/json',
       Prefer: 'return=minimal',
     },
@@ -50,17 +58,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!save.ok) return new Response('Could not save', { status: 500 });
 
   // Email is best effort: the request is already saved.
-  if (env.RESEND_API_KEY) {
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: 'TalaStudio Website <hello@talastudio.net>',
-        to: [env.DAVID_EMAIL || 'david@talastudio.net'],
-        reply_to: row.email,
-        subject: `Catalog request: ${row.company}`,
-        text: FIELDS.map((k) => `${k}: ${row[k]}`).join('\n'),
-      }),
+  // Sent through the Cloudflare Email Service binding named EMAIL (no API key).
+  if (env.EMAIL) {
+    await env.EMAIL.send({
+      to: env.DAVID_EMAIL || 'david@talastudio.net',
+      from: 'hello@talastudio.net',
+      replyTo: row.email,
+      subject: `Catalog request: ${row.company}`,
+      text: FIELDS.map((k) => `${k}: ${row[k]}`).join('\n'),
     }).catch(() => {});
   }
 

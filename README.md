@@ -44,7 +44,7 @@ Copy `.env.example` to `.env`. Never commit `.env`.
 | `PUBLIC_TURNSTILE_SITE_KEY` | catalog form | Cloudflare Turnstile site key |
 | `PUBLIC_CF_ANALYTICS_TOKEN` | all pages | Cloudflare Web Analytics token |
 | `PUBLIC_USE_SAMPLE_DATA` | local preview only | `true` shows the sample catalog when Supabase is not configured |
-| `TURNSTILE_SECRET_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `RESEND_API_KEY`, `DAVID_EMAIL` | `functions/api/catalog.ts` | Set as Cloudflare Pages secrets |
+| `TURNSTILE_SECRET_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `DAVID_EMAIL` (+ Cloudflare `EMAIL` send binding) | `functions/api/catalog.ts` | Set as Cloudflare Pages secrets |
 
 ### Sample data
 
