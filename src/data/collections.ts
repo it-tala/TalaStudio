@@ -28,6 +28,9 @@ export const collectionEntries: Entry[] = [
       '07': { name: '6-Drawer Dresser'},
       '08': { name: 'Drawer Console'},
       '09': { name: 'Mirror'},
+      '10': { name: 'Sofa' },
+      '11': { name: 'Ottoman' },
+      '12': { name: 'Single Sofa' },
     } },
   { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table to match. Simple to live with.', published: true, captions: {
       '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' },
@@ -46,10 +49,13 @@ export const collectionEntries: Entry[] = [
   { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: true, captions: {
       '01': { name: 'Sofa' }, '02': { name: 'Sofa' }, '03': { name: 'Single Sofa' },
     } },
+  { slug: 'beechwood-living', name: 'Beechwood', room: 'living', description: null, published: true, captions: {
+      '01': { name: 'Sofa' }, '02': { name: 'Single Sofa' },
+    } },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: true },
 ];
 
-const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
+const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'svg'];
 
 function heroPath(room: string, slug: string): string | null {
   for (const ext of EXTENSIONS) {
@@ -61,16 +67,19 @@ function heroPath(room: string, slug: string): string | null {
 }
 
 function galleryItems(room: string, slug: string, captions: Record<string, Caption> = {}): { src: string; name?: string; code?: string }[] {
-  const dir = join(process.cwd(), 'public', 'collections', room, slug);
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir)
-    .filter((f) => /^gallery-.*\.(jpe?g|png|webp)$/i.test(f))
-    .sort()
-    .map((f) => {
+  // Own room first, then the same slug under the other rooms (e.g. living/beechwood for the Beechwood bedroom collection).
+  const rooms = [room, ...['bedroom', 'living', 'dining', 'other'].filter((r) => r !== room)];
+  const items: { src: string; name?: string; code?: string; n: number }[] = [];
+  for (const r of rooms) {
+    const dir = join(process.cwd(), 'public', 'collections', r, slug);
+    if (!existsSync(dir)) continue;
+    for (const f of readdirSync(dir).filter((f) => /^gallery-.*\.(jpe?g|png|webp|svg)$/i.test(f)).sort()) {
       const n = f.match(/^gallery-(\d+)/i)?.[1];
       const cap = n ? captions[n] : undefined;
-      return { src: `/collections/${room}/${slug}/${f}`, name: cap?.name, code: cap?.code };
-    });
+      items.push({ src: `/collections/${r}/${slug}/${f}`, name: cap?.name, code: cap?.code, n: Number(n ?? 0) });
+    }
+  }
+  return items.sort((x, y) => x.n - y.n).map(({ n, ...rest }) => rest);
 }
 
 export function staticCollections(): Collection[] {
