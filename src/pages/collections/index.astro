@@ -3,10 +3,9 @@ import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getCollections, imageUrl } from '../../lib/supabase';
-import { edgeBackground } from '../../lib/edge';
 
 const all = await getCollections();
-const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(all.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
+const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
 const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining'], ['other', 'Collections']] as const;
 // Bedroom, living and dining always show (dining reads "coming soon" until its first collection); "other" only when it has one.
 const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room === r));
@@ -44,35 +43,42 @@ const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room =
   {present.map(([room, label]) => {
     const rows = all.filter((c) => c.room === room);
     return (
-    <section class="section" id={room} style="padding-top:2rem">
+    <section class="section room" id={room} style="padding-top:2rem">
       {room !== 'other' && (
-        <div class="tiles-head">
-          <div><h2>{label}</h2></div>
-          {rows.length > 0 && (
-            <div class="row-arrows" aria-hidden="true">
-              <button type="button" class="arrow prev" data-dir="-1" tabindex="-1">&#8249;</button>
-              <button type="button" class="arrow next" data-dir="1" tabindex="-1">&#8250;</button>
+        <div class="coll-intro room-head"><h2>{label}</h2></div>
+      )}
+      <div class="cslider" aria-roledescription="carousel" aria-label={`${label} collections`}>
+        <div class="cs-track" tabindex="0">
+          {rows.map((c) => (
+            <a class="cs-slide" href={`/collections/${c.slug}`}>
+              {imageUrl(c.hero_image_path) && <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} collection, ${c.room} render`} loading="lazy" draggable="false" />}
+              <div class="cs-body">
+                {room !== 'other' && <small>{label}</small>}
+                <h3>{c.name}</h3>
+                {c.description && <p>{c.description}</p>}
+                <span class="feat-meta">
+                  <span><i>Room</i>{c.room === 'other' ? 'Collection' : c.room}</span>
+                  {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
+                </span>
+                <em>Explore the collection</em>
+              </div>
+            </a>
+          ))}
+          {rows.length === 0 && (
+            <div class="cs-slide soon">
+              <div class="cs-body">
+                <small>{label}</small>
+                <h3>New collection in progress</h3>
+                <p>Coming soon.</p>
+              </div>
             </div>
           )}
         </div>
-      )}
-      <div class="coll-row" tabindex="0" aria-label={`${label} collections`}>
-        {rows.map((c) => (
-          <a class="coll-card" href={`/collections/${c.slug}`}>
-            {imageUrl(c.hero_image_path)
-              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" draggable="false" /></span>
-              : <Ph label={`${c.name} render`} watermark />}
-            {room !== 'other' && <small>{label}</small>}
-            <h3>{c.name}</h3>
-            {c.description && <p>{c.description}</p>}
-          </a>
-        ))}
-        {rows.length === 0 && (
-          <div class="coll-card soon">
-            <span class="frame"><span class="soon-label">Coming soon</span></span>
-            <small>{label}</small>
-            <h3>New collection in progress</h3>
-          </div>
+        {rows.length > 1 && (
+          <>
+            <button type="button" class="cs-arrow prev" aria-label="Previous collection">&#8249;</button>
+            <button type="button" class="cs-arrow next" aria-label="Next collection">&#8250;</button>
+          </>
         )}
       </div>
     </section>
@@ -83,37 +89,24 @@ const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room =
 </Base>
 
 <script>
-  // Each room is a sideways strip: the next card peeks in so it reads as one continuous row.
-  // Touch and trackpad scroll natively; arrows step one card; a mouse can drag.
-  document.querySelectorAll<HTMLElement>('.coll-row').forEach((row) => {
-    const head = row.previousElementSibling;
-    const prev = head?.querySelector<HTMLButtonElement>('.prev');
-    const next = head?.querySelector<HTMLButtonElement>('.next');
-    const arrows = head?.querySelector<HTMLElement>('.row-arrows');
+  // One collection per slide, cover as background. Arrows step a slide; touch and trackpad scroll natively.
+  document.querySelectorAll<HTMLElement>('.cslider').forEach((box) => {
+    const track = box.querySelector<HTMLElement>('.cs-track')!;
+    const prev = box.querySelector<HTMLButtonElement>('.prev');
+    const next = box.querySelector<HTMLButtonElement>('.next');
     const sync = () => {
-      const over = row.scrollWidth > row.clientWidth + 4;
-      if (arrows) arrows.style.visibility = over ? 'visible' : 'hidden';
-      if (prev) prev.disabled = row.scrollLeft < 4;
-      if (next) next.disabled = row.scrollLeft + row.clientWidth >= row.scrollWidth - 4;
+      if (prev) prev.disabled = track.scrollLeft < 4;
+      if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
     };
-    const step = (d: number) => {
-      const card = row.querySelector<HTMLElement>('.coll-card');
-      row.scrollBy({ left: d * ((card?.offsetWidth ?? 400) + 24), behavior: 'smooth' });
-    };
+    const step = (d: number) => track.scrollBy({ left: d * track.clientWidth, behavior: 'smooth' });
     prev?.addEventListener('click', () => step(-1));
     next?.addEventListener('click', () => step(1));
-    row.addEventListener('scroll', sync, { passive: true });
+    track.addEventListener('scroll', sync, { passive: true });
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') step(1);
+    });
     addEventListener('resize', sync);
     sync();
-    let drag: { x: number; l: number } | null = null;
-    let moved = false;
-    row.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse') { drag = { x: e.clientX, l: row.scrollLeft }; moved = false; } });
-    addEventListener('pointermove', (e) => {
-      if (!drag) return;
-      if (Math.abs(e.clientX - drag.x) > 5) { moved = true; row.classList.add('dragging'); }
-      if (moved) row.scrollLeft = drag.l - (e.clientX - drag.x);
-    });
-    addEventListener('pointerup', () => { drag = null; setTimeout(() => row.classList.remove('dragging'), 0); });
-    row.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
   });
 </script>
