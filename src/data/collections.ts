@@ -52,7 +52,7 @@ export const collectionEntries: Entry[] = [
   { slug: 'beechwood-living', name: 'Beechwood', room: 'living', description: null, published: true, captions: {
       '01': { name: 'Sofa' }, '02': { name: 'Single Sofa' },
     } },
-  { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: true },
+  { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: false },
 ];
 
 const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'svg'];

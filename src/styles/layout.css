@@ -115,6 +115,7 @@
 .feat-grid { display: flex; flex-direction: column; gap: 0; margin: 0 0 48px; }
 .feat-card { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; text-decoration: none; color: inherit; }
 .feat-card:nth-child(even) .frame, .feat-card:nth-child(even) > .ph { order: 2; }
+.feat-card:nth-child(odd) { background: var(--bg-dark); color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 65%, transparent); --line: rgba(236, 229, 217, .2); }
 .feat-card .frame, .feat-card > .ph { aspect-ratio: 4 / 3; min-height: 100%; }
 .feat-card .frame img { object-fit: cover; }
 .feat-body { padding: clamp(32px, 6vw, 96px); justify-content: center; display: flex; flex-direction: column; }
