@@ -1,0 +1,205 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ph from '../../components/Ph.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollections, getProducts, getProductImages, imageUrl } from '../../lib/supabase';
+
+export async function getStaticPaths() {
+  const [collections, products, images] = await Promise.all([getCollections(), getProducts(), getProductImages()]);
+  return collections.map((collection) => {
+    const pieces = products
+      .filter((p) => p.collection_id === collection.id)
+      .map((p) => ({ ...p, image: imageUrl(images.find((i) => i.product_id === p.id)?.image_path) }));
+    return { params: { slug: collection.slug }, props: { collection, pieces } };
+  });
+}
+
+import { edgeBackground } from '../../lib/edge';
+const { collection, pieces } = Astro.props;
+const gallery = await Promise.all((collection.gallery ?? []).map(async (g) => ({ ...g, bg: await edgeBackground(g.src) })));
+const hero = imageUrl(collection.hero_image_path);
+const materials = [...new Set(pieces.flatMap((p) => p.materials ?? []))];
+const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
+---
+<Base
+  title={collection.name}
+  description={`${collection.name}: a TalaStudio ${collection.room === 'other' ? '' : collection.room + ' '}collection, designed and engineered in Jepara. ${collection.description ?? ''}`.slice(0, 155)}
+  image={hero ?? undefined}
+>
+  <section class="hero dark">
+    {hero ? <img src={hero} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    <div class="wrap over fade">
+      <p class="eyebrow">{collection.room === 'other' ? 'Collection' : `${collection.room} collection`}</p>
+      <h1>{collection.name}</h1>
+    </div>
+  </section>
+
+  {collection.description && (
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">The collection</p>
+      <p class="intro">{collection.description}</p>
+    </div>
+  </section>
+  )}
+
+  {gallery.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <h2>The {collection.name} collection</h2>
+        <div class="gallery">
+          {gallery.map((g, i) => (
+            <figure>
+              <button type="button" class="zoom-open" data-index={i} aria-label={`Zoom in${g.name ? ': ' + g.name : ''}`}>
+                <span class="frame" style={g.bg ? `background:${g.bg}` : undefined}>
+                  <img src={g.src} alt={g.name ? `${collection.name} ${g.name}` : `${collection.name} collection, view ${i + 1}`} loading={i < 2 ? 'eager' : 'lazy'} />
+                </span>
+              </button>
+              {g.name && (
+                <figcaption>{g.name}</figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+    <dialog class="lightbox" aria-label="Photo viewer">
+      <div class="lb-stage"><img alt="" /></div>
+      <p class="lb-cap"></p>
+      <button type="button" class="lb-btn lb-close" aria-label="Close">×</button>
+      <button type="button" class="lb-btn lb-prev" aria-label="Previous">‹</button>
+      <button type="button" class="lb-btn lb-next" aria-label="Next">›</button>
+      <p class="lb-hint">Tap the photo to zoom in. Drag to move around.</p>
+    </dialog>
+  )}
+
+  {pieces.length > 0 && (
+  <section class="section alt">
+    <div class="wrap">
+      <h2>The {collection.name} pieces</h2>
+      <div class="cards">
+        {pieces.map((p) => (
+          <a class="card" href={`/products/${p.slug}`}>
+            {p.image ? <img src={p.image} alt={p.name} loading="lazy" /> : <Ph label={p.name} watermark />}
+            <h3>{p.name}</h3>
+            <p>{(p.finishes ?? []).length > 0 ? `${p.finishes!.length} finishes` : p.sku}</p>
+            <span class="link">View details</span>
+          </a>
+        ))}
+      </div>
+      {pieces.length === 0 && <p class="lede">Pieces are added as they are finalised.</p>}
+    </div>
+  </section>
+  )}
+
+  {(materials.length > 0 || finishes.length > 0) && (
+    <section class="section">
+      <div class="wrap mats">
+        {materials.length > 0 && <div><h3>Materials</h3><ul>{materials.map((m) => <li>{m}</li>)}</ul></div>}
+        {finishes.length > 0 && <div><h3>Finishes</h3><ul>{finishes.map((f) => <li>{f}</li>)}</ul></div>}
+      </div>
+    </section>
+  )}
+
+  <CtaBand title={`The full ${collection.name} range is in the catalog.`} />
+</Base>
+
+<script>
+  const box = document.querySelector<HTMLDialogElement>('.lightbox');
+  if (box) {
+    const stage = box.querySelector<HTMLElement>('.lb-stage')!;
+    const img = stage.querySelector('img')!;
+    const cap = box.querySelector('.lb-cap')!;
+    const items = [...document.querySelectorAll<HTMLButtonElement>('.zoom-open')].map((b) => {
+      const im = b.querySelector('img')!;
+      return { src: im.getAttribute('src')!, alt: im.alt, name: b.closest('figure')?.querySelector('figcaption')?.textContent ?? '' };
+    });
+    let cur = 0;
+    const setZoom = (on: boolean, fx = 0.5, fy = 0.5) => {
+      box.classList.toggle('zoomed', on);
+      if (on) {
+        stage.scrollLeft = fx * stage.scrollWidth - stage.clientWidth / 2;
+        stage.scrollTop = fy * stage.scrollHeight - stage.clientHeight / 2;
+      }
+    };
+    const show = (i: number) => {
+      cur = (i + items.length) % items.length;
+      setZoom(false);
+      img.src = items[cur].src;
+      img.alt = items[cur].alt;
+      cap.textContent = items[cur].name;
+    };
+    document.querySelectorAll<HTMLButtonElement>('.zoom-open').forEach((b) =>
+      b.addEventListener('click', () => { show(Number(b.dataset.index)); box.showModal(); document.documentElement.style.overflow = 'hidden'; }));
+    box.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+    // Mouse drag to pan while zoomed (touch and trackpad scroll natively)
+    let drag: { x: number; y: number; l: number; t: number } | null = null;
+    let moved = false;
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || !box.classList.contains('zoomed')) return;
+      drag = { x: e.clientX, y: e.clientY, l: stage.scrollLeft, t: stage.scrollTop };
+      moved = false;
+      stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 4) moved = true;
+      stage.scrollLeft = drag.l - (e.clientX - drag.x);
+      stage.scrollTop = drag.t - (e.clientY - drag.y);
+    });
+    stage.addEventListener('pointerup', () => { drag = null; });
+    img.addEventListener('click', (e) => {
+      if (moved) { moved = false; return; }
+      if (box.classList.contains('zoomed')) return setZoom(false);
+      const r = img.getBoundingClientRect();
+      setZoom(true, (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+    });
+    box.querySelector('.lb-close')!.addEventListener('click', () => box.close());
+    box.querySelector('.lb-prev')!.addEventListener('click', () => show(cur - 1));
+    box.querySelector('.lb-next')!.addEventListener('click', () => show(cur + 1));
+    box.addEventListener('click', (e) => { if (e.target === box || e.target === stage) box.close(); });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  }
+</script>
+
+<style>
+  .hero { position: relative; }
+  .hero :global(.ph), .hero img { aspect-ratio: 21 / 9; width: 100%; object-fit: cover; min-height: 22rem; }
+  .over { position: absolute; inset: auto 0 2.5rem 0; margin-inline: auto; }
+  .intro { font: 400 clamp(1.5rem, 3vw, 2.2rem)/1.35 'Cormorant Garamond', Georgia, serif; max-width: 48rem; }
+  .cards { display: grid; gap: 2rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .card { text-decoration: none; }
+  .card h3 { margin-top: 1rem; font-size: 1.35rem; }
+  .card p { color: var(--text-soft); font-size: .9rem; }
+  .card .link { margin-top: .6rem; font-size: .75rem; }
+  .mats { display: grid; gap: 3rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .mats ul { list-style: none; padding: 0; margin-top: 1rem; display: grid; gap: .4rem; color: var(--text-soft); }
+</style>
+
+<style>
+  .gallery { display: grid; gap: 1.6rem 1rem; margin-top: 2rem; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); align-items: start; }
+  .gallery figure { margin: 0; }
+  .gallery figcaption { padding-top: .8rem; font-size: .8rem; line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: var(--text-soft); }
+</style>
+
+<style is:global>
+  .zoom-open { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; font: inherit; color: inherit; }
+  .lightbox { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(20, 17, 14, .96); color: #f3ece2; }
+  .lightbox::backdrop { background: rgba(20, 17, 14, .96); }
+  .lb-stage { position: absolute; inset: 0 0 4.5rem 0; overflow: auto; display: flex; scrollbar-width: none; }
+  .lb-stage::-webkit-scrollbar { display: none; }
+  .lb-stage img { margin: auto; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; cursor: zoom-in; flex: none; }
+  .lightbox.zoomed .lb-stage { cursor: grab; }
+  .lightbox.zoomed .lb-stage img { max-width: none; max-height: none; width: 250%; cursor: zoom-out; }
+  .lb-cap { position: absolute; left: 0; right: 0; bottom: 2rem; margin: 0; text-align: center; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; pointer-events: none; }
+  .lb-hint { position: absolute; left: 0; right: 0; bottom: .6rem; margin: 0; text-align: center; font-size: .7rem; opacity: .55; pointer-events: none; }
+  .lb-btn { position: absolute; z-index: 2; width: 2.8rem; height: 2.8rem; border: 0; border-radius: 50%; background: rgba(243, 236, 226, .14); color: inherit; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+  .lb-btn:hover { background: rgba(243, 236, 226, .28); }
+  .lb-close { top: 1rem; right: 1rem; }
+  .lb-prev { left: 1rem; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 1rem; top: 50%; transform: translateY(-50%); }
+  .lightbox.zoomed .lb-prev, .lightbox.zoomed .lb-next { opacity: .5; }
+</style>

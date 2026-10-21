@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('insights', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Base title={post.data.title} description={post.data.description}>
+  <article class="section">
+    <div class="wrap prose">
+      <p class="eyebrow">Insights · {post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      <h1>{post.data.title}</h1>
+      <Content />
+    </div>
+  </article>
+  <CtaBand />
+</Base>
+
+<style>
+  .prose { max-width: 44rem; }
+  .prose h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); margin-bottom: 1.5rem; }
+  .prose :global(h2) { font-size: 1.8rem; margin-top: 2.2rem; }
+  .prose :global(p), .prose :global(li) { margin-top: .8rem; color: var(--text-soft); }
+  .prose :global(ul) { padding-left: 1.3rem; }
+</style>

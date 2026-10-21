@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('insights', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+<Base
+  title="Insights"
+  description="Articles from the TalaStudio studio on design, engineering, and buying furniture by the container from Indonesia."
+>
+  <PageHero eyebrow="Insights" title="Notes from the studio." />
+  <section class="section">
+    <div class="wrap">
+      {posts.length === 0 && <p class="lede" style="margin:0">First articles coming soon.</p>}
+      <ul class="list">
+        {posts.map((p) => (
+          <li>
+            <time datetime={p.data.date.toISOString()}>{p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            <h2><a href={`/insights/${p.id}`}>{p.data.title}</a></h2>
+            <p>{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { list-style: none; padding: 0; display: grid; gap: 3rem; }
+  .list li { border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .list h2 { font-size: 2rem; margin: .4rem 0; }
+  .list a { text-decoration: none; }
+  .list p, time { color: var(--text-soft); }
+  time { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; }
+</style>

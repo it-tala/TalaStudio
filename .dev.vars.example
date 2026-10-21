@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local `wrangler pages dev`. Never commit .dev.vars.
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+TURNSTILE_SECRET_KEY=
+DAVID_EMAIL=david@talastudio.net

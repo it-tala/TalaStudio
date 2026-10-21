@@ -1,0 +1,21 @@
+---
+import Ph from './Ph.astro';
+interface Props { name: string; slug: string; room: string; description: string; image?: string | null; flip?: boolean }
+const { name, slug, room, description, image, flip = false } = Astro.props;
+---
+<style>
+  article { display: grid; gap: 2rem; align-items: center; }
+  .txt p { color: var(--text-soft); max-width: 28rem; margin-top: .8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  @media (min-width: 820px) { article { grid-template-columns: 1.4fr 1fr; gap: 4rem; } article.flip .img { order: 2; } }
+</style>
+<article class:list={[{ flip }]}>
+  <a class="img" href={`/collections/${slug}`}>
+    {image ? <img src={image} alt={`${name} collection, ${room.toLowerCase()} render`} loading="lazy" /> : <Ph label={`${name} render`} wide watermark />}
+  </a>
+  <div class="txt">
+    <p class="eyebrow" style="margin:0">{room}</p>
+    <h3>{name}</h3>
+    <p>{description}</p>
+    <a class="link" href={`/collections/${slug}`}>Explore</a>
+  </div>
+</article>

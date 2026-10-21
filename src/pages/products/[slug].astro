@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ph from '../../components/Ph.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getCollections, getProducts, getProductImages, imageUrl, inches } from '../../lib/supabase';
+
+export async function getStaticPaths() {
+  const [collections, products, images] = await Promise.all([getCollections(), getProducts(), getProductImages()]);
+  return products.map((product) => {
+    const collection = collections.find((c) => c.id === product.collection_id);
+    const gallery = images.filter((i) => i.product_id === product.id).map((i) => imageUrl(i.image_path)!);
+    const related = products
+      .filter((p) => p.collection_id === product.collection_id && p.id !== product.id)
+      .slice(0, 4)
+      .map((p) => ({ ...p, image: imageUrl(images.find((i) => i.product_id === p.id)?.image_path) }));
+    return { params: { slug: product.slug }, props: { product, collection, gallery, related } };
+  });
+}
+
+const { product: p, collection, gallery, related } = Astro.props;
+const dim = (cm: number | null) => (cm == null ? null : `${cm} cm / ${inches(cm)} in`);
+const specs: [string, string | null][] = [
+  ['SKU', p.sku],
+  ['Width', dim(p.width_cm)],
+  ['Depth', dim(p.depth_cm)],
+  ['Height', dim(p.height_cm)],
+  ['Materials', p.materials?.join(', ') ?? null],
+  ['Finishes', p.finishes?.join(', ') ?? null],
+];
+const shipping: [string, string | null][] = [
+  ['Carton (L x W x H)', p.carton_length_cm ? `${p.carton_length_cm} x ${p.carton_width_cm} x ${p.carton_height_cm} cm` : null],
+  ['Carton weight', p.carton_weight_kg ? `${p.carton_weight_kg} kg` : null],
+  ['Volume', p.cbm ? `${p.cbm} CBM` : null],
+  ['Pieces per 40HQ', p.pieces_per_40hq ? String(p.pieces_per_40hq) : null],
+  ['MOQ', p.moq ? `${p.moq} pcs` : null],
+  ['Lead time', p.lead_time_days ? `${p.lead_time_days} days` : null],
+];
+---
+<Base
+  title={p.name}
+  description={`${p.name}${collection ? `, ${collection.name} collection` : ''}. Sizes, materials, finishes and container data from TalaStudio, Jepara.`.slice(0, 160)}
+  image={gallery[0]}
+>
+  <section class="section">
+    <div class="wrap pdp">
+      <div class="gal">
+        {gallery.length
+          ? gallery.map((src) => <img src={src} alt={p.name} loading="lazy" />)
+          : <Ph label={p.name} watermark />}
+      </div>
+      <div class="info">
+        {collection && <p class="eyebrow"><a href={`/collections/${collection.slug}`}>{collection.name}</a></p>}
+        <h1>{p.name}</h1>
+        {p.description && <p class="lede">{p.description}</p>}
+        <a class="btn" href="/request-catalog" style="margin-top:2rem">Request catalog</a>
+
+        <details open><summary>Specifications</summary>
+          <dl>{specs.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+        </details>
+        <details><summary>Carton and container</summary>
+          <dl>{shipping.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section alt">
+      <div class="wrap">
+        <h2>Complete the look</h2>
+        <div class="cards">
+          {related.map((r) => (
+            <a class="card" href={`/products/${r.slug}`}>
+              {r.image ? <img src={r.image} alt={r.name} loading="lazy" /> : <Ph label={r.name} watermark />}
+              <h3>{r.name}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand />
+</Base>
+
+<style>
+  .pdp { display: grid; gap: 3rem; align-items: start; }
+  .gal { display: grid; gap: 1rem; }
+  .info h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+  details { border-top: 1px solid var(--line); padding-block: 1.1rem; margin-top: 1.5rem; }
+  details:last-child { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 2rem; margin-top: 1rem; font-size: .95rem; }
+  dt { color: var(--text-soft); }
+  dd { margin: 0; }
+  .cards { display: grid; gap: 2rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
+  .card { text-decoration: none; }
+  .card h3 { margin-top: .8rem; font-size: 1.2rem; }
+  @media (min-width: 900px) { .pdp { grid-template-columns: 1.2fr 1fr; gap: 5rem; } .info { position: sticky; top: 6rem; } }
+</style>

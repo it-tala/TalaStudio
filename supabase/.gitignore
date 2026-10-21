@@ -1,0 +1,11 @@
+# Local Supabase runtime files
+.branches
+.temp
+.env
+.env.*
+
+# LOCAL DUMMY ONLY. Never commit: invented data, dummy staff login, placeholder images, internal notes.
+seed.sql
+dummy-images/
+snippets/
+README-local-dummy.md

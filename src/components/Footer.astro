@@ -1,0 +1,52 @@
+<style>
+  /* Same text style as the navbar links: Inter, 0.8rem, uppercase, 0.1em spacing, weight 400 */
+  footer { background: var(--bg-dark); color: var(--on-dark); padding-block: 4rem 1rem; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; line-height: 1.7; }
+  /* Wide footer: 25px from each screen edge */
+  footer .wrap { width: calc(100% - 50px); max-width: none; }
+  /* Justified: first column flush left, last flush right, minimum 10px between columns */
+  .cols { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 2.5rem 10px; }
+  .cols > div { flex: 0 0 auto; text-align: center; }
+  .cols > div:first-child { max-width: 20rem; }
+  /* Tablet and phone: two columns, two rows, text flush left so the columns line up */
+  @media (max-width: 1000px) {
+    .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 2rem; }
+    .cols > div, .cols > div:first-child { max-width: none; text-align: left; }
+  }
+  h4 { font: 500 .75rem Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; opacity: .6; margin-bottom: 1rem; }
+  ul { list-style: none; padding: 0; display: grid; gap: .5rem; }
+  a { text-decoration: none; opacity: .85; }
+  a:hover { opacity: 1; }
+  /* Buyers and Contact: collapsible dropdowns, right aligned */
+  .cols > details { flex: 0 0 auto; text-align: right; }
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary h4 { display: inline-flex; align-items: center; gap: .5em; margin-bottom: 0; }
+  details summary h4::after { content: ''; width: .4em; height: .4em; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: translateY(-.15em) rotate(45deg); transition: transform .2s; }
+  details[open] summary h4::after { transform: translateY(.1em) rotate(-135deg); }
+  details summary:hover h4 { opacity: .85; }
+  details ul { margin-top: 1rem; }
+  .small { margin: 1.5rem 0 0; padding-top: .75rem; border-top: 1px solid rgba(236, 229, 217, .15); opacity: .6; text-align: left; font-size: .65rem; letter-spacing: .08em; }
+</style>
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><h4>TalaStudio</h4><p>Furniture designed, engineered and costed in one place. Jepara, Indonesia.</p></div>
+      <div><h4>Explore</h4><ul>
+        <li><a href="/collections">Collections</a></li>
+        <li><a href="/the-studio">The Studio, Jepara</a></li>
+        <li><a href="/how-we-work">How we work</a></li>
+        <li><a href="/insights">Insights</a></li></ul></div>
+      <details><summary><h4>Buyers</h4></summary><ul>
+        <li><a href="/how-a-container-works">How a container works</a></li>
+        <li><a href="/sourcing-from-indonesia">Sourcing from Indonesia</a></li>
+        <li><a href="/partner-with-us">Partner with us</a></li>
+        <li><a href="/buyer-dashboard">Buyer dashboard demo</a></li></ul></details>
+      <details><summary><h4>Contact</h4></summary><ul>
+        <li><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></li>
+        <li><a href="/request-catalog">Request catalog</a></li>
+        <li><a href="/contact">Book a showroom visit</a></li>
+        <li><a href="/privacy-and-terms">Privacy and terms</a></li></ul></details>
+    </div>
+    <p class="small">© {new Date().getFullYear()} TalaStudio. All designs are protected.</p>
+  </div>
+</footer>

@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const topics = [
+  ['MOQ', 'Each product page shows its minimum order quantity. You build a container from many pieces, not one.'],
+  ['Mix collections', 'Combine bedroom, living and dining pieces in a single container to fit your floor plan.'],
+  ['Lead time', 'Each product page shows its lead time. We confirm the schedule when you place the order.'],
+  ['FOB', 'Prices are quoted FOB Indonesia. You get them in the catalog and in your quote, not on this site.'],
+  ['Cartons and CBM', 'Every piece lists carton size, weight, CBM and pieces per 40HQ, so you can plan the load.'],
+  ['Inspection', 'We check every piece. You see the QC photos online before the container ships.'],
+];
+---
+<Base
+  title="How a container works"
+  description="How buying a TalaStudio container works: MOQ, mixing collections, lead times, FOB terms, carton data and inspection, direct from Jepara."
+>
+  <PageHero eyebrow="For buyers" title="How a container works." lede="Direct from our studio in Jepara to your warehouse. Here is what to expect." />
+
+  <section class="section">
+    <div class="wrap">
+      <h2>What to expect.</h2>
+      <div class="grid">
+        {topics.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <h2>From order to dock.</h2>
+      <ol class="flow">
+        <li>Request the catalog and choose your pieces.</li>
+        <li>We send a quote and confirm lead time.</li>
+        <li>Our partner factories build to our drawings. We check and photograph each piece.</li>
+        <li>You review the QC photos online.</li>
+        <li>The container is loaded and ships.</li>
+      </ol>
+    </div>
+  </section>
+
+  <CtaBand title="Plan your first container." />
+</Base>
+
+<style>
+  .grid { display: grid; gap: 2.5rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .grid > div { border-top: 1px solid var(--line); padding-top: 1.2rem; }
+  .grid p { color: var(--text-soft); margin-top: .5rem; }
+  .flow { margin-top: 2rem; padding-left: 1.4rem; display: grid; gap: .8rem; font-size: 1.15rem; max-width: 40rem; }
+</style>

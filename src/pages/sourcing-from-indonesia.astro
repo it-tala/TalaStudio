@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+---
+<Base
+  title="Sourcing furniture from Indonesia"
+  description="A buyer's guide to sourcing furniture from Indonesia: Jepara's furniture heritage, how we work with partner factories, and how a container order works."
+>
+  <PageHero eyebrow="Buyer guide" title="Sourcing furniture from Indonesia." lede="What to know before you source from Indonesia, and how TalaStudio works with its makers." />
+
+  <section class="section">
+    <div class="wrap prose">
+      {/* Copy deck v2. Confirm with Evin: partner factories are in the Jepara region. */}
+      <h2>Why Jepara</h2>
+      <p>Jepara, on the north coast of Central Java, is Indonesia's best known furniture town. Woodworking is the local trade, and skilled makers are close to where the wood is worked.</p>
+
+      <h2>What you can source</h2>
+      <p>Indonesian makers work in solid woods such as teak and mahogany, alongside veneers and mixed materials. Ask each supplier what species, grade and finish they use, and get it in writing.</p>
+
+      <h2>How to import, in short</h2>
+      <ol>
+        <li>Choose pieces and confirm the minimum order.</li>
+        <li>Agree terms, usually FOB Indonesia.</li>
+        <li>Check production and inspect before loading.</li>
+        <li>Arrange freight and customs for your market.</li>
+      </ol>
+      <p>See <a href="/how-a-container-works">how a container works</a> with us.</p>
+
+      <h2>How TalaStudio works with makers</h2>
+      <p>We design and engineer every collection in our Jepara studio. Partner factories in the region build to our drawings. We inspect every piece before it ships, and you can see the QC photos online.</p>
+    </div>
+  </section>
+
+  <CtaBand title="Talk to us." text="Ask us about your range and your market." />
+</Base>
+
+<style>
+  .prose { max-width: 46rem; }
+  .prose h2 { font-size: 1.9rem; margin-top: 2.5rem; }
+  .prose p, .prose li { margin-top: .8rem; color: var(--text-soft); }
+  .prose ol { padding-left: 1.4rem; }
+  .note { font-style: italic; }
+</style>

@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+const themes = [
+  ['travertine', 'A. Travertine', 'Warm light stone. Quiet, gallery feel. Default.'],
+  ['charcoal', 'B. Charcoal Teak', 'Dark, with a warm teak accent. Renders glow.'],
+  ['dune', 'C. Dune', 'Mid sand with a deep brown band. Earthy, grounded.'],
+];
+---
+<Base title="Palette options" description="Internal preview of three colour palettes for Evin to choose from.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Internal. Not in sitemap.</p>
+      <h1>Pick a palette.</h1>
+      <div class="list">
+        {themes.map(([k, n, d]) => (
+          <div class="card" data-theme={k}>
+            <p class="eyebrow">{n}</p>
+            <h2>The look of forward retail.</h2>
+            <p class="lede">{d}</p>
+            <div class="bands"><span class="alt"></span><span class="dark"></span><span style="background:var(--accent)"></span></div>
+            <a class="btn" href="/request-catalog" style="margin-top:1.5rem">Request catalog</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .list { display: grid; gap: 2rem; margin-top: 3rem; }
+  .card { background: var(--bg); color: var(--text); padding: 2.5rem; border: 1px solid rgba(0, 0, 0, .25); }
+  .card .eyebrow, .card .lede { color: var(--text-soft); }
+  .bands { display: flex; gap: .5rem; margin-top: 1.5rem; }
+  .bands span { width: 4rem; height: 2rem; }
+  .bands .alt { background: var(--bg-alt); }
+  .bands .dark { background: var(--bg-dark); }
+</style>
