@@ -2,22 +2,42 @@
 import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Lightbox from '../../components/Lightbox.astro';
 import { getCollections, getProducts, getProductImages, imageUrl, inches } from '../../lib/supabase';
+import { edgeBackground } from '../../lib/edge';
+import { ANGLES, type Angle } from '../../data/angles.ts';
+import { swatch } from '../../data/finishes.ts';
 
 export async function getStaticPaths() {
   const [collections, products, images] = await Promise.all([getCollections(), getProducts(), getProductImages()]);
   return products.map((product) => {
     const collection = collections.find((c) => c.id === product.collection_id);
-    const gallery = images.filter((i) => i.product_id === product.id).map((i) => imageUrl(i.image_path)!);
+    const own = images.filter((i) => i.product_id === product.id);
+    // One set of views per finish, in the order of the item's finishes (null = its only finish).
+    const finishes = [...new Set([...(product.finishes ?? []), ...own.map((i) => i.finish)])];
+    const groups = finishes
+      .map((finish) => ({
+        finish,
+        views: own.filter((i) => i.finish === finish).sort((a, b) => a.sort_order - b.sort_order)
+          .map((i) => ({ src: imageUrl(i.image_path)!, angle: i.angle })),
+      }))
+      .filter((g) => g.views.length);
     const related = products
       .filter((p) => p.collection_id === product.collection_id && p.id !== product.id)
       .slice(0, 4)
       .map((p) => ({ ...p, image: imageUrl(images.find((i) => i.product_id === p.id)?.image_path) }));
-    return { params: { slug: product.slug }, props: { product, collection, gallery, related } };
+    return { params: { slug: product.slug }, props: { product, collection, groups, related } };
   });
 }
 
-const { product: p, collection, gallery, related } = Astro.props;
+const { product: p, collection, related } = Astro.props;
+const groups = await Promise.all(Astro.props.groups.map(async (g) => ({
+  ...g,
+  views: await Promise.all(g.views.map(async (v) => ({ ...v, bg: await edgeBackground(v.src) }))),
+})));
+const label = (a: Angle | null) => (a ? ANGLES[a] : '');
+const alt = (a: Angle | null, finish: string | null) => [p.name, label(a).toLowerCase(), finish].filter(Boolean).join(', ');
+const caption = (a: Angle | null, finish: string | null) => [p.name, label(a), finish].filter(Boolean).join(' · ');
 const dim = (cm: number | null) => (cm == null ? null : `${cm} cm / ${inches(cm)} in`);
 const specs: [string, string | null][] = [
   ['SKU', p.sku],
@@ -39,27 +59,68 @@ const shipping: [string, string | null][] = [
 <Base
   title={p.name}
   description={`${p.name}${collection ? `, ${collection.name} collection` : ''}. Sizes, materials, finishes and container data from TalaStudio, Jepara.`.slice(0, 160)}
-  image={gallery[0]}
+  image={groups[0]?.views[0]?.src}
 >
   <section class="section">
     <div class="wrap pdp">
       <div class="gal">
-        {gallery.length
-          ? gallery.map((src) => <img src={src} alt={p.name} loading="lazy" />)
-          : <Ph label={p.name} watermark />}
+        {groups.length === 0 && <Ph label={p.name} watermark />}
+        {groups.map((g, gi) => (
+          <div class="views" data-group={gi} hidden={gi !== 0}>
+            <figure class="main">
+              <button type="button" class="frame" style={g.views[0].bg ? `background:${g.views[0].bg}` : undefined}
+                data-caption={caption(g.views[0].angle, g.finish)} aria-label="Enlarge photo">
+                <img src={g.views[0].src} alt={alt(g.views[0].angle, g.finish)} />
+                <span class="enlarge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6" /></svg>
+                </span>
+              </button>
+              <figcaption>{label(g.views[0].angle)}</figcaption>
+            </figure>
+            {g.views.length > 1 && (
+              <ul class="thumbs" aria-label="Angles">
+                {g.views.map((v, i) => (
+                  <li>
+                    <button type="button" class="thumb" style={v.bg ? `background:${v.bg}` : undefined}
+                      data-src={v.src} data-alt={alt(v.angle, g.finish)} data-label={label(v.angle)} data-bg={v.bg ?? ''} data-caption={caption(v.angle, g.finish)}
+                      aria-current={i === 0 ? 'true' : undefined} aria-label={label(v.angle) || `View ${i + 1}`}>
+                      <img src={v.src} alt="" loading="lazy" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+        {groups.length > 0 && <Lightbox />}
       </div>
       <div class="info">
         {collection && <p class="eyebrow"><a href={`/collections/${collection.slug}`}>{collection.name}</a></p>}
         <h1>{p.name}</h1>
         {p.description && <p class="lede">{p.description}</p>}
+        {groups.length > 0 && (
+          <div class="finishes">
+            <p class="eyebrow">Finish <span class="finish-name">{groups[0].finish ?? 'Standard'}</span></p>
+            <div class="dots" role="group" aria-label="Finish">
+              {groups.map((g, i) => (
+                <button type="button" class="finish" data-group={i} data-name={g.finish ?? 'Standard'} style={`--swatch:${swatch(g.finish)}`}
+                  aria-pressed={i === 0 ? 'true' : 'false'} aria-label={g.finish ?? 'Standard'} title={g.finish ?? 'Standard'}></button>
+              ))}
+            </div>
+          </div>
+        )}
         <a class="btn" href="/request-catalog" style="margin-top:2rem">Request catalog</a>
 
-        <details open><summary>Specifications</summary>
-          <dl>{specs.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
-        </details>
-        <details><summary>Carton and container</summary>
-          <dl>{shipping.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
-        </details>
+        {specs.some(([, v]) => v) && (
+          <details open><summary>Specifications</summary>
+            <dl>{specs.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+          </details>
+        )}
+        {shipping.some(([, v]) => v) && (
+          <details><summary>Carton and container</summary>
+            <dl>{shipping.filter(([, v]) => v).map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
+          </details>
+        )}
       </div>
     </div>
   </section>
@@ -83,9 +144,82 @@ const shipping: [string, string | null][] = [
   <CtaBand />
 </Base>
 
+<script>
+  import { openLightbox } from '../../lib/lightbox';
+  // Thumbnails swap the main view; finish buttons swap the whole set and keep the same angle where they can.
+  const pick = (thumb: HTMLButtonElement) => {
+    const box = thumb.closest<HTMLElement>('.views')!;
+    const img = box.querySelector<HTMLImageElement>('.main img')!;
+    img.src = thumb.dataset.src!;
+    img.alt = thumb.dataset.alt!;
+    box.querySelector<HTMLElement>('.main .frame')!.style.background = thumb.dataset.bg ?? '';
+    box.querySelector('.main figcaption')!.textContent = thumb.dataset.label ?? '';
+    box.querySelectorAll('.thumb').forEach((t) => t.removeAttribute('aria-current'));
+    thumb.setAttribute('aria-current', 'true');
+  };
+  document.querySelectorAll<HTMLButtonElement>('.thumb').forEach((t) => t.addEventListener('click', () => pick(t)));
+  document.querySelectorAll<HTMLButtonElement>('.finish').forEach((b) => b.addEventListener('click', () => {
+    const angle = document.querySelector('.views:not([hidden]) .main figcaption')?.textContent;
+    document.querySelectorAll('.finish').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelector('.finish-name')!.textContent = b.dataset.name!;
+    document.querySelectorAll<HTMLElement>('.views').forEach((v) => (v.hidden = v.dataset.group !== b.dataset.group));
+    const same = [...document.querySelectorAll<HTMLButtonElement>(`.views[data-group="${b.dataset.group}"] .thumb`)].find((t) => t.dataset.label === angle);
+    if (same) pick(same);
+  }));
+  // The main view opens the zoom viewer with every angle of the shown finish; paging there moves the main view along.
+  // The viewer shows the same finish dots: picking one there switches the page too, keeping the angle where it can.
+  const finishBtns = [...document.querySelectorAll<HTMLButtonElement>('.finish')];
+  const finishes = finishBtns.map((b) => ({ name: b.dataset.name!, swatch: b.style.getPropertyValue('--swatch') }));
+  const shown = () => {
+    const box = document.querySelector<HTMLElement>('.views:not([hidden])')!;
+    const frame = box.querySelector<HTMLButtonElement>('.main .frame')!;
+    const thumbs = [...box.querySelectorAll<HTMLButtonElement>('.thumb')];
+    const img = frame.querySelector('img')!;
+    if (!thumbs.length) return { items: [{ src: img.src, alt: img.alt, caption: frame.dataset.caption }], start: 0 };
+    return {
+      items: thumbs.map((t) => ({ src: t.dataset.src!, alt: t.dataset.alt!, caption: t.dataset.caption })),
+      start: Math.max(0, thumbs.findIndex((t) => t.hasAttribute('aria-current'))),
+      onShow: (i: number) => pick(thumbs[i]),
+    };
+  };
+  document.querySelectorAll<HTMLButtonElement>('.main .frame').forEach((frame) => frame.addEventListener('click', () => {
+    const { items, start, onShow } = shown();
+    openLightbox(items, start, {
+      onShow,
+      finishes,
+      finish: Math.max(0, finishBtns.findIndex((b) => b.getAttribute('aria-pressed') === 'true')),
+      onFinish: (i) => { finishBtns[i].click(); return shown(); },
+    });
+  }));
+</script>
+
 <style>
   .pdp { display: grid; gap: 3rem; align-items: start; }
   .gal { display: grid; gap: 1rem; }
+  /* Every finish's set of views sits in the same cell, so the gallery keeps the height of the tallest set
+     (and the page below does not jump) when the finish changes. */
+  .views { display: grid; gap: 1rem; grid-area: 1 / 1; align-content: start; }
+  .views[hidden] { display: grid; visibility: hidden; }
+  .main { margin: 0; }
+  .main .frame { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 0; background: var(--bg-alt); cursor: zoom-in; }
+  .enlarge { position: absolute; right: .75rem; bottom: .75rem; display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: rgba(243, 236, 226, .85); color: var(--text); opacity: .75; transition: opacity .2s; }
+  .main .frame:hover .enlarge, .main .frame:focus-visible .enlarge { opacity: 1; }
+  .main img { width: 100%; height: 100%; object-fit: contain; }
+  .main figcaption { padding-top: .7rem; min-height: 1.6rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-soft); }
+  .thumbs { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+  .thumb { display: block; width: 5.5rem; aspect-ratio: 4 / 3; padding: 0; border: 1px solid transparent; background: var(--bg-alt); opacity: .65; cursor: pointer; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; }
+  .thumb:hover { opacity: 1; }
+  .thumb[aria-current] { opacity: 1; border-color: var(--text); }
+  /* Finish: small round colour dots under the description; the chosen one gets a ring */
+  .finishes { margin-top: 1.75rem; }
+  .finishes .eyebrow { margin: 0 0 .7rem; }
+  .finish-name { margin-left: .5rem; color: var(--text); }
+  .dots { display: flex; flex-wrap: wrap; gap: .7rem; }
+  .finish { width: 1.6rem; height: 1.6rem; padding: 0; border: 1px solid rgba(38, 34, 30, .22); border-radius: 50%; background: var(--swatch); cursor: pointer; transition: box-shadow .15s; }
+  .finish:hover { box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--line); }
+  .finish[aria-pressed='true'] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px var(--text); }
+  .finish:focus-visible { outline: 2px solid var(--text); outline-offset: 5px; }
   .info h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
   details { border-top: 1px solid var(--line); padding-block: 1.1rem; margin-top: 1.5rem; }
   details:last-child { border-bottom: 1px solid var(--line); }
@@ -96,5 +230,9 @@ const shipping: [string, string | null][] = [
   .cards { display: grid; gap: 2rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
   .card { text-decoration: none; }
   .card h3 { margin-top: .8rem; font-size: 1.2rem; }
-  @media (min-width: 900px) { .pdp { grid-template-columns: 1.2fr 1fr; gap: 5rem; } .info { position: sticky; top: 6rem; } }
+  /* Wider than .wrap so the photo takes close to half the page on big screens; the text column stays readable. */
+  @media (min-width: 900px) {
+    .pdp { width: min(1680px, 100% - 5rem); grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 1fr); gap: clamp(3rem, 5vw, 6rem); }
+    .info { position: sticky; top: 6rem; max-width: 32rem; }
+  }
 </style>

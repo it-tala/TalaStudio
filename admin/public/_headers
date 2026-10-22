@@ -1,0 +1,6 @@
+# Cloudflare Pages response headers for the admin. Staff only: never indexed, never framed.
+/*
+  X-Robots-Tag: noindex, nofollow
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin

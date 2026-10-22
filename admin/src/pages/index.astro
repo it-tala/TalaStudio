@@ -1,0 +1,71 @@
+---
+// Staff only: collections, their items (with angles and finishes), covers and gallery images. Row Level Security locks the data, not this page.
+// Static page; src/lib/app.ts draws everything after sign-in.
+import '../styles/admin.css';
+
+const configured = Boolean(import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>TalaStudio Admin</title>
+    <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="logo" href="/">TalaStudio <span>Admin</span></a>
+      <div id="session" class="session" hidden>
+        <span id="who"></span>
+        <button type="button" id="publish" class="btn small" data-action="publish" title="Rebuild talastudio.net with the saved changes (2 to 3 minutes)">Publish site</button>
+        <button type="button" class="btn small ghost" data-action="signout">Sign out</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="view-setup" class="center" hidden={configured}>
+        <div class="card">
+          <h1>Connect Supabase first</h1>
+          <p>The admin needs <code>PUBLIC_SUPABASE_URL</code> and <code>PUBLIC_SUPABASE_ANON_KEY</code> when it is built. See <code>admin/README.md</code>.</p>
+        </div>
+      </section>
+
+      <section id="view-login" class="center" hidden>
+        <form id="login" class="card">
+          <h1>Staff sign in</h1>
+          <label>Email<input name="email" type="email" autocomplete="username" required /></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
+          <p class="form-error" role="alert"></p>
+          <button type="submit" class="btn">Sign in</button>
+          <p class="hint">Staff accounts are set up in Supabase by Azkia.</p>
+        </form>
+      </section>
+
+      <section id="view-denied" class="center" hidden>
+        <div class="card">
+          <h1>No staff access</h1>
+          <p><b id="denied-email"></b> is signed in but is not on the staff list.</p>
+          <p class="hint">Azkia adds staff in Supabase, table <code>staff</code>.</p>
+          <button type="button" class="btn small ghost" data-action="signout">Sign out</button>
+        </div>
+      </section>
+
+      <div id="view-main" class="main" hidden>
+        <aside id="list" class="list" aria-label="Collections"></aside>
+        <div id="editor" class="editor"></div>
+      </div>
+    </main>
+
+    <p id="progress" class="progress" role="status" hidden></p>
+    <p id="toast" class="toast" role="status" aria-live="polite" hidden></p>
+    <input id="file-cover" type="file" accept="image/*" hidden />
+    <input id="file-gallery" type="file" accept="image/*" multiple hidden />
+    <input id="file-item" type="file" accept="image/*" multiple hidden />
+    <script>import '../lib/app';</script>
+  </body>
+</html>
