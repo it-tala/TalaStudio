@@ -52,6 +52,7 @@ export const collectionEntries: Entry[] = [
       '18': { name: 'Sofa' },
       '19': { name: 'Sofa' },
       '20': { name: 'Sofa' },
+      '25': { name: 'Sofa' }, // spec sheet: fabrics, frame finishes, sizes
     } },
   { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true, captions: {
       '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' }, '05': { name: 'Night Table' },
