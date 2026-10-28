@@ -1,0 +1,66 @@
+---
+// Hero background: one cover per collection, cross-fading behind the hero copy.
+// The first cover loads with the page; the rest load once it is up. Each cover links to its collection.
+interface Props { slides: { src: string; label: string; name: string; href: string }[] }
+const { slides } = Astro.props;
+---
+{slides.length === 0 && <div class="media"></div>}
+{slides.map((s, i) => (
+  <a
+    class:list={['media', 'slide', { on: i === 0 }]}
+    href={s.href}
+    aria-label={`${s.name}: ${s.label}`}
+    aria-hidden={i === 0 ? undefined : 'true'}
+    tabindex={i === 0 ? undefined : -1}
+    style={i === 0 ? `background-image:url(${s.src})` : undefined}
+    data-bg={i === 0 ? undefined : s.src}
+  ></a>
+))}
+{slides.length > 1 && (
+  <button type="button" class="hero-arrow prev" aria-label="Previous picture">‹</button>
+  <button type="button" class="hero-arrow next" aria-label="Next picture">›</button>
+  <div class="hero-dots" role="group" aria-label="Hero pictures">
+    {slides.map((s, i) => <button type="button" aria-label={`Show ${s.label}`} aria-current={i === 0 ? 'true' : undefined}></button>)}
+  </div>
+)}
+
+<script>
+  // Auto-advance every few seconds. Pauses on hover, on keyboard focus and in a background tab.
+  // With reduced motion it never advances by itself; the dots still switch pictures.
+  document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
+    const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
+    const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
+    if (slides.length < 2) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)');
+    const load = (s: HTMLElement) => { if (s.dataset.bg) { s.style.backgroundImage = `url(${s.dataset.bg})`; delete s.dataset.bg; } };
+    const loadAll = () => slides.forEach(load);
+    if (document.readyState === 'complete') loadAll(); else addEventListener('load', loadAll, { once: true });
+
+    let cur = 0;
+    let timer = 0;
+    let hover = false;
+    let focus = false;
+    const show = (i: number) => {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, j) => {
+        if (j === cur) { load(s); s.classList.add('on'); s.removeAttribute('aria-hidden'); s.removeAttribute('tabindex'); }
+        else { s.classList.remove('on'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('tabindex', '-1'); }
+      });
+      dots.forEach((d, j) => (j === cur ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+    };
+    const start = () => {
+      clearInterval(timer);
+      if (!still.matches && !hover && !focus && !document.hidden) timer = window.setInterval(() => show(cur + 1), 6000);
+    };
+    dots.forEach((d, j) => d.addEventListener('click', () => { show(j); start(); }));
+    hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => { show(cur - 1); start(); });
+    hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => { show(cur + 1); start(); });
+    hero.addEventListener('mouseenter', () => { hover = true; start(); });
+    hero.addEventListener('mouseleave', () => { hover = false; start(); });
+    hero.addEventListener('focusin', () => { focus = true; start(); });
+    hero.addEventListener('focusout', (e) => { if (!hero.contains(e.relatedTarget as Node | null)) { focus = false; start(); } });
+    document.addEventListener('visibilitychange', start);
+    still.addEventListener('change', start);
+    start();
+  });
+</script>

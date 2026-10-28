@@ -1,0 +1,233 @@
+---
+// One card per item of a collection: gallery pictures grouped by caption name, in gallery order.
+// A click opens a full-screen viewer for that item: the big picture on top, every angle as a thumbnail strip below.
+// Pictures without a caption are left out.
+// Wood (and, for upholstered items, fabric) swatches under the picture switch the item to the photos of that finish.
+import type { Collection } from '../lib/supabase';
+import { edgeBackground } from '../lib/edge';
+import { swatch, finishSlug } from '../data/finishes';
+interface Props { collection: Collection }
+const { collection } = Astro.props;
+type Pic = NonNullable<Collection['gallery']>[number];
+const woods = collection.woods ?? [];
+// The finish the default photos show: named in `shown`, else the first of the list
+const shownOf = (list: string[]) => list.find((x) => collection.shown?.includes(x)) ?? list[0];
+const shownWood = shownOf(woods);
+const groups = new Map<string, Pic[]>();
+for (const g of collection.gallery ?? []) if (g.name) groups.set(g.name, [...(groups.get(g.name) ?? []), g]);
+const items = await Promise.all([...groups].map(async ([name, all]) => {
+  const pics = [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover)]; // the cover picture leads
+  const srcs = pics.map((p) => p.src);
+  const fabrics = collection.upholstered?.includes(name) ? collection.fabrics ?? [] : [];
+  const shownFabric = shownOf(fabrics);
+  // Photos per finish choice, keyed 'walnut' or 'walnut/grey'. The shown wood (and fabric) uses the default photos.
+  // For the shown fabric, a wood-only folder counts too (walnut/ for walnut + cream).
+  const photos: Record<string, string[]> = {};
+  woods.forEach((w) => (fabrics.length ? fabrics : [undefined]).forEach((f) => {
+    const wk = finishSlug(w);
+    const key = f ? `${wk}/${finishSlug(f)}` : wk;
+    const found = w === shownWood && f === shownFabric ? srcs : pics.flatMap((p) => p.finishes?.[key] ?? (f === shownFabric ? p.finishes?.[wk] : undefined) ?? []);
+    if (found.length) photos[key] = found;
+  }));
+  return { name, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]) };
+}));
+const id = `cat-${collection.slug}`;
+const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 'view' : 'views'}`].join(' · ');
+---
+{items.length > 0 && (
+  <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name}>
+    <div class="tiles-head">
+      <p class="eyebrow" id={`${id}-title`} style="margin:0">{collection.name} collection</p>
+      <a class="link" style="margin:0" href={`/collections/${collection.slug}`}>View the collection</a>
+    </div>
+    <ul class="cat-grid">
+      {items.map((it) => (
+        <li class="cat-item" data-name={it.name} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
+          <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
+            <span class="frame" style={it.bg ? `background:${it.bg}` : undefined}>
+              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" />
+            </span>
+          </button>
+          {woods.length > 0 && (
+            <div class="cat-swatches">
+              <span role="group" aria-label="Wood">
+                {woods.map((w) => <button type="button" class="sw" data-wood={finishSlug(w)} data-label={w} aria-pressed={w === shownWood ? 'true' : 'false'} aria-label={w} title={w} style={`--sw:${swatch(w)}`}></button>)}
+              </span>
+              {it.fabrics.length > 0 && (
+                <span role="group" aria-label="Fabric">
+                  {it.fabrics.map((f) => <button type="button" class="sw" data-fabric={finishSlug(f)} data-label={f} aria-pressed={f === it.shownFabric ? 'true' : 'false'} aria-label={f} title={f} style={`--sw:${swatch(f)}`}></button>)}
+                </span>
+              )}
+            </div>
+          )}
+          <span class="cat-name">{it.name}</span>
+          <span class="cat-views">{finishLine([shownWood, it.shownFabric].filter((s): s is string => !!s), it.srcs.length)}</span>
+        </li>
+      ))}
+    </ul>
+    <dialog class="cat-box" aria-labelledby={`${id}-name`}>
+      <div class="cat-track" tabindex="0" aria-label="Angles, scroll sideways"></div>
+      <div class="cat-cap"><h3 id={`${id}-name`}></h3><span class="cat-pos" aria-live="polite"></span></div>
+      <div class="cat-thumbs" role="group" aria-label="All angles"></div>
+      <button type="button" class="cat-btn cat-close" aria-label="Close">×</button>
+      <button type="button" class="cat-btn cat-prev" aria-label="Previous angle">‹</button>
+      <button type="button" class="cat-btn cat-next" aria-label="Next angle">›</button>
+    </dialog>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('.cat').forEach((sec) => {
+    const box = sec.querySelector<HTMLDialogElement>('.cat-box')!;
+    const track = box.querySelector<HTMLElement>('.cat-track')!;
+    const thumbs = box.querySelector<HTMLElement>('.cat-thumbs')!;
+    const title = box.querySelector('h3')!;
+    const pos = box.querySelector('.cat-pos')!;
+    const prev = box.querySelector<HTMLButtonElement>('.cat-prev')!;
+    const next = box.querySelector<HTMLButtonElement>('.cat-next')!;
+    let opener: HTMLButtonElement | null = null;
+    let shown = -1;
+    let finishText = '';
+    const at = () => Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+    const go = (i: number) => track.scrollTo({ left: i * track.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    const sync = () => {
+      const n = track.children.length;
+      const i = at();
+      prev.hidden = next.hidden = thumbs.hidden = n < 2;
+      prev.disabled = i <= 0;
+      next.disabled = i >= n - 1;
+      if (i === shown) return;
+      shown = i;
+      pos.textContent = [finishText, n > 1 ? `${i + 1} / ${n}` : ''].filter(Boolean).join(' · ');
+      [...thumbs.children].forEach((t, j) => {
+        t.classList.toggle('on', j === i);
+        if (j === i) { t.setAttribute('aria-current', 'true'); t.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+        else t.removeAttribute('aria-current');
+      });
+    };
+    const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]>) => Object.assign(document.createElement(tag), props);
+
+    // The chosen finish of an item: its photos (the default ones while that finish has none yet) and its names
+    const finish = (li: HTMLElement) => {
+      const picked = [...li.querySelectorAll<HTMLButtonElement>('.sw[aria-pressed="true"]')];
+      const key = picked.map((s) => s.dataset.wood ?? s.dataset.fabric).join('/');
+      const own: string[] | undefined = JSON.parse(li.dataset.photos ?? '{}')[key];
+      return { srcs: own ?? (JSON.parse(li.dataset.srcs ?? '[]') as string[]), labels: picked.map((s) => s.dataset.label!), soon: picked.length > 0 && !own };
+    };
+    sec.querySelectorAll<HTMLElement>('.cat-item').forEach((li) => {
+      const img = li.querySelector<HTMLImageElement>('.cat-card img')!;
+      const views = li.querySelector('.cat-views')!;
+      li.querySelectorAll<HTMLButtonElement>('.sw').forEach((sw) => sw.addEventListener('click', () => {
+        sw.parentElement!.querySelectorAll('.sw').forEach((o) => o.setAttribute('aria-pressed', String(o === sw)));
+        const f = finish(li);
+        img.src = f.srcs[0];
+        img.alt = `${sec.dataset.collection} ${li.dataset.name}, ${f.labels.join(', ')}`;
+        views.textContent = [...f.labels, f.soon ? 'photo soon' : `${f.srcs.length} ${f.srcs.length === 1 ? 'view' : 'views'}`].join(' · ');
+      }));
+    });
+
+    sec.querySelectorAll<HTMLButtonElement>('.cat-card').forEach((b) => b.addEventListener('click', () => {
+      const li = b.closest<HTMLElement>('.cat-item')!;
+      const name = li.dataset.name ?? '';
+      const f = finish(li);
+      const srcs = f.srcs;
+      finishText = f.soon ? '' : f.labels.join(' · ');
+      title.textContent = name;
+      track.replaceChildren(...srcs.map((src, i) => {
+        const slide = el('div', { className: 'cat-slide' });
+        slide.append(el('img', { src, alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${srcs.length}` }));
+        return slide;
+      }));
+      thumbs.replaceChildren(...srcs.map((src, i) => {
+        const t = el('button', { type: 'button', ariaLabel: `Show view ${i + 1}` });
+        t.append(el('img', { src, alt: '' }));
+        t.addEventListener('click', () => go(i));
+        return t;
+      }));
+      opener = b;
+      shown = -1;
+      box.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      track.scrollLeft = 0;
+      sync();
+    }));
+    box.addEventListener('close', () => { document.documentElement.style.overflow = ''; opener?.focus(); });
+    box.querySelector('.cat-close')!.addEventListener('click', () => box.close());
+    // A click on the dark space around the picture closes the viewer
+    box.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t === box || t.classList.contains('cat-slide') || t.classList.contains('cat-cap')) box.close();
+    });
+    prev.addEventListener('click', () => go(at() - 1));
+    next.addEventListener('click', () => go(at() + 1));
+    track.addEventListener('scroll', sync, { passive: true });
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); }
+    });
+  });
+</script>
+
+<style is:global>
+  /* Edge to edge, lined up with the collection card's text */
+  .cat { --cat-edge: clamp(20px, 4vw, 64px); padding-block: clamp(48px, 6vw, 88px) 0; }
+  .cat .tiles-head { max-width: none; padding-inline: var(--cat-edge); margin-bottom: 28px; align-items: center; }
+  .cat-grid { list-style: none; margin: 0; padding: 0 var(--cat-edge); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+  .cat-item { display: flex; flex-direction: column; align-items: flex-start; }
+  .cat-card { display: flex; flex-direction: column; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: zoom-in; }
+  .cat-card .frame img { transition: transform .6s ease; }
+  .cat-card:hover .frame img { transform: scale(1.03); }
+  .cat-card:focus-visible { outline: 1px solid var(--text); outline-offset: 6px; }
+  /* Finish swatches under the picture: small dots, the chosen one ringed; wood and fabric split by a thin line */
+  .cat-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; }
+  .cat-swatches > span { display: flex; gap: 8px; }
+  .cat-swatches > span + span { padding-left: 12px; border-left: 1px solid var(--line); }
+  .sw { position: relative; width: 16px; height: 16px; padding: 0; border: 0; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 .5px var(--line); cursor: pointer; outline: .5px solid transparent; outline-offset: 1.5px; transition: outline-color .2s; }
+  .sw:hover { outline-color: var(--text-soft); }
+  /* Bigger preview on hover or keyboard focus, so the wood grain can be seen */
+  .sw::after { content: ''; position: absolute; left: 50%; bottom: calc(100% + 10px); width: 76px; height: 76px; border-radius: 50%; background: var(--sw); box-shadow: 0 0 0 3px var(--bg), 0 6px 18px rgba(0, 0, 0, .18); opacity: 0; transform: translateX(-50%) scale(.6); transform-origin: 50% 100%; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 3; }
+  .sw:hover::after, .sw:focus-visible::after { opacity: 1; transform: translateX(-50%) scale(1); }
+  .sw[aria-pressed='true'] { outline-color: var(--text); }
+  .sw:focus-visible { outline: 1px solid var(--text); }
+  .cat-name { margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; line-height: 1.15; }
+  .cat-views { margin-top: 6px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
+  @media (max-width: 1000px) { .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .cat-card .frame img, .sw, .sw::after { transition: none; } }
+
+  /* Viewer: full screen and dark like the collection page lightbox. Big picture, name, then a sideways strip of every angle */
+  .cat-box { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(20, 17, 14, .96); color: #f3ece2; overflow: hidden; }
+  .cat-box[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; }
+  .cat-box::backdrop { background: rgba(20, 17, 14, .96); }
+  .cat-track { display: flex; min-height: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .cat-track::-webkit-scrollbar { display: none; }
+  .cat-track:focus-visible { outline: 1px solid rgba(243, 236, 226, .4); outline-offset: -1px; }
+  .cat-slide { flex: 0 0 100%; display: grid; place-items: center; min-height: 0; padding: 24px 88px 0; scroll-snap-align: start; }
+  .cat-slide img { max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; user-select: none; }
+  .cat-cap { display: flex; justify-content: center; align-items: baseline; gap: 14px; padding: 16px 20px 12px; }
+  .cat-cap h3 { font: 500 .8rem/1.4 Inter, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .cat-pos { font-size: .7rem; letter-spacing: .1em; opacity: .55; }
+  .cat-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 20px 20px; scrollbar-width: thin; scrollbar-color: rgba(243, 236, 226, .3) transparent; }
+  .cat-thumbs[hidden] { display: none; }
+  .cat-thumbs > :first-child { margin-left: auto; }
+  .cat-thumbs > :last-child { margin-right: auto; }
+  .cat-thumbs button { flex: none; height: 76px; padding: 0; border: 1px solid transparent; background: none; opacity: .5; cursor: pointer; transition: opacity .2s; }
+  .cat-thumbs button:hover { opacity: .85; }
+  .cat-thumbs button.on { opacity: 1; border-color: #f3ece2; }
+  .cat-thumbs button:focus-visible { outline: 1px solid #f3ece2; outline-offset: 2px; }
+  .cat-thumbs img { height: 100%; width: auto; }
+  .cat-btn { position: absolute; z-index: 2; width: 2.8rem; height: 2.8rem; border: 0; border-radius: 50%; background: rgba(243, 236, 226, .14); color: inherit; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+  .cat-btn:hover:not(:disabled) { background: rgba(243, 236, 226, .28); }
+  .cat-btn:disabled { opacity: .3; cursor: default; }
+  .cat-btn[hidden] { display: none; }
+  .cat-close { top: 1rem; right: 1rem; }
+  .cat-prev, .cat-next { top: calc(50% - 56px); transform: translateY(-50%); }
+  .cat-prev { left: 1rem; }
+  .cat-next { right: 1rem; }
+  @media (max-width: 700px) {
+    .cat-slide { padding: 64px 12px 0; }
+    .cat-thumbs button { height: 56px; }
+    .cat-prev, .cat-next { width: 2.4rem; height: 2.4rem; font-size: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .cat-thumbs button { transition: none; } }
+</style>

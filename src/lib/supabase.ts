@@ -4,7 +4,8 @@ export { supabase, imageUrl };
 export type Collection = {
   id: string; slug: string; name: string; room: 'bedroom' | 'living' | 'dining' | 'other';
   description: string | null; hero_image_path: string | null; sort_order: number;
-  gallery?: { src: string; name?: string; code?: string }[]; // static v1 only: extra images from /public
+  gallery?: { src: string; name?: string; code?: string; cover?: boolean; finishes?: Record<string, string> }[]; // static v1 only: extra images from /public
+  woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[]; // static v1 only: swatches on the landing page catalog
 };
 
 export type Product = {

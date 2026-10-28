@@ -7,14 +7,23 @@ import { story } from '../data/story';
 import { edgeBackground } from '../lib/edge';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
+import HeroSlideshow from '../components/HeroSlideshow.astro';
+import ItemCatalog from '../components/ItemCatalog.astro';
 
-// Landing page shows three collections, one per room in this order: living, dining, bedroom.
-// Dining has none yet, so bedroom fills the spare slot (living 1 + bedroom 2).
 const all = await getCollections();
-const inRoom = (room: string, n: number) => all.filter((c) => c.room === room).slice(0, n);
-const living = inRoom('living', 1);
-const dining = inRoom('dining', 1);
-const collections = [...living, ...dining, ...inRoom('bedroom', 3 - living.length - dining.length)];
+// Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
+const featured = ['doheny'];
+// Hero: one cover per published collection. Placeholder SVG covers are skipped; covers shared by two entries show once.
+// A click goes to that collection's card further down, or to its own page while it is not on the landing page.
+const heroSlides = [...new Map(all
+  .filter((c) => c.hero_image_path && !c.hero_image_path.endsWith('.svg'))
+  .map((c) => [c.hero_image_path, {
+    src: imageUrl(c.hero_image_path)!,
+    label: `${c.name} collection, ${c.room} render`,
+    name: `${c.name} collection`,
+    href: featured.includes(c.slug) ? `#coll-${c.slug}` : `/collections/${c.slug}`,
+  }])).values()];
+const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
 const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
@@ -44,7 +53,7 @@ const materials = [
 >
   <!-- 1. Hero -->
   <section class="hero-full">
-    <div class="media" role="img" aria-label="Doheny collection, bedroom render" style="background-image:url(/collections/bedroom/doheny/hero.jpg)"></div>
+    <HeroSlideshow slides={heroSlides} />
     <div class="inner fade">
       <p class="eyebrow">Jepara, Indonesia</p>
       <h1>{story.headline}</h1>
@@ -107,7 +116,8 @@ const materials = [
     {collections.length > 0 ? (
       <div class="feat-grid">
         {collections.map((c) => (
-          <a class="feat-card" href={`/collections/${c.slug}`}>
+          <>
+          <a class="feat-card" id={`coll-${c.slug}`} href={`/collections/${c.slug}`}>
             {imageUrl(c.hero_image_path)
               ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
               : <Ph label={`${c.name} render`} watermark />}
@@ -122,12 +132,13 @@ const materials = [
               <em>Explore the collection</em>
             </div>
           </a>
+          <ItemCatalog collection={c} />
+          </>
         ))}
       </div>
     ) : (
       <p class="coll-intro">First collections arrive soon. <a href="/request-catalog">Request the catalog</a> to be first to see them.</p>
     )}
-    <p style="text-align:center"><a class="link" href="/collections">Explore every collection</a></p>
   </section>
 
   <!-- 6. Materials -->
