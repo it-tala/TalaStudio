@@ -3,5 +3,5 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://talastudio.net',
-  integrations: [sitemap({ filter: (p) => !p.includes('/palettes') && !p.includes('/fonts') })],
+  integrations: [sitemap({ filter: (p) => !p.includes('/palettes') })],
 });

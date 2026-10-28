@@ -75,7 +75,7 @@ Full-page screenshots of the current build are in `docs/preview/`, for sharing w
 | `10-request-catalog-mobile.png` | Request catalog form |
 | `11-menu-open-mobile.png` | Menu open (top of screen only) |
 
-There is no product page screenshot yet. The first item page is `/products/beechwood-6-drawer-dresser` (added 21 October 2026): one main view with a thumbnail per angle, and a button per finish once an item has more than one.
+There is no product page screenshot: V1 shows collections only, and product pages return when products come from Supabase.
 
 ### How mobile differs from desktop
 
@@ -95,11 +95,10 @@ src/
   layouts/      Base.astro (title, description, link preview tags, analytics)
   styles/       global.css (palettes, type), layout.css (Harbour-style sections)
   lib/          supabase.ts (client, queries, image URLs)
-  data/         collections.ts (V1 collections and items), angles.ts (item angles), demo-dashboard.ts (sample buyer dashboard)
+  data/         sample-catalog.ts (preview), demo-dashboard.ts (sample buyer dashboard)
   content/      insights/*.md (articles)
 functions/api/catalog.ts   catalog form: spam check, save to Supabase, email David
-public/                    favicon, robots.txt, _headers (lets the admin app read the V1 image files)
-admin/                     the back end: staff app for collections and images, built and deployed on its own (admin/README.md)
+public/                    favicon, robots.txt
 ```
 
 ## Pages
@@ -118,7 +117,7 @@ Home, Collections, Collection page, Product page, How we work, The Studio, Buyer
 
 ## Data
 
-Collections and products are read from Supabase **at build time**. Staff manage collections and their images in the admin app (`admin/`, a separate Cloudflare Pages project; see `admin/README.md`). Its **Publish site** button rebuilds this site through a deploy hook. Schema: `supabase/migrations/`.
+Collections and products are read from Supabase **at build time**. Add or publish rows, then rebuild (a Supabase webhook can trigger a Cloudflare Pages deploy). Schema: `../talastudio-stack/supabase/001_initial_schema.sql`.
 
 Images load from a public storage bucket named `public-images` (set in `src/lib/supabase.ts`).
 

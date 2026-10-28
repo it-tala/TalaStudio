@@ -1,5 +1,0 @@
-# Cloudflare Pages response headers for talastudio.net.
-# The admin app (admin/, its own domain) reads the V1 image files to add the watermark.
-# Remove this rule once public/collections/ is emptied after the move to Supabase.
-/collections/*
-  Access-Control-Allow-Origin: *

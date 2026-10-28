@@ -3,8 +3,6 @@
 ## 1. Database (once)
 Supabase dashboard of the TalaStudio project > SQL Editor > New query.
 Paste all of `supabase/setup-all.sql` > Run. (Only in the TalaStudio project.)
-Already ran an older setup-all.sql (migrations 001 to 004)? Then run only
-`supabase/migrations/20261021000005_item_angles_finishes.sql` (item angles and finishes).
 
 ## 2. Where to find the values
 Supabase > Project Settings > API:
@@ -33,18 +31,3 @@ form (/request-catalog) -> POST /api/catalog (functions/api/catalog.ts)
   -> Turnstile check -> saved in table catalog_requests (Supabase)
   -> email to DAVID_EMAIL via the EMAIL binding (Cloudflare Email Service).
 Test: submit the form once, check the row in Supabase and David's inbox/spam.
-
-## 5. Staff logins (for the admin app)
-The admin app (`admin/`, its own Cloudflare Pages project) is where staff manage collections,
-covers and gallery images. Setup, deploy and the move from the V1 list: `admin/README.md`.
-
-Turn off public sign-ups first:
-  Supabase > Authentication > Sign In / Providers > "Allow new users to sign up" = off.
-
-Add a staff member (Evin, David, Rian, Azkia):
-  1. Supabase > Authentication > Users > Add user > Create new user
-     (their talastudio.net email, a password from the password manager, Auto Confirm on).
-  2. SQL Editor (role: 'owner' for Evin and David, 'approver' for Rian and Azkia):
-       insert into staff (user_id, full_name, role)
-       select id, 'Azkia', 'approver' from auth.users where email = 'azkia@talastudio.net';
-  Signed in but not in `staff` = no access. Row Level Security enforces this, not the app.

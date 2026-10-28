@@ -3,7 +3,6 @@
 import sharp from 'sharp';
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 
 const cache = new Map<string, string | null>();
 const hex = (v: number[]) => `rgb(${v.map((n) => Math.round(n)).join(',')})`;
@@ -14,10 +13,7 @@ export async function edgeBackground(src: string, frameRatio = 4 / 3): Promise<s
   try {
     const file = join(process.cwd(), 'public', src);
     if (src.startsWith('/') && existsSync(file)) {
-      // Read into memory first: sharp given a path keeps the file open, and on Windows the dev server
-      // then locks every image it has shown, so it cannot be replaced or deleted.
-      const bytes = await readFile(file);
-      const { data, info } = await sharp(bytes).removeAlpha().resize(32, 32, { fit: 'fill' }).raw().toBuffer({ resolveWithObject: true });
+      const { data, info } = await sharp(file).removeAlpha().resize(32, 32, { fit: 'fill' }).raw().toBuffer({ resolveWithObject: true });
       const avg = (pts: [number, number][]) => {
         const s = [0, 0, 0];
         for (const [x, y] of pts) for (let c = 0; c < 3; c++) s[c] += data[(y * info.width + x) * 3 + c];
@@ -25,7 +21,7 @@ export async function edgeBackground(src: string, frameRatio = 4 / 3): Promise<s
       };
       const col = (x: number) => Array.from({ length: 32 }, (_, y) => [x, y] as [number, number]);
       const row = (y: number) => Array.from({ length: 32 }, (_, x) => [x, y] as [number, number]);
-      const meta = await sharp(bytes).metadata();
+      const meta = await sharp(file).metadata();
       const ratio = (meta.width ?? 1) / (meta.height ?? 1);
       out = ratio < frameRatio
         ? `linear-gradient(90deg, ${hex(avg([...col(0), ...col(1)]))}, ${hex(avg([...col(30), ...col(31)]))})`
