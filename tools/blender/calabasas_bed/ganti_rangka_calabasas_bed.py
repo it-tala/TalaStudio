@@ -6,7 +6,8 @@ Dipakai pada 03_PROYEK/Calabasas_Bed_Plester.blend. Yang diganti HANYA mesh rang
     leg_front_left/right
 Nama objek, material, modifier, parent, studio, kamera, lampu, NPanel "Nakas Studio",
 kasur & bantal tidak diubah. Bedding hanya digeser supaya tetap di tengah rangka baru
-(rangka lama tidak simetris, 17,5 mm ke kiri) dan throw diangkat keluar dari rangka.
+(rangka lama tidak simetris, 17,5 mm ke kiri), kasur dilebarkan selebar rangka dan
+throw ikut melebar. Bercak gelap di lantai (pantulan sandbag/kaki stand/kabel) dihilangkan.
 
 Jalankan:
   SETUP_Calabasas_Bed.cmd                (otomatis, backup dulu lalu simpan)
@@ -302,58 +303,152 @@ def mesh_center(obj):
     return (lo + hi) / 2, lo, hi
 
 
-def fix_bedding(objs, root, x_shift_mm):
-    """geser bedding ke tengah rangka baru; throw yang menggantung diangkat keluar rangka."""
-    if root.get("cb_rev1_bedding"):
-        return
-    for o in objs:
-        if o.name.startswith("fabric_"):
-            o.location.x += x_shift_mm * MM
-    throw = bpy.data.objects.get("fabric_throw")
-    if throw:
-        clear = D["frame_half"] + 8.0                       # 8 mm dari muka luar rangka
-        top = D["rail_z"] + D["rail_h"]
-        z_hi = top + 150.0                                  # di atas ini throw tidak diubah
-        dx = throw.location.x / MM
-        step = 20.0
-        for side in (-1, 1):
-            # geseran yang dibutuhkan per ketinggian (bin 20 mm), dari lapisan terdalam
-            bins = {}
-            for v in throw.data.vertices:
-                x, z = side * (v.co.x / MM + dx), v.co.z / MM
-                if x > 650 and z < z_hi:
-                    k = int(z // step)
-                    bins[k] = min(bins.get(k, 1e9), x)
-            if not bins:
-                continue
-            ks = sorted(bins)
-            need = {k: max(0.0, clear - bins[k]) for k in ks}
-            # di atas rangka: ruang hanya perlu di luar tepi atas -> turun mulus ke 0 di z_hi
-            ktop = int(top // step)
-            n_top = max([need[k] for k in ks if k <= ktop] or [0.0])
-            for k in ks:
-                z = (k + 0.5) * step
-                if z > top:
-                    w = max(0.0, 1 - (z - top) / (z_hi - top))
-                    need[k] = n_top * w * w * (3 - 2 * w)
-            zc = [(k + 0.5) * step for k in ks]
-            nv = [need[k] for k in ks]
+MATTRESS_INSET = 5.0     # kasur 5 mm lebih kecil dari muka luar rangka (samping & kaki)
 
-            def interp(z):
-                if z <= zc[0]:
-                    return nv[0]
-                for i in range(len(zc) - 1):
-                    if z <= zc[i + 1]:
-                        t = (z - zc[i]) / (zc[i + 1] - zc[i])
-                        return nv[i] * (1 - t) + nv[i + 1] * t
-                return 0.0
-            for v in throw.data.vertices:
-                x, z = side * (v.co.x / MM + dx), v.co.z / MM
-                if x < 600 or z >= z_hi:
-                    continue
-                v.co.x += side * interp(z) * min(1.0, (x - 600) / 50) * MM
-        throw.data.update()
-    root["cb_rev1_bedding"] = True
+
+def fix_bedding(objs, root, x_shift_mm):
+    """bedding ke tengah rangka baru, kasur selebar rangka, throw ikut melebar."""
+    if not root.get("cb_rev1_bedding"):
+        for o in objs:
+            if o.name.startswith("fabric_"):
+                o.location.x += x_shift_mm * MM
+        root["cb_rev1_bedding"] = True
+    m_half, m_top = fit_mattress()
+    fit_throw(m_half, m_top)
+
+
+def fit_mattress():
+    """kasur: geser sisi-sisinya (bukan skala, jadi radius tepinya tetap) sampai
+    selebar rangka - 2 x inset, ujung kaki 5 mm di dalam footrail, ujung kepala
+    menempel muka headboard."""
+    mat = bpy.data.objects.get("fabric_mattress")
+    if mat is None:
+        return None, None
+    y_post = mesh_center(bpy.data.objects["post_left"])[0].y / MM
+    tx = D["frame_half"] - MATTRESS_INSET
+    ty0 = y_post + D["frame_front"] + MATTRESS_INSET
+    ty1 = y_post - D["hb_t"]
+    ox, oy = mat.location.x / MM, mat.location.y / MM
+    vs = mat.data.vertices
+    xs = [v.co.x / MM + ox for v in vs]
+    ys = [v.co.y / MM + oy for v in vs]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    sx0, sx1 = -tx - min(xs), tx - max(xs)
+    sy0, sy1 = ty0 - min(ys), ty1 - max(ys)
+    for v, x, y in zip(vs, xs, ys):
+        v.co.x += (sx1 if x > cx else sx0) * MM
+        v.co.y += (sy1 if y > cy else sy0) * MM
+    mat.data.update()
+    return tx, max(v.co.z for v in vs) / MM + mat.location.z / MM
+
+
+def fit_throw(m_half, m_top):
+    """throw dilebarkan sebanding kasur (dihitung dari bentuk aslinya, jadi aman
+    dijalankan berulang), lalu bagian yang menggantung dijauhkan dari kasur & rangka."""
+    throw = bpy.data.objects.get("fabric_throw")
+    if throw is None or m_half is None:
+        return
+    me = throw.data
+    orig = me.attributes.get("cb_asli")
+    if orig is None:                                     # simpan bentuk asli sekali
+        orig = me.attributes.new("cb_asli", "FLOAT_VECTOR", "POINT")
+        for i, v in enumerate(me.vertices):
+            orig.data[i].vector = v.co
+    ox = throw.location.x / MM
+    k = m_half / 700.0                                   # kasur asli 1400 mm
+    for i, v in enumerate(me.vertices):
+        o = orig.data[i].vector
+        v.co = (((o.x / MM + ox) * k - ox) * MM, o.y, o.z)
+
+    top = D["rail_z"] + D["rail_h"]
+    step = 20.0
+
+    def clear(z):
+        if z < top + 6:
+            return D["frame_half"] + 8.0                 # 8 mm di luar rangka
+        if z < m_top - 25:
+            return m_half + 6.0                          # 6 mm di luar sisi kasur
+        return None
+
+    for side in (-1, 1):
+        bins = {}
+        for v in me.vertices:
+            x, z = side * (v.co.x / MM + ox), v.co.z / MM
+            if x > m_half - 120 and clear(z) is not None:
+                kk = int(z // step)
+                bins[kk] = min(bins.get(kk, 1e9), x)
+        if not bins:
+            continue
+        ks = sorted(bins)
+        zc = [(kk + 0.5) * step for kk in ks]
+        nv = [max(0.0, (clear(z) or bins[kk]) - bins[kk]) for kk, z in zip(ks, zc)]
+        if max(nv) <= 0:
+            continue
+        # naik mulus ke 0 di atas kasur
+        zc.append(m_top + 30)
+        nv.append(0.0)
+
+        def interp(z):
+            if z <= zc[0]:
+                return nv[0]
+            for i in range(len(zc) - 1):
+                if z <= zc[i + 1]:
+                    t = (z - zc[i]) / (zc[i + 1] - zc[i])
+                    t = t * t * (3 - 2 * t)
+                    return nv[i] * (1 - t) + nv[i + 1] * t
+            return 0.0
+        for v in me.vertices:
+            x, z = side * (v.co.x / MM + ox), v.co.z / MM
+            if x < m_half - 170:
+                continue
+            v.co.x += side * interp(z) * min(1.0, (x - m_half + 170) / 50) * MM
+    me.update()
+
+
+def clean_floor():
+    """bercak gelap di lantai = pantulan perlengkapan studio yang berdiri di lantai
+    (sandbag, kaki tripod, kabel, counterweight). Perlengkapan ini sudah tidak terlihat
+    kamera & tidak berbayangan, tapi masih muncul di pantulan lantai. Untuk objek
+    perlengkapan setinggi lantai (< 0,6 m) yang tidak memancarkan cahaya, pantulan
+    glossy/diffuse dimatikan. Softbox & lampu tidak diubah.
+    Noise besar di material lantai LATAR juga dihaluskan."""
+    dg = bpy.context.evaluated_depsgraph_get()
+    n = 0
+    for o in bpy.data.objects:
+        if not o.get("ns_equipment") or o.type not in {"MESH", "CURVE"}:
+            continue
+        if any(s.material and emits(s.material) for s in o.material_slots):
+            continue
+        ev = o.evaluated_get(dg)
+        zmin = min((ev.matrix_world @ Vector(c)).z for c in ev.bound_box)
+        if zmin < 0.6:
+            o.visible_glossy = False
+            o.visible_diffuse = False
+            o.visible_transmission = False
+            n += 1
+    print("CALABASAS BED: %d perlengkapan lantai tidak lagi terpantul di lantai" % n)
+    for m in bpy.data.materials:
+        if not (m.name.startswith("LATAR") and "lantai" in m.name) or not m.node_tree:
+            continue
+        for nd in m.node_tree.nodes:
+            if nd.type == "MAP_RANGE" and abs(nd.inputs["To Min"].default_value - 0.72) < 1e-3:
+                nd.inputs["To Min"].default_value = 0.97
+                nd.inputs["To Max"].default_value = 1.03
+            if nd.type == "TEX_NOISE" and abs(nd.inputs["Scale"].default_value - 1.6) < 1e-3:
+                nd.inputs["Detail"].default_value = 2.0
+
+
+def emits(m):
+    if not m.node_tree:
+        return False
+    for nd in m.node_tree.nodes:
+        if nd.type == "EMISSION":
+            return True
+        if nd.type == "BSDF_PRINCIPLED":
+            s = nd.inputs["Emission Strength"]
+            if s.is_linked or s.default_value > 0:
+                return True
+    return False
 
 
 def main():
@@ -385,6 +480,7 @@ def main():
         h = D["post_h"] + D["toprail_r"]
         root["dimensions_cm"] = [round(w / 10, 1), round(l / 10, 1), round(h / 10, 1)]
         root["source_dwg"] = SOURCE
+    clean_floor()
     print("CALABASAS BED: rangka diganti sesuai %s (%.1f x %.1f x %.1f mm)"
           % (SOURCE, 2 * D["toprail_half"], -D["frame_front"] + D["post_r"],
              D["post_h"] + D["toprail_r"]))
