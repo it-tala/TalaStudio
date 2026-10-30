@@ -7,13 +7,14 @@ import type { Collection } from '../lib/supabase';
 import { edgeBackground } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { groupItems } from '../lib/items';
-interface Props { collection: Collection; link?: boolean } // link: "View the collection" in the heading row
-const { collection, link = true } = Astro.props;
+// link: "View the collection" in the heading row. only: show just these items (by name); the rest stay on the collection page.
+interface Props { collection: Collection; link?: boolean; only?: string[] }
+const { collection, link = true, only } = Astro.props;
 const woods = collection.woods ?? [];
 // The finish the default photos show: named in `shown`, else the first of the list
 const shownOf = (list: string[]) => list.find((x) => collection.shown?.includes(x)) ?? list[0];
 const shownWood = shownOf(woods);
-const items = await Promise.all(groupItems(collection).map(async ({ name, pics: grouped }) => {
+const items = await Promise.all(groupItems(collection).filter((it) => !only || only.includes(it.name)).map(async ({ name, pics: grouped }) => {
   // Room shots (covers) belong to the card slider, not here, unless an item has nothing else. The card and viewer open on the front view.
   const all = grouped.some((p) => !p.cover) ? grouped.filter((p) => !p.cover) : grouped;
   const pics = [...all.filter((p) => p.front), ...all.filter((p) => !p.front)];

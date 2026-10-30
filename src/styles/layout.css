@@ -21,17 +21,19 @@
 .feat-card { scroll-margin-top: 4.5rem; } /* clears the sticky header when the hero links here */
 .hero-dots { position: absolute; z-index: 2; right: 48px; bottom: 64px; display: flex; gap: 4px; }
 /* Arrows on the picture's left and right edges, same thin look as the collections page slider */
-.hero-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 44px; height: 64px; padding: 0; border: 0; background: none; color: var(--on-dark); font-size: 44px; font-weight: 200; line-height: 1; cursor: pointer; opacity: .75; text-shadow: 0 1px 8px rgba(0, 0, 0, .4); transition: opacity .2s; }
-.hero-arrow:hover { opacity: 1; }
-.hero-arrow.prev { left: 12px; }
-.hero-arrow.next { right: 12px; }
+/* Slider arrows (hero and collection card): large round buttons, dark glass with a white chevron, clear on light and dark photos */
+.hero-arrow, .fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 56px; height: 56px; padding: 0 0 4px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 50%; background: rgba(20, 17, 14, .45); color: #fff; font-size: 40px; font-weight: 400; line-height: 1; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, .25); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .2s, border-color .2s; }
+.hero-arrow:hover, .fs-arrow:hover { background: rgba(20, 17, 14, .7); border-color: rgba(255, 255, 255, .7); }
+.hero-arrow:focus-visible, .fs-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.hero-arrow.prev { left: 20px; }
+.hero-arrow.next { right: 20px; }
 .hero-arrow:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; }
 .hero-dots button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; }
 .hero-dots button::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--on-dark); opacity: .75; transition: background .3s, opacity .3s; }
 .hero-dots button:hover::before { opacity: 1; }
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
-@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 16px; } .hero-arrow { width: 32px; font-size: 34px; } .hero-arrow.prev { left: 2px; } .hero-arrow.next { right: 2px; } }
+@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 16px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
 @media (prefers-reduced-motion: reduce) { .hero-full .slide, .hero-dots button::before { transition: none; } }
 
 /* Proof strip: dark band, dividers, centred caps */
@@ -156,12 +158,10 @@
 .fs-track::-webkit-scrollbar { display: none; }
 .fs-track:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -6px; }
 .fs-slide { position: relative; flex: 0 0 100%; margin: 0; scroll-snap-align: start; }
-.fs-slide figcaption { position: absolute; left: 24px; bottom: 20px; z-index: 1; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
-.fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 44px; height: 64px; padding: 0; border: 0; background: none; color: #fff; font-size: 44px; font-weight: 200; line-height: 1; cursor: pointer; opacity: .8; text-shadow: 0 1px 8px rgba(0, 0, 0, .4); transition: opacity .2s; }
-.fs-arrow:hover { opacity: 1; }
-.fs-arrow:focus-visible { outline: 1px solid #fff; outline-offset: 2px; }
-.fs-arrow.prev { left: 8px; }
-.fs-arrow.next { right: 8px; }
+.fs-slide figcaption { position: absolute; left: 28px; bottom: 24px; z-index: 1; font-size: clamp(14px, 1.2vw, 18px); font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .55), 0 2px 14px rgba(0, 0, 0, .45); }
+.fs-slide figcaption span { margin-left: .4em; font-weight: 300; opacity: .85; } /* collection name after the product name */
+.fs-arrow.prev { left: 20px; }
+.fs-arrow.next { right: 20px; }
 @media (max-width: 800px) {
   .feat-card, .feat-card:nth-of-type(even) { grid-template-columns: 1fr; }
   .feat-card .frame, .feat-card > .ph { order: 0; }

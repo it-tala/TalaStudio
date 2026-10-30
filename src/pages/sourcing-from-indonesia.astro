@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import { pageOn } from '../data/sections';
 ---
 <Base
   title="Sourcing furniture from Indonesia"
@@ -25,7 +26,7 @@ import CtaBand from '../components/CtaBand.astro';
         <li>Check production and inspect before loading.</li>
         <li>Arrange freight and customs for your market.</li>
       </ol>
-      <p>See <a href="/how-a-container-works">how a container works</a> with us.</p>
+      {pageOn('/how-a-container-works') && <p>See <a href="/how-a-container-works">how a container works</a> with us.</p>}
 
       <h2>How TalaStudio works with makers</h2>
       <p>We design and engineer every collection in our Jepara studio. Partner factories in the region build to our drawings. We inspect every piece before it ships, and you can see the QC photos online.</p>

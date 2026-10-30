@@ -1,5 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import { pageOn } from '../data/sections';
+// Switched off in src/data/sections.ts: the address sends visitors home
+if (!pageOn('/how-a-container-works')) return Astro.redirect('/');
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 

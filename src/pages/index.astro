@@ -14,6 +14,10 @@ import { groupItems, itemRooms } from '../lib/items';
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
 const featured = ['doheny'];
+// The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
+const homeItems: Record<string, string[]> = {
+  doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
+};
 // Hero: one cover per published collection. Placeholder SVG covers are skipped; covers shared by two entries show once.
 // A click goes to that collection's card further down, or to its own page while it is not on the landing page.
 const heroSlides = [...new Map(all
@@ -127,7 +131,7 @@ const materials = [
                   {covers(c).map((p, i) => (
                     <figure class="fs-slide">
                       <img src={p.src} alt={`${c.name} ${p.name}`} loading={i === 0 ? 'eager' : 'lazy'} />
-                      <figcaption>{p.name}</figcaption>
+                      <figcaption>{p.name} <span>{c.name}</span></figcaption>
                     </figure>
                   ))}
                 </div>
@@ -148,7 +152,7 @@ const materials = [
               <a class="feat-more" href={`/collections/${c.slug}`}>Explore the collection</a>
             </div>
           </div>
-          <ItemCatalog collection={c} />
+          <ItemCatalog collection={c} only={homeItems[c.slug]} />
           </>
         ))}
       </div>

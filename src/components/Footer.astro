@@ -1,3 +1,6 @@
+---
+import { pageOn } from '../data/sections';
+---
 <style>
   /* Same text style as the navbar links: Inter, 0.8rem, uppercase, 0.1em spacing, weight 400 */
   footer { background: var(--bg-dark); color: var(--on-dark); padding-block: 4rem 1rem; font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .8rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; line-height: 1.7; }
@@ -33,13 +36,13 @@
       <div><h4>TalaStudio</h4><p>Furniture designed, engineered and costed in one place. Jepara, Indonesia.</p></div>
       <div><h4>Explore</h4><ul>
         <li><a href="/collections">Collections</a></li>
-        <li><a href="/the-studio">The Studio, Jepara</a></li>
+        {pageOn('/the-studio') && <li><a href="/the-studio">The Studio, Jepara</a></li>}
         <li><a href="/how-we-work">How we work</a></li>
         <li><a href="/insights">Insights</a></li></ul></div>
       <details><summary><h4>Buyers</h4></summary><ul>
-        <li><a href="/how-a-container-works">How a container works</a></li>
+        {pageOn('/how-a-container-works') && <li><a href="/how-a-container-works">How a container works</a></li>}
         <li><a href="/sourcing-from-indonesia">Sourcing from Indonesia</a></li>
-        <li><a href="/partner-with-us">Partner with us</a></li>
+        {pageOn('/partner-with-us') && <li><a href="/partner-with-us">Partner with us</a></li>}
         <li><a href="/buyer-dashboard">Buyer dashboard demo</a></li></ul></details>
       <details><summary><h4>Contact</h4></summary><ul>
         <li><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></li>

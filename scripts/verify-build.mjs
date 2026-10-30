@@ -25,6 +25,7 @@ const cssChecked = new Map();
 for (const page of pages) {
   const html = readFileSync(page, 'utf8');
   const label = '/' + relative(dist, page).replace(/\\/g, '/').replace(/index\.html$/, '');
+  if (/<meta http-equiv="refresh"/.test(html)) continue; // a switched-off page that only sends visitors on (see disabledPages)
   const hrefs = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="(\/_astro\/[^"]+\.css)"/g)].map((m) => m[1]);
   const inline = (html.match(/<style[\s>]/g) || []).length;
 
