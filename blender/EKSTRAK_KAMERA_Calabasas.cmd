@@ -1,12 +1,13 @@
 @echo off
 rem EKSTRAK_KAMERA_Calabasas.cmd
-rem Mengambil semua angle kamera dari setiap 03_PROYEK\Calabasas*.blend (posisi, rotasi,
-rem lens, fokus, azimuth/elevasi terhadap produk, angle terkunci) ke file JSON di folder KAMERA_Calabasas.
+rem Mengambil semua angle kamera dari setiap 03_PROYEK\Calabasas*.blend ke file JSON di
+rem 03_PROYEK\KAMERA, lalu (opsional) mengirimnya ke GitHub supaya orang lain bisa memakainya.
+rem File sesi .blend tidak ikut ke GitHub (diabaikan .gitignore), tetapi file JSON ini ikut.
 rem File .blend hanya dibaca, tidak diubah. Letakkan file ini di folder Studio_Furniture.
 setlocal
 set "ROOT=%~dp0"
 set "BLENDER=C:\Program Files\Blender Foundation\Blender 5.2\blender.exe"
-set "OUT=%ROOT%KAMERA_Calabasas"
+set "OUT=%ROOT%03_PROYEK\KAMERA"
 set "SKRIP=%TEMP%\ekstrak_kamera_calabasas.py"
 
 if not exist "%BLENDER%" (echo Blender tidak ditemukan: "%BLENDER%" & pause & exit /b 1)
@@ -21,11 +22,24 @@ for %%f in ("%ROOT%03_PROYEK\Calabasas*.blend") do (
     set /a N+=1
 )
 if "%N%"=="0" (echo Tidak ada file Calabasas*.blend di 03_PROYEK. & pause & exit /b 1)
-
 echo.
-echo Selesai. Hasil ada di: "%OUT%"
-echo Satu file ^<nama sesi^>_kamera.json untuk setiap file Calabasas.
+echo Selesai. JSON ada di: "%OUT%"
 start "" explorer.exe "%OUT%"
+
+rem ---- Kirim ke GitHub supaya bisa diambil orang lain ----
+where git >nul 2>nul || (echo Git tidak terpasang; kirim folder KAMERA secara manual. & pause & exit /b 0)
+git -C "%ROOT%." rev-parse --is-inside-work-tree >nul 2>nul || (echo Folder ini bukan repo Git; kirim folder KAMERA secara manual. & pause & exit /b 0)
+echo.
+choice /c YT /n /m "Kirim JSON kamera ke GitHub sekarang? [Y]a / [T]idak: "
+if errorlevel 2 (pause & exit /b 0)
+git -C "%ROOT%." add "03_PROYEK/KAMERA/*.json"
+git -C "%ROOT%." commit -m "Angle kamera sesi Calabasas (JSON)" -- "03_PROYEK/KAMERA"
+git -C "%ROOT%." push
+if errorlevel 1 (echo. & echo Push gagal. Kirim screenshot jendela ini ke Claude. & pause & exit /b 1)
+for /f "delims=" %%u in ('git -C "%ROOT%." remote get-url origin') do set "URL=%%u"
+for /f "delims=" %%b in ('git -C "%ROOT%." branch --show-current') do set "BR=%%b"
+echo.
+echo Terkirim ke %URL% (branch %BR%), folder 03_PROYEK/KAMERA.
 pause
 exit /b 0
 
