@@ -1,7 +1,7 @@
 @echo off
 rem EKSTRAK_KAMERA_Calabasas.cmd
 rem Mengambil semua angle kamera dari setiap 03_PROYEK\Calabasas*.blend (posisi, rotasi,
-rem lens, fokus, azimuth/elevasi terhadap produk, angle terkunci) ke folder KAMERA_Calabasas.
+rem lens, fokus, azimuth/elevasi terhadap produk, angle terkunci) ke file JSON di folder KAMERA_Calabasas.
 rem File .blend hanya dibaca, tidak diubah. Letakkan file ini di folder Studio_Furniture.
 setlocal
 set "ROOT=%~dp0"
@@ -11,22 +11,20 @@ set "SKRIP=%TEMP%\ekstrak_kamera_calabasas.py"
 
 if not exist "%BLENDER%" (echo Blender tidak ditemukan: "%BLENDER%" & pause & exit /b 1)
 if not exist "%OUT%" mkdir "%OUT%"
-if exist "%OUT%\KAMERA_Calabasas.csv" del "%OUT%\KAMERA_Calabasas.csv"
 for /f "delims=:" %%n in ('findstr /n /b /c:"#PYTHON_BEGIN" "%~f0"') do set "SKIP=%%n"
 more +%SKIP% "%~f0" > "%SKRIP%"
 
 set "N=0"
 for %%f in ("%ROOT%03_PROYEK\Calabasas*.blend") do (
     echo Membaca %%~nxf ...
-    "%BLENDER%" -b "%%~ff" --factory-startup --python "%SKRIP%" -- "%OUT%" 2>&1 | findstr /c:"[kamera]" /c:"Error"
+    "%BLENDER%" -b "%%~ff" --factory-startup --python "%SKRIP%" -- "%OUT%" 2>&1 | findstr /l /c:"[kamera]" /c:"Error"
     set /a N+=1
 )
 if "%N%"=="0" (echo Tidak ada file Calabasas*.blend di 03_PROYEK. & pause & exit /b 1)
 
 echo.
 echo Selesai. Hasil ada di: "%OUT%"
-echo  - KAMERA_Calabasas.csv  : ringkasan semua kamera (buka dengan Excel)
-echo  - ^<nama file^>_kamera.json : detail lengkap per file
+echo Satu file ^<nama sesi^>_kamera.json untuk setiap file Calabasas.
 start "" explorer.exe "%OUT%"
 pause
 exit /b 0
@@ -34,7 +32,7 @@ exit /b 0
 #PYTHON_BEGIN
 # Ekstrak semua kamera dari file .blend yang sedang dibuka (mode -b).
 # Argumen setelah "--": <folder_output>
-import bpy, sys, os, json, csv, math
+import bpy, sys, os, json, math
 from mathutils import Vector
 
 out_dir = sys.argv[sys.argv.index("--") + 1]
@@ -94,7 +92,7 @@ if prod is not None and hasattr(prod, "all_objects"):
         hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
         center = (lo + hi) / 2
 
-rows, cams = [], []
+cams = []
 for o in sorted([o for o in bpy.data.objects if o.type == "CAMERA"], key=lambda o: o.name):
     cam = o.data
     mw = o.matrix_world
@@ -140,10 +138,6 @@ for o in sorted([o for o in bpy.data.objects if o.type == "CAMERA"], key=lambda 
         "custom_props_kamera": props(cam),
     }
     cams.append(info)
-    rows.append([name, o.name, info["shot"], int(info["aktif_di_scene"]),
-                 *info["lokasi_m"], *info["rotasi_deg"], info["lens_mm"],
-                 info["sensor_mm"], *info["shift_xy"], info["fokus_m"], info["f_stop"],
-                 info["azimuth_deg"], info["elevasi_deg"], info["jarak_m"]])
 
 data = {
     "file": blend,
@@ -159,13 +153,4 @@ data = {
 with open(os.path.join(out_dir, name + "_kamera.json"), "w", encoding="utf-8") as f:
     json.dump(data, f, indent=2, ensure_ascii=False)
 
-csv_path = os.path.join(out_dir, "KAMERA_Calabasas.csv")
-new = not os.path.exists(csv_path)
-with open(csv_path, "a", newline="", encoding="utf-8-sig") as f:
-    w = csv.writer(f, delimiter=";")
-    if new:
-        w.writerow(["file", "kamera", "shot", "aktif", "loc_x", "loc_y", "loc_z",
-                    "rot_x", "rot_y", "rot_z", "lens_mm", "sensor_mm", "shift_x", "shift_y",
-                    "fokus_m", "f_stop", "azimuth_deg", "elevasi_deg", "jarak_m"])
-    w.writerows(rows)
 print(f"[kamera] {name}: {len(cams)} kamera, produk '{prod_name}'")
