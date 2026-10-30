@@ -131,7 +131,7 @@ const materials = [
                   {covers(c).map((p, i) => (
                     <figure class="fs-slide">
                       <img src={p.src} alt={`${c.name} ${p.name}`} loading={i === 0 ? 'eager' : 'lazy'} />
-                      <figcaption>{p.name} <span>{c.name}</span></figcaption>
+                      <figcaption>{p.name}<span aria-hidden="true">|</span>{c.name}</figcaption>
                     </figure>
                   ))}
                 </div>
