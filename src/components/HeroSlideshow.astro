@@ -25,8 +25,8 @@ const { slides } = Astro.props;
 )}
 
 <script>
-  // Auto-advance every few seconds. Pauses on hover, on keyboard focus and in a background tab.
-  // With reduced motion it never advances by itself; the dots still switch pictures.
+  // Auto-advance every 5 seconds, also under the mouse. Pauses while a keyboard user is inside the hero and in a background tab.
+  // With reduced motion it never advances by itself; the arrows and dots still switch pictures.
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
@@ -38,7 +38,6 @@ const { slides } = Astro.props;
 
     let cur = 0;
     let timer = 0;
-    let hover = false;
     let focus = false;
     const show = (i: number) => {
       cur = (i + slides.length) % slides.length;
@@ -50,14 +49,13 @@ const { slides } = Astro.props;
     };
     const start = () => {
       clearInterval(timer);
-      if (!still.matches && !hover && !focus && !document.hidden) timer = window.setInterval(() => show(cur + 1), 6000);
+      if (!still.matches && !focus && !document.hidden) timer = window.setInterval(() => show(cur + 1), 5000);
     };
     dots.forEach((d, j) => d.addEventListener('click', () => { show(j); start(); }));
     hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => { show(cur - 1); start(); });
     hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => { show(cur + 1); start(); });
-    hero.addEventListener('mouseenter', () => { hover = true; start(); });
-    hero.addEventListener('mouseleave', () => { hover = false; start(); });
-    hero.addEventListener('focusin', () => { focus = true; start(); });
+    // Only keyboard focus pauses: a mouse click on an arrow or dot leaves focus there but should not stop the show
+    hero.addEventListener('focusin', (e) => { focus = (e.target as Element).matches(':focus-visible'); start(); });
     hero.addEventListener('focusout', (e) => { if (!hero.contains(e.relatedTarget as Node | null)) { focus = false; start(); } });
     document.addEventListener('visibilitychange', start);
     still.addEventListener('change', start);

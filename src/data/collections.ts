@@ -19,10 +19,13 @@ import { existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Collection } from '../lib/supabase';
 
-type Caption = { name: string; code?: string; cover?: boolean };
+type Caption = { name: string; code?: string; cover?: boolean; hide?: boolean; spec?: boolean; front?: boolean };
 // Captions by gallery file number. Name = item name from the product list; code = collection code + item number (e.g. DO-05).
 // Leave an image out to show it without a caption. Only fill what is confirmed.
-// cover: true = the item's picture on the landing page catalog (otherwise its lowest gallery number).
+// cover: true = the item's room shot: shown in the landing page card slider, left out of the item catalog and its viewer.
+// hide: true = left out of the catalog (e.g. a second crop of a cover); the item keeps its place in the order.
+// spec: true = the item's spec sheet (finishes, sizes); always the last picture in the viewer.
+// front: true = the item's front view on a plain background; shown in the landing page card slider.
 type Entry = {
   slug: string; dir?: string; name: string; room: Collection['room']; description: string | null; published: boolean; captions?: Record<string, Caption>;
   woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[];
@@ -30,29 +33,66 @@ type Entry = {
 
 export const collectionEntries: Entry[] = [
   { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: 'A low bed with rounded wood edges and a padded headboard, with a night table, dresser and mirror to match.', published: true,
-    woods: ['Bleached Oak', 'Natural Oak', 'Smoked Oak', 'Walnut'], fabrics: ['Cream Bouclé', 'Cream', 'Grey'], upholstered: ['Bed', 'Sofa'],
+    woods: ['Bleached Oak', 'Natural Oak', 'Smoked Oak', 'Walnut'], fabrics: ['Cream Bouclé', 'Cream', 'Grey'], upholstered: ['Bed', 'Sofa', 'Armchair'],
     shown: ['Natural Oak', 'Cream'], captions: {
-      '01': { name: 'Bed' },
-      '02': { name: '6-Drawer Dresser'},
-      '03': { name: 'Drawer Console with Mirror'},
-      '04': { name: 'Bed' },
-      '05': { name: 'Bed' },
+      '01': { name: 'Bed', cover: true }, // room shot
+      '02': { name: '6-Drawer Dresser', hide: true }, // portrait crop of cover 24
+      '03': { name: 'Drawer Console with Mirror', hide: true }, // portrait crop of cover 23
+      // '04' (bed 3/4 on white, no night tables) taken out of the catalog: no caption.
+      '05': { name: 'Bed', front: true },
       '06': { name: 'Night Table' },
-      '07': { name: '6-Drawer Dresser'},
-      '08': { name: 'Drawer Console with Mirror' },
+      '07': { name: '6-Drawer Dresser', hide: true }, // 3/4 on white, taken out of the catalog
+      '08': { name: 'Drawer Console with Mirror', front: true },
       // '09' is the old, squarer mirror: no caption, so it stays out of the catalog. Delete the file when it is not locked.
-      '10': { name: '6-Drawer Dresser' },
+      '10': { name: '6-Drawer Dresser', front: true },
       '11': { name: '6-Drawer Dresser' },
       '12': { name: 'Drawer Console with Mirror' },
       '13': { name: 'Drawer Console with Mirror' },
       '14': { name: 'Drawer Console with Mirror' },
-      '15': { name: 'Night Table', cover: true },
+      '15': { name: 'Night Table', front: true },
       '16': { name: 'Night Table' },
-      '17': { name: 'Sofa' },
-      '18': { name: 'Sofa' },
-      '19': { name: 'Sofa' },
-      '20': { name: 'Sofa' },
-      '25': { name: 'Sofa' }, // spec sheet: fabrics, frame finishes, sizes
+      // 17-21 and 36: the first sofa (two seat cushions), replaced by 47-50. Hidden; 17 keeps the sofa's place in the order.
+      '17': { name: 'Sofa', hide: true },
+      '18': { name: 'Sofa', hide: true },
+      '19': { name: 'Sofa', hide: true },
+      '20': { name: 'Sofa', hide: true },
+      // 21-24: wide room shots, the catalog covers
+      '21': { name: 'Sofa', hide: true },
+      '22': { name: 'Night Table', cover: true },
+      '23': { name: 'Drawer Console with Mirror', cover: true },
+      '24': { name: '6-Drawer Dresser', hide: true }, // old room shot (cut-out pulls), replaced by 54
+      // '25' is the first sofa spec sheet (sizes left blank), replaced by 36: no caption.
+      '26': { name: 'Coffee Table' },
+      '27': { name: 'Coffee Table', front: true },
+      '28': { name: 'Coffee Table' },
+      '29': { name: 'Coffee Table' },
+      '30': { name: 'Coffee Table', cover: true }, // room shot
+      // 31-36: spec sheets (finishes, sizes)
+      '31': { name: '6-Drawer Dresser', spec: true },
+      '32': { name: 'Bed', spec: true },
+      '33': { name: 'Drawer Console with Mirror', spec: true },
+      '34': { name: 'Coffee Table', spec: true },
+      '35': { name: 'Night Table', spec: true },
+      '36': { name: 'Sofa', hide: true },
+      '37': { name: 'Tallboy', cover: true }, // room shot
+      // '38' is the first tallboy front view, replaced by 45: no caption.
+      '39': { name: 'Tallboy' },
+      '40': { name: 'Tallboy' },
+      '41': { name: 'Tallboy', spec: true },
+      '42': { name: 'Armchair', front: true },
+      '43': { name: 'Armchair' },
+      // '44' and '46' are earlier armchair spec sheets (titled "Single Sofa"), replaced by 52.
+      '45': { name: 'Tallboy', front: true },
+      '46': { name: 'Armchair', hide: true },
+      // 47-50: the sofa with one long seat cushion
+      '47': { name: 'Sofa', cover: true }, // room shot
+      '48': { name: 'Sofa' },
+      '49': { name: 'Sofa', front: true },
+      '50': { name: 'Sofa', hide: true }, // first spec sheet (sizes blank), replaced by 53
+      '51': { name: 'Armchair', cover: true }, // room shot
+      '52': { name: 'Armchair', spec: true }, // sizes and finishes still blank
+      '53': { name: 'Sofa', spec: true }, // seat height and wood finish still blank
+      '54': { name: '6-Drawer Dresser', cover: true }, // room shot, bar pulls
     } },
   { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true, captions: {
       '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' }, '05': { name: 'Night Table' },
@@ -121,7 +161,7 @@ function galleryItems(room: string, slug: string, captions: Record<string, Capti
     for (const f of readdirSync(dir).filter((f) => GALLERY.test(f)).sort()) {
       const n = f.match(/^gallery-(\d+)/i)?.[1];
       const cap = n ? captions[n] : undefined;
-      items.push({ src: `/collections/${r}/${slug}/${f}`, name: cap?.name, code: cap?.code, cover: cap?.cover, finishes: n ? finishes.get(n) : undefined, n: Number(n ?? 0) });
+      items.push({ src: `/collections/${r}/${slug}/${f}`, name: cap?.name, code: cap?.code, cover: cap?.cover, hide: cap?.hide, spec: cap?.spec, front: cap?.front, finishes: n ? finishes.get(n) : undefined, n: Number(n ?? 0) });
     }
   }
   return items.sort((x, y) => x.n - y.n).map(({ n, ...rest }) => rest);

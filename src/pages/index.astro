@@ -9,6 +9,7 @@ import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
+import { groupItems, itemRooms } from '../lib/items';
 
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
@@ -24,6 +25,8 @@ const heroSlides = [...new Map(all
     href: featured.includes(c.slug) ? `#coll-${c.slug}` : `/collections/${c.slug}`,
   }])).values()];
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
+// Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
+const covers = (c: (typeof all)[number]) => groupItems(c).map((it) => ({ name: it.name, src: it.pics[0].src }));
 const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
@@ -117,21 +120,34 @@ const materials = [
       <div class="feat-grid">
         {collections.map((c) => (
           <>
-          <a class="feat-card" id={`coll-${c.slug}`} href={`/collections/${c.slug}`}>
-            {imageUrl(c.hero_image_path)
+          <div class="feat-card" id={`coll-${c.slug}`}>
+            {covers(c).length > 1 ? (
+              <div class="frame feat-slides" role="group" aria-roledescription="carousel" aria-label={`${c.name} pieces`}>
+                <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
+                  {covers(c).map((p, i) => (
+                    <figure class="fs-slide">
+                      <img src={p.src} alt={`${c.name} ${p.name}`} loading={i === 0 ? 'eager' : 'lazy'} />
+                      <figcaption>{p.name}</figcaption>
+                    </figure>
+                  ))}
+                </div>
+                <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
+                <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
+              </div>
+            ) : imageUrl(c.hero_image_path)
               ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
               : <Ph label={`${c.name} render`} watermark />}
             <div class="feat-body">
-              {c.room !== 'other' && <small>{c.room}</small>}
+              <small>Collection</small>
               <h3>{c.name}</h3>
               {c.description && <p>{c.description}</p>}
               <span class="feat-meta">
-                <span><i>Room</i>{c.room === 'other' ? 'Collection' : c.room}</span>
+                <span><i>Room</i>{itemRooms(c).join(', ') || (c.room === 'other' ? 'Collection' : c.room)}</span>
                 {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
               </span>
-              <em>Explore the collection</em>
+              <a class="feat-more" href={`/collections/${c.slug}`}>Explore the collection</a>
             </div>
-          </a>
+          </div>
           <ItemCatalog collection={c} />
           </>
         ))}
@@ -225,3 +241,35 @@ const materials = [
     <CtaBand title="The full range, in one catalog." text="Sizes, materials, finishes and container data for every piece. Tell us who you are and we will send it." />
   )}
 </Base>
+
+<script>
+  // Collection card picture: one slide per piece. Swipe or scroll sideways, or use the arrows; moves on every 5 seconds
+  // while the mouse is elsewhere. With reduced motion it only moves when asked.
+  document.querySelectorAll<HTMLElement>('.feat-slides').forEach((box) => {
+    const track = box.querySelector<HTMLElement>('.fs-track')!;
+    const prev = box.querySelector<HTMLButtonElement>('.prev')!;
+    const next = box.querySelector<HTMLButtonElement>('.next')!;
+    const n = track.children.length;
+    const still = matchMedia('(prefers-reduced-motion: reduce)');
+    const at = () => Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
+    const go = (i: number) => track.scrollTo({ left: ((i + n) % n) * track.clientWidth, behavior: still.matches ? 'auto' : 'smooth' });
+    let timer = 0;
+    let hover = false;
+    const start = () => {
+      clearInterval(timer);
+      if (!still.matches && !hover && !document.hidden) timer = window.setInterval(() => go(at() + 1), 5000);
+    };
+    prev.addEventListener('click', () => { go(at() - 1); start(); });
+    next.addEventListener('click', () => { go(at() + 1); start(); });
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); start(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); start(); }
+    });
+    box.addEventListener('mouseenter', () => { hover = true; start(); });
+    box.addEventListener('mouseleave', () => { hover = false; start(); });
+    track.addEventListener('touchstart', start, { passive: true }); // a swipe restarts the count
+    document.addEventListener('visibilitychange', start);
+    still.addEventListener('change', start);
+    start();
+  });
+</script>

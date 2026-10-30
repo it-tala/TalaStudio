@@ -6,17 +6,17 @@
 import type { Collection } from '../lib/supabase';
 import { edgeBackground } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
-interface Props { collection: Collection }
-const { collection } = Astro.props;
-type Pic = NonNullable<Collection['gallery']>[number];
+import { groupItems } from '../lib/items';
+interface Props { collection: Collection; link?: boolean } // link: "View the collection" in the heading row
+const { collection, link = true } = Astro.props;
 const woods = collection.woods ?? [];
 // The finish the default photos show: named in `shown`, else the first of the list
 const shownOf = (list: string[]) => list.find((x) => collection.shown?.includes(x)) ?? list[0];
 const shownWood = shownOf(woods);
-const groups = new Map<string, Pic[]>();
-for (const g of collection.gallery ?? []) if (g.name) groups.set(g.name, [...(groups.get(g.name) ?? []), g]);
-const items = await Promise.all([...groups].map(async ([name, all]) => {
-  const pics = [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover)]; // the cover picture leads
+const items = await Promise.all(groupItems(collection).map(async ({ name, pics: grouped }) => {
+  // Room shots (covers) belong to the card slider, not here, unless an item has nothing else. The card and viewer open on the front view.
+  const all = grouped.some((p) => !p.cover) ? grouped.filter((p) => !p.cover) : grouped;
+  const pics = [...all.filter((p) => p.front), ...all.filter((p) => !p.front)];
   const srcs = pics.map((p) => p.src);
   const fabrics = collection.upholstered?.includes(name) ? collection.fabrics ?? [] : [];
   const shownFabric = shownOf(fabrics);
@@ -31,14 +31,17 @@ const items = await Promise.all([...groups].map(async ([name, all]) => {
   }));
   return { name, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]) };
 }));
+// The viewer shows every photo whole in a square (1:1); the space around it takes the photo's own edge colour
+const viewerSrcs = [...new Set(items.flatMap((it) => Object.values(it.photos).flat().concat(it.srcs)))];
+const squareBg = Object.fromEntries(await Promise.all(viewerSrcs.map(async (s) => [s, await edgeBackground(s, 1)])));
 const id = `cat-${collection.slug}`;
 const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 'view' : 'views'}`].join(' · ');
 ---
 {items.length > 0 && (
-  <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name}>
+  <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name} data-bgs={JSON.stringify(squareBg)}>
     <div class="tiles-head">
       <p class="eyebrow" id={`${id}-title`} style="margin:0">{collection.name} collection</p>
-      <a class="link" style="margin:0" href={`/collections/${collection.slug}`}>View the collection</a>
+      {link && <a class="link" style="margin:0" href={`/collections/${collection.slug}`}>View the collection</a>}
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
@@ -105,6 +108,7 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
         else t.removeAttribute('aria-current');
       });
     };
+    const bgs: Record<string, string | null> = JSON.parse(sec.dataset.bgs ?? '{}');
     const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]>) => Object.assign(document.createElement(tag), props);
 
     // The chosen finish of an item: its photos (the default ones while that finish has none yet) and its names
@@ -135,7 +139,10 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
       title.textContent = name;
       track.replaceChildren(...srcs.map((src, i) => {
         const slide = el('div', { className: 'cat-slide' });
-        slide.append(el('img', { src, alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${srcs.length}` }));
+        const square = el('div', { className: 'cat-sq' });
+        if (bgs[src]) square.style.background = bgs[src];
+        square.append(el('img', { src, alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${srcs.length}` }));
+        slide.append(square);
         return slide;
       }));
       thumbs.replaceChildren(...srcs.map((src, i) => {
@@ -175,7 +182,7 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
   .cat-grid { list-style: none; margin: 0; padding: 0 var(--cat-edge); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
   .cat-item { display: flex; flex-direction: column; align-items: flex-start; }
   .cat-card { display: flex; flex-direction: column; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: zoom-in; }
-  .cat-card .frame img { transition: transform .6s ease; }
+  .cat-card .frame img { object-fit: contain; transition: transform .6s ease; } /* front view shown whole; the frame takes its edge colour */
   .cat-card:hover .frame img { transform: scale(1.03); }
   .cat-card:focus-visible { outline: 1px solid var(--text); outline-offset: 6px; }
   /* Finish swatches under the picture: small dots, the chosen one ringed; wood and fabric split by a thin line */
@@ -202,8 +209,10 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
   .cat-track { display: flex; min-height: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
   .cat-track::-webkit-scrollbar { display: none; }
   .cat-track:focus-visible { outline: 1px solid rgba(243, 236, 226, .4); outline-offset: -1px; }
-  .cat-slide { flex: 0 0 100%; display: grid; place-items: center; min-height: 0; padding: 24px 88px 0; scroll-snap-align: start; }
-  .cat-slide img { max-width: 100%; max-height: 100%; min-height: 0; object-fit: contain; user-select: none; }
+  .cat-slide { flex: 0 0 100%; display: grid; place-items: center; min-height: 0; padding: 24px 88px 0; scroll-snap-align: start; container-type: size; }
+  /* Each photo sits whole in a 1:1 square, as large as the slide allows */
+  .cat-sq { width: min(100cqw, 100cqh); aspect-ratio: 1; display: grid; place-items: center; overflow: hidden; background: var(--bg-alt); }
+  .cat-sq img { width: 100%; height: 100%; object-fit: contain; user-select: none; }
   .cat-cap { display: flex; justify-content: center; align-items: baseline; gap: 14px; padding: 16px 20px 12px; }
   .cat-cap h3 { font: 500 .8rem/1.4 Inter, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
   .cat-pos { font-size: .7rem; letter-spacing: .1em; opacity: .55; }
@@ -211,11 +220,11 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
   .cat-thumbs[hidden] { display: none; }
   .cat-thumbs > :first-child { margin-left: auto; }
   .cat-thumbs > :last-child { margin-right: auto; }
-  .cat-thumbs button { flex: none; height: 76px; padding: 0; border: 1px solid transparent; background: none; opacity: .5; cursor: pointer; transition: opacity .2s; }
+  .cat-thumbs button { flex: none; height: 76px; aspect-ratio: 1; padding: 0; border: 1px solid transparent; background: none; opacity: .5; cursor: pointer; transition: opacity .2s; }
   .cat-thumbs button:hover { opacity: .85; }
   .cat-thumbs button.on { opacity: 1; border-color: #f3ece2; }
   .cat-thumbs button:focus-visible { outline: 1px solid #f3ece2; outline-offset: 2px; }
-  .cat-thumbs img { height: 100%; width: auto; }
+  .cat-thumbs img { width: 100%; height: 100%; object-fit: cover; }
   .cat-btn { position: absolute; z-index: 2; width: 2.8rem; height: 2.8rem; border: 0; border-radius: 50%; background: rgba(243, 236, 226, .14); color: inherit; font-size: 1.8rem; line-height: 1; cursor: pointer; }
   .cat-btn:hover:not(:disabled) { background: rgba(243, 236, 226, .28); }
   .cat-btn:disabled { opacity: .3; cursor: default; }

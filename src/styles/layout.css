@@ -150,7 +150,18 @@
 .feat-meta { display: flex; flex-wrap: wrap; gap: 14px 36px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
 .feat-meta span { display: block; font-size: 14px; text-transform: capitalize; }
 .feat-meta i { display: block; font-style: normal; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 4px; }
-.feat-body em { margin-top: 18px; font-style: normal; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 5px; }
+.feat-more { align-self: flex-start; margin-top: 18px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 5px; }
+/* Card picture as a sideways slider of the pieces: each cover fills the frame, name bottom-left, thin arrows like the hero */
+.fs-track { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.fs-track::-webkit-scrollbar { display: none; }
+.fs-track:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -6px; }
+.fs-slide { position: relative; flex: 0 0 100%; margin: 0; scroll-snap-align: start; }
+.fs-slide figcaption { position: absolute; left: 24px; bottom: 20px; z-index: 1; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
+.fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); width: 44px; height: 64px; padding: 0; border: 0; background: none; color: #fff; font-size: 44px; font-weight: 200; line-height: 1; cursor: pointer; opacity: .8; text-shadow: 0 1px 8px rgba(0, 0, 0, .4); transition: opacity .2s; }
+.fs-arrow:hover { opacity: 1; }
+.fs-arrow:focus-visible { outline: 1px solid #fff; outline-offset: 2px; }
+.fs-arrow.prev { left: 8px; }
+.fs-arrow.next { right: 8px; }
 @media (max-width: 800px) {
   .feat-card, .feat-card:nth-of-type(even) { grid-template-columns: 1fr; }
   .feat-card .frame, .feat-card > .ph { order: 0; }
