@@ -1,59 +1,76 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
-import Ph from '../components/Ph.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { story } from '../data/story';
 
-const team = [
-  ['Evin', 'Owner and designer'],
-  ['David', 'Sales and buyer relations'],
+// Who We Are (layout and copy from TalaStudio_Who_We_Are.pdf). Founder photos are in public/team/.
+const rows: [string, string[]][] = [
+  ['Our story', [
+    'TalaStudio was founded by Evin Oshima and David Wormald. They met 23 years ago, when David, then working for Palliser, walked into Evin’s booth at a furniture fair in Jakarta. Evin went on to design several collections for him, and the two have worked together on and off ever since.',
+  ]],
+  ['Why TalaStudio', [
+    'Too much furniture at volume price points looked the same as it did 20 or 30 years ago. We believed buyers shouldn’t have to choose between fresh design and a competitive price. So we created TalaStudio to develop design-forward, lovingly detailed, interesting products and bring them to market in volume, at a very competitive price.',
+    'Together we bring more than 65 years of combined industry experience, a skilled in-house studio team, and a network of large factories we have worked with for decades.',
+  ]],
+  ['Our design point of view', [
+    'We’re not locked into a single look. Our first collection takes its cue from 1960s Los Angeles, but our taste is eclectic: we watch trends closely without being bound by them. What stays constant is our attention to proportion, detail and price.',
+    'We welcome ideas from our customers and can quickly develop new designs to fill a gap in their line. Our job is to give buyers furniture that fits their customers’ homes and the way they live.',
+  ]],
+];
+
+const founders = [
+  { name: 'Evin Oshima', role: 'Director of Operations', photo: '/team/evin-oshima-2.jpg',
+    text: 'Evin handles operations and design. He is a designer and a maker who has been in design and furniture since 1988, and has run factories making hotel interiors in China, the Philippines and Indonesia. He lives in Jepara, Indonesia, where he recently converted his factory into the TalaStudio studio.' },
+  { name: 'David Wormald', role: 'Director of Marketing', photo: '/team/david-wormald.jpg',
+    text: 'David has been in the furniture industry for more than 30 years. He has worked with Palliser, Lane, Natuzzi and other major brands, as well as large manufacturers across Asia. As Director of Marketing, he leads sales, marketing, product development and sourcing, along with upholstery, trend and merchandising. David is based in Vietnam.' },
 ];
 ---
 <Base
-  title="About"
-  description="TalaStudio designs furniture where it is made, in Jepara, Indonesia: the forward look at a value price, every piece checked, fully online."
+  title="Who we are"
+  description="TalaStudio was founded by Evin Oshima and David Wormald: fresh, detailed furniture design brought to market in volume, at a very competitive price. Jepara, Indonesia."
 >
-  <PageHero eyebrow="About" title={story.title} lede={story.promise} />
-
-  <section class="section">
-    <div class="wrap grid-2" style="align-items:start">
-      <Ph label="Studio shot" />
-      <div class="prose">
-        <h2>Our story</h2>
-        {story.paragraphs.map((p) => <p>{p}</p>)}
-        <p class="close">{story.close}</p>
-        <a class="btn" href="/request-catalog" style="margin-top:1.5rem">Request catalog</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section alt">
+  <section class="section who">
     <div class="wrap">
-      <h2>What you can count on</h2>
-      <div class="counts">
-        {story.counts.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      <p class="eyebrow fade">Jepara, Indonesia</p>
+      <h1 class="fade">Who We Are</h1>
+
+      {rows.map(([label, paras]) => (
+        <div class="row">
+          <h2 class="label">{label}</h2>
+          <div class="body">{paras.map((p) => <p>{p}</p>)}</div>
+        </div>
+      ))}
+
+      <div class="founders">
+        <h2 class="label">The founders</h2>
+        {founders.map((f) => (
+          <article class="founder">
+            <img src={f.photo} alt={f.name} width="600" height="720" loading="lazy" />
+            <div>
+              <h3>{f.name}</h3>
+              <p class="role">{f.role}</p>
+              <p>{f.text}</p>
+            </div>
+          </article>
+        ))}
       </div>
+
+      <p class="outro">To see how we design and build, visit <a href="/how-we-work">How We Work</a>. To talk about a collection, <a href="/contact">contact us</a>.</p>
     </div>
   </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2>The team</h2>
-      <div class="team">
-        {team.map(([n, r]) => <div><h3>{n}</h3><p>{r}</p></div>)}
-      </div>
-    </div>
-  </section>
-
-  <CtaBand />
 </Base>
 
 <style>
-  .prose p { margin-top: 1rem; font-size: 1.15rem; color: var(--text-soft); max-width: 40rem; }
-  .prose h2 { margin-bottom: .4rem; }
-  .prose .close { color: var(--text); font: 500 1.7rem/1.25 'Cormorant Garamond', Georgia, serif; margin-top: 1.8rem; }
-  .counts, .team { display: grid; gap: 2rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
-  .counts > div, .team > div { border-top: 1px solid var(--line); padding-top: 1rem; }
-  .counts p, .team p { color: var(--text-soft); margin-top: .4rem; }
+  .who .wrap { max-width: 62rem; }
+  .who h1 { padding-bottom: clamp(1.5rem, 3vw, 2.5rem); border-bottom: 1px solid var(--line); }
+  .label { font: 500 .75rem/1.5 'Inter', system-ui, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .row { display: grid; gap: .8rem 3rem; padding-block: clamp(1.5rem, 3vw, 2.2rem); border-bottom: 1px solid var(--line); }
+  .row .label { max-width: 14ch; }
+  .body p + p { margin-top: 1rem; }
+  .founders { padding-block: clamp(1.5rem, 3vw, 2.2rem) 0; display: grid; gap: 1.25rem; }
+  .founder { display: grid; grid-template-columns: 11rem 1fr; gap: 1.8rem; align-items: start; padding: 1.4rem; background: color-mix(in srgb, var(--bg) 55%, #fff); }
+  .founder img { width: 100%; height: auto; aspect-ratio: 5 / 6; object-fit: cover; border-radius: 3px; }
+  .founder h3 { font-size: 1.8rem; }
+  .founder .role { margin: .2rem 0 .8rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .outro { margin-top: clamp(2rem, 4vw, 3rem); padding-top: 1.5rem; border-top: 1px solid var(--line); font: italic 400 1.3rem/1.5 'Cormorant Garamond', Georgia, serif; color: var(--text-soft); }
+  @media (min-width: 760px) { .row { grid-template-columns: 14rem 1fr; } }
+  @media (max-width: 560px) { .founder { grid-template-columns: 1fr; } .founder img { width: 11rem; } }
 </style>

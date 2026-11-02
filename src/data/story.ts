@@ -2,9 +2,10 @@
 // TalaStudio designs and engineers. Partner factories build to our drawings.
 // Left out until Evin decides: years of experience, "our factory" wording.
 export const story = {
-  headline: 'The forward look, at a value price.',
+  // Home hero (1 Nov 2026): two lines with a short rule between them
+  headline: ['Studio designed,', 'shipped at scale.'],
   promise:
-    'TalaStudio designs furniture with the look the most forward retailers are selling. We price it where your customers actually buy.',
+    'Every collection is developed and sampled by hand in our Jepara studio, then produced and shipped at scale by factory partners built for volume.',
   title: "Designed where it's made.",
   studioBlurb:
     'We draw it, engineer it and price it in one place. We pick the joint, the finish and the hardware with the maker while the sketch is still wet. Then we check every piece before it ships.',

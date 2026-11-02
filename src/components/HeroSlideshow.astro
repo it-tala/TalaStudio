@@ -1,9 +1,18 @@
 ---
 // Hero background: one cover per collection, cross-fading behind the hero copy.
 // The first cover loads with the page; the rest load once it is up. Each cover links to its collection.
-interface Props { slides: { src: string; label: string; name: string; href: string }[] }
+// The page's own hero copy sits on the first cover; every other cover brings its collection's copy, fading with the picture.
+interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string }[] }
 const { slides } = Astro.props;
 ---
+{slides.slice(1).map((s, i) => (
+  <div class="inner hero-alt" data-slide={i + 1} aria-hidden="true">
+    <p class="eyebrow">{s.room}</p>
+    <h2 class="hero-title">{s.name}</h2>
+    <p class="text">{s.text}</p>
+    <div class="btns"><a class="btn" href={s.href} tabindex="-1">Explore the collection</a></div>
+  </div>
+))}
 {slides.length === 0 && <div class="media"></div>}
 {slides.map((s, i) => (
   <a
@@ -19,6 +28,9 @@ const { slides } = Astro.props;
 {slides.length > 1 && (
   <button type="button" class="hero-arrow prev" aria-label="Previous picture">‹</button>
   <button type="button" class="hero-arrow next" aria-label="Next picture">›</button>
+  <div class="hero-names" aria-hidden="true">
+    {slides.map((s, i) => <span class:list={{ on: i === 0 }}>{s.name}</span>)}
+  </div>
   <div class="hero-dots" role="group" aria-label="Hero pictures">
     {slides.map((s, i) => <button type="button" aria-label={`Show ${s.label}`} aria-current={i === 0 ? 'true' : undefined}></button>)}
   </div>
@@ -30,22 +42,59 @@ const { slides } = Astro.props;
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
+    const alts = [...hero.querySelectorAll<HTMLElement>('.hero-alt')];
+    const names = [...hero.querySelectorAll<HTMLElement>('.hero-names span')];
     if (slides.length < 2) return;
     const still = matchMedia('(prefers-reduced-motion: reduce)');
-    const load = (s: HTMLElement) => { if (s.dataset.bg) { s.style.backgroundImage = `url(${s.dataset.bg})`; delete s.dataset.bg; } };
+    // A cover is only switched in once its picture is decoded, so it never fades in half-drawn
+    const ready = new Map<HTMLElement, Promise<void>>();
+    const load = (s: HTMLElement) => {
+      if (!ready.has(s)) {
+        const src = s.dataset.bg;
+        if (!src) ready.set(s, Promise.resolve());
+        else {
+          const img = new Image();
+          img.src = src;
+          ready.set(s, img.decode().catch(() => {}).then(() => { s.style.backgroundImage = `url(${src})`; delete s.dataset.bg; }));
+        }
+      }
+      return ready.get(s)!;
+    };
     const loadAll = () => slides.forEach(load);
     if (document.readyState === 'complete') loadAll(); else addEventListener('load', loadAll, { once: true });
+    // The page copy's load fade would restart each time it comes back; drop it once it has played
+    hero.querySelectorAll('.inner.fade').forEach((el) => el.addEventListener('animationend', () => el.classList.remove('fade'), { once: true }));
 
     let cur = 0;
+    let want = 0;
     let timer = 0;
+    let settle = 0;
     let focus = false;
-    const show = (i: number) => {
-      cur = (i + slides.length) % slides.length;
+    const show = async (i: number) => {
+      const next = (i + slides.length) % slides.length;
+      want = next;
+      await load(slides[next]);
+      if (want !== next || next === cur) return; // a later click won, or nothing to change
+      const prev = cur;
+      cur = next;
+      // The old cover stays fully up under the new one until the fade is done
+      clearTimeout(settle);
+      slides.forEach((s, j) => s.classList.toggle('was', j === prev));
+      settle = window.setTimeout(() => slides[prev].classList.remove('was'), 1300);
       slides.forEach((s, j) => {
-        if (j === cur) { load(s); s.classList.add('on'); s.removeAttribute('aria-hidden'); s.removeAttribute('tabindex'); }
+        if (j === cur) { s.classList.add('on'); s.removeAttribute('aria-hidden'); s.removeAttribute('tabindex'); }
         else { s.classList.remove('on'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('tabindex', '-1'); }
       });
       dots.forEach((d, j) => (j === cur ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+      names.forEach((n, j) => n.classList.toggle('on', j === cur));
+      // The page copy sits on the first picture; the others show their collection's copy
+      hero.classList.toggle('copy-off', cur !== 0);
+      alts.forEach((a) => {
+        const on = Number(a.dataset.slide) === cur;
+        a.classList.toggle('on', on);
+        a.setAttribute('aria-hidden', String(!on));
+        a.querySelectorAll('a').forEach((l) => (on ? l.removeAttribute('tabindex') : l.setAttribute('tabindex', '-1')));
+      });
     };
     const start = () => {
       clearInterval(timer);

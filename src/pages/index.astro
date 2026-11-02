@@ -13,7 +13,8 @@ import { groupItems, itemRooms } from '../lib/items';
 
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
-const featured = ['doheny', 'calabasas', 'temescal'];
+// Slots ready for 'calabasas' and 'temescal' (same layout); hidden until their pieces are in.
+const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
 const homeItems: Record<string, string[]> = {
   doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
@@ -27,6 +28,8 @@ const heroSlides = [...new Map(all
     label: `${c.name} collection, ${c.room} render`,
     name: `${c.name} collection`,
     href: featured.includes(c.slug) ? `#coll-${c.slug}` : `/collections/${c.slug}`,
+    room: c.room === 'other' ? 'Collection' : `${c.room} collection`,
+    text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
   }])).values()];
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
@@ -55,7 +58,7 @@ const materials = [
 ];
 ---
 <Base
-  title="TalaStudio | The forward look, at a value price"
+  title="TalaStudio | Studio designed, shipped at scale"
   description="TalaStudio designs bedroom, living and dining furniture in Jepara, Indonesia and sells it by the container to retailers, buying groups and distributors."
 >
   <!-- 1. Hero -->
@@ -63,10 +66,9 @@ const materials = [
     <HeroSlideshow slides={heroSlides} />
     <div class="inner fade">
       <p class="eyebrow">Jepara, Indonesia</p>
-      <h1>{story.headline}</h1>
+      <h1 class="hero-stack"><span>{story.headline[0]}</span><span class="rule" aria-hidden="true"></span><span>{story.headline[1]}</span></h1>
       <p class="text">{story.promise}</p>
       <div class="btns">
-        <a class="btn" href="/request-catalog">Request catalog</a>
         <a class="btn ghost" href="/collections">View collections</a>
       </div>
     </div>
@@ -107,7 +109,7 @@ const materials = [
         <h2 class="statement">{story.title}</h2>
         <p class="text">{story.studioBlurb}</p>
         <a class="link" href="/the-studio">See the studio</a>
-        <a class="link" style="margin-left:2rem" href="/about">Our story</a>
+        <a class="link" style="margin-left:2rem" href="/who-we-are">Our story</a>
       </div>
     </div>
   </section>

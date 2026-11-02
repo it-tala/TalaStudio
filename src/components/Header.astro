@@ -2,6 +2,7 @@
 import { pageOn } from '../data/sections';
 const nav = [
   ['Collections', '/collections'],
+  ['Who we are', '/who-we-are'],
   ['How we work', '/how-we-work'],
   ['The Studio', '/the-studio'],
   ['How a container works', '/how-a-container-works'],
@@ -12,7 +13,10 @@ const nav = [
 <style>
   header { border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 10; }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4.5rem; }
-  .logo { font: 500 1.6rem 'Cormorant Garamond', Georgia, serif; text-decoration: none; letter-spacing: .04em; }
+  /* The TS mark is a mask, so it takes the logo brown here and the text colour on the dark palette */
+  .logo { display: flex; align-items: center; gap: .7rem; color: #584538; font: 500 1.35rem 'Cormorant Garamond', Georgia, serif; text-transform: uppercase; letter-spacing: .16em; text-decoration: none; }
+  .logo i { width: 2.6rem; aspect-ratio: 412 / 398; background: currentColor; -webkit-mask: url(/logo-mark.png) center / contain no-repeat; mask: url(/logo-mark.png) center / contain no-repeat; }
+  :global([data-theme='charcoal']) .logo { color: var(--text); }
   nav { display: none; gap: 1.6rem; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
   nav a { text-decoration: none; color: var(--text-soft); }
   nav a:hover { color: var(--text); }
@@ -37,7 +41,7 @@ const nav = [
 </style>
 <header>
   <div class="wrap bar">
-    <a class="logo" href="/">TalaStudio</a>
+    <a class="logo" href="/" aria-label="TalaStudio home"><i aria-hidden="true"></i>TalaStudio</a>
     <nav aria-label="Main">
       {nav.map(([t, h]) => <a href={h}>{t}</a>)}
       <a class="navcta" href="/request-catalog">Request catalog</a>

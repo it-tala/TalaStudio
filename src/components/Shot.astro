@@ -1,0 +1,21 @@
+---
+// A photo slot on How We Work. Drop <name>.(jpg|png|webp) into public/how-we-work/ and it replaces the placeholder.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+interface Props { name: string; label: string; hint?: string; ratio?: string; class?: string }
+const { name, label, hint, ratio = '3 / 2', class: cls } = Astro.props;
+const ext = ['jpg', 'jpeg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'how-we-work', `${name}.${e}`)));
+---
+{ext
+  ? <img class:list={['shot', cls]} style={`aspect-ratio:${ratio}`} src={`/how-we-work/${name}.${ext}`} alt={hint ?? label} loading="lazy" />
+  : <div class:list={['shot', 'shot-ph', cls]} style={`aspect-ratio:${ratio}`} role="img" aria-label={label}>
+      <b>{label}</b>{hint && <span>{hint}</span>}
+    </div>}
+
+<style>
+  .shot { display: block; width: 100%; height: auto; object-fit: cover; }
+  .shot-ph { display: grid; place-content: center; gap: .4rem; padding: 1rem; text-align: center; background: var(--bg-alt); border: 1px solid var(--line); }
+  .shot-ph b { font-size: .7rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+  .shot-ph span { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); max-width: 30ch; margin-inline: auto; }
+</style>

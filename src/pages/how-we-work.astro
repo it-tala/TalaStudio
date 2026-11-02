@@ -1,61 +1,160 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { story } from '../data/story';
+import Shot from '../components/Shot.astro';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
-const steps = [
-  ['Design', 'The studio draws each collection in Jepara.'],
-  ['Engineer', 'Construction, materials and hardware are worked out while we draw.'],
-  ['Cost', 'Every line is priced before the design is final.'],
-  ['Build', 'Our partner factories build to our drawings, with us checking at each step.'],
-  ['Check', 'We inspect every piece, not a sample.'],
-  ['Show', 'You follow orders, QC photos and shipping online.'],
-];
+// How We Work (layout and copy from TalaStudio_How_We_Work_Layout.pdf, v1, 1 Nov 2026).
+// Photos: public/how-we-work/<name>.jpg, named as in each <Shot name> below. Until a file is there, a labelled box shows.
+const heroExt = ['jpg', 'jpeg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'how-we-work', `hero.${e}`)));
+const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
 ---
 <Base
   title="How we work"
-  description="TalaStudio engineers and costs each piece as it designs it, checks every piece, and shows buyers their orders online. The forward look at a value price."
+  description="Every TalaStudio collection is drawn, sampled by hand and engineered for cost in our Jepara studio, then built by partner factories, checked, barcoded and tracked to the container."
 >
-  <PageHero eyebrow="How we work" title={story.title} lede="We do not draw a piece and then throw it over the wall. We work it out with the makers from the first sketch." />
+  <section class:list={['hww-hero', { photo: hero }]} style={hero ? `background-image:url(${hero})` : undefined}>
+    {!hero && <p class="hero-ph" aria-hidden="true"><b>Hero · wide shot</b><span>Samplemakers at the bench in the converted factory</span></p>}
+    <div class="wrap fade">
+      <p class="eyebrow">Jepara, Indonesia</p>
+      <h1>Studio designed.</h1>
+      <p class="sub">Shipped at scale.</p>
+    </div>
+  </section>
 
+  <!-- 01 -->
   <section class="section">
+    <div class="wrap pair">
+      <div>
+        <p class="num">01 — Who we are</p>
+        <h2>A converted factory on the north coast of Java.</h2>
+        <p class="copy">TalaStudio works out of a converted factory in Jepara, a town on the north coast of Java where furniture has been made for as long as anyone can remember. A collection begins as a single idea, often just a line or a proportion. We draw it, render it and develop it. Then it moves to the bench.</p>
+      </div>
+      <Shot name="studio" label="Studio exterior / interior" hint="The converted factory building, or a wide of the studio floor" ratio="3 / 4" />
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="section rule">
     <div class="wrap">
-      <h2>How we do it</h2>
-      <div class="two">
-        {story.how.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+      <p class="num">02 — How we work</p>
+      <h2>First it moves to the bench.</h2>
+      <div class="pair lead">
+        <Shot name="samplemaker" label="Samplemaker, hands on" hint="Close-up: shaping or fitting a detail by hand" ratio="3 / 4" />
+        <div class="copy">
+          <p>In our studio, a small team of samplemakers builds the first pieces by hand. This is where we work out the details, the finishes and the textures. We 3D print the handles, then have them hand cast. We keep refining until it's right, and then we build the key pieces.</p>
+          <p>When the key pieces are right, we take the collection to our factory partners to make the full set of pre-production samples (PPS). They build from our samples, as well as from detailed drawings, so what comes off their line still speaks in our voice.</p>
+        </div>
+      </div>
+      <div class="row four">
+        <Shot name="sketch" label="Hand sketch" hint="Sketchbook or pencil drawing on the bench" ratio="1 / 1" />
+        <Shot name="printed-handle" label="3D-printed handle" hint="Printed prototype next to the drawing" ratio="1 / 1" />
+        <Shot name="brass" label="Hand-cast brass" hint="Cast handle, raw and finished" ratio="1 / 1" />
+        <Shot name="finish-samples" label="Finish samples" hint="Stain / lacquer test boards in a row" ratio="1 / 1" />
+      </div>
+      <div class="row two">
+        <Shot name="key-piece" label="Key piece in the studio" hint="A finished studio sample (e.g. Doheny bed or Calabasas night table)" />
+        <Shot name="factory-pps" label="Factory PPS line" hint="Partner factory building pre-production samples" />
       </div>
     </div>
   </section>
 
-  <section class="section alt">
-    <div class="wrap">
-      <h2>Six steps, one place.</h2>
-      <ol class="steps">
-        {steps.map(([t, d], i) => <li><span>{String(i + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{d}</p></li>)}
-      </ol>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <h2>What you can count on</h2>
-      <div class="two four">
-        {story.counts.map(([t, d]) => <div><h3>{t}</h3><p>{d}</p></div>)}
+  <!-- 03 -->
+  <section class="section rule">
+    <div class="wrap pair">
+      <div>
+        <p class="num">03 — Engineered, not just drawn</p>
+        <h2>We never design what we don't know how to make.</h2>
+        <p class="copy">We care about more than the look. Every item is engineered for performance and for cost, and we never design anything unless we know exactly how it will be made. The result is furniture with the right design, proportion and detail, at a very competitive cost.</p>
+      </div>
+      <div class="row two tight">
+        <Shot name="shop-drawing" label="Shop drawing" hint="Detailed drawing on screen or printed" ratio="1 / 1" />
+        <Shot name="costing" label="Costing sheet" hint="BOM / costing, abstract close-up" ratio="1 / 1" />
+        <Shot name="cnc" label="CNC" hint="Machine cutting a part" ratio="1 / 1" />
+        <Shot name="sanding" label="Sanding" hint="Hand finishing a curve" ratio="1 / 1" />
       </div>
     </div>
   </section>
 
-  <CtaBand />
+  <!-- 04 -->
+  <section class="section rule">
+    <div class="wrap">
+      <p class="num">04 — Built lean</p>
+      <h2>Twelve people and every tool we know.</h2>
+      <div class="pair lead">
+        <Shot name="team" label="Office / design team" hint="Team at work: drafting, rendering, planning. Candid, no group pose" ratio="4 / 3" />
+        <p class="copy">Our team is lean, and we use every tool we know, from hand sketches to 3D printing, from sanding to CNC. Because we draw and cost every piece in detail, we get the best possible prices from our factories. Because we run lean, we add only a low markup to the factory cost. That's how we bring beautiful furniture to market at scale, at an accessible price.</p>
+      </div>
+      <div class="row three">
+        <Shot name="materials" label="Materials" hint="Timber stack, veneer, rattan, rope, fabric bolts" />
+        <Shot name="printer" label="3D printer" hint="Printer running in the studio" />
+        <Shot name="render" label="Render on screen" hint="Blender / D5 view of a collection piece" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="section rule">
+    <div class="wrap">
+      <div class="pair lead top">
+        <Shot name="qc" label="QC inspection" hint="Inspector checking and photographing a piece; barcode label visible" ratio="3 / 4" />
+        <div>
+          <p class="num">05 — Every piece tracked</p>
+          <h2>Checked, barcoded, followed to the water.</h2>
+          <p class="copy">Our QC team checks and documents every piece to our standards. Each item is barcoded and each carton is marked. We can trace every item, the container it went into, and that container on the water. We're building a dashboard that puts production status, order status, shipping status and every document online, in real time.</p>
+        </div>
+      </div>
+      <div class="row three">
+        <Shot name="barcode" label="Barcode / carton marking" hint="Label being applied or scanned" />
+        <Shot name="container" label="Container loading" hint="Cartons going into a 40-ft at the yard" />
+        <Shot name="dashboard" label="Dashboard" hint="Screenshot of the buyer dashboard (demo data)" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule close">
+    <div class="wrap">
+      <h2>Well-designed, on-trend furniture, built right and shipped direct by the container, at scale.</h2>
+      <a class="btn" href="/request-catalog">Request catalog</a>
+    </div>
+  </section>
 </Base>
 
 <style>
-  .two { display: grid; gap: 2.5rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
-  .two > div { border-top: 1px solid var(--line); padding-top: 1.2rem; }
-  .two p { color: var(--text-soft); margin-top: .5rem; }
-  .steps { list-style: none; padding: 0; display: grid; gap: 2.5rem; margin-top: 2rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
-  .steps li { border-top: 1px solid var(--line); padding-top: 1.2rem; }
-  .steps span { font-size: .75rem; letter-spacing: .18em; color: var(--text-soft); }
-  .steps h3 { margin-top: .5rem; }
-  .steps p { color: var(--text-soft); margin-top: .5rem; }
+  .hww-hero { position: relative; display: flex; align-items: flex-end; aspect-ratio: 16 / 7; min-height: 26rem; max-height: 85svh; padding-block: 3rem; background: var(--bg-alt) center / cover no-repeat; overflow: hidden; }
+  .hww-hero.photo { color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 75%, transparent); }
+  .hww-hero.photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.55)); }
+  .hww-hero .wrap { position: relative; }
+  .hww-hero h1 { text-transform: uppercase; letter-spacing: .02em; }
+  .hww-hero .sub { margin-top: .6rem; font-size: clamp(.85rem, 1.4vw, 1.1rem); letter-spacing: .3em; text-transform: uppercase; color: var(--text-soft); }
+  .hero-ph { position: absolute; inset: 0 0 40%; display: grid; place-content: center; gap: .3rem; text-align: center; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-soft); }
+
+  .rule > .wrap { border-top: 1px solid var(--line); padding-top: clamp(3rem, 6vw, 5rem); }
+  .section.rule { padding-top: 0; }
+  .num { font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  h2 { max-width: 22ch; }
+  .copy { margin-top: 1.4rem; color: var(--text-soft); max-width: 36rem; }
+  .copy p + p { margin-top: 1rem; }
+  .lead .copy { margin-top: 0; }
+
+  .pair { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+  .pair.lead { margin-top: clamp(2rem, 4vw, 3rem); }
+  .pair.top { margin-top: 0; }
+  .row { display: grid; gap: clamp(.8rem, 2vw, 1.4rem); margin-top: clamp(.8rem, 2vw, 1.4rem); }
+  .row.four { grid-template-columns: repeat(2, 1fr); }
+  .row.two { grid-template-columns: repeat(2, 1fr); }
+  .row.tight { margin-top: 0; }
+  .row.three { grid-template-columns: 1fr; }
+
+  .close { text-align: center; }
+  .close h2 { margin-inline: auto; max-width: 26ch; font-size: clamp(1.8rem, 3.5vw, 2.8rem); }
+  .close .btn { margin-top: 2rem; }
+
+  @media (min-width: 700px) {
+    .row.four { grid-template-columns: repeat(4, 1fr); }
+    .row.three { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .pair { grid-template-columns: 1fr 1fr; }
+  }
 </style>

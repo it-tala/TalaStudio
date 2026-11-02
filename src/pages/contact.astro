@@ -1,20 +1,35 @@
 ---
 import Base from '../layouts/Base.astro';
+
+// People to contact directly. Leave phone empty to hide that line.
+const people = [
+  { role: 'Director of Sales', name: 'David Wormald', email: 'david@talastudio.net', phone: '' },
+  { role: 'Director of Operations', name: 'Evin Oshima', email: 'evin@talastudio.net', phone: '+62.812.3661.7795' },
+];
+const digits = (p: string) => p.replace(/\D/g, '');
 ---
 <Base
   title="Contact"
-  description="Talk to TalaStudio about container orders, regional exclusivity or a showroom visit in Jepara, Indonesia."
+  description="Talk to TalaStudio about a product or an idea: container orders, new designs or a showroom visit in Jepara, Indonesia."
 >
   <section class="section">
     <div class="wrap grid-2" style="align-items:start">
       <div>
         <p class="eyebrow">Contact</p>
         <h1>Talk to us.</h1>
-        <p class="lede">Container orders, exclusivity, or a visit to the studio. Send us a note and we will get back to you.</p>
+        <p class="lede">For information, don't hesitate to reach out! Need a product, or have an idea? Give us a few days and we will create it.</p>
       </div>
       <div class="cards">
+        {people.map((p) => (
+          <div>
+            <p class="role">{p.role}</p>
+            <h3>{p.name}</h3>
+            <p>Email: <a href={`mailto:${p.email}`}>{p.email}</a></p>
+            {p.phone && <p>Phone / WhatsApp: <a href={`https://wa.me/${digits(p.phone)}`} target="_blank" rel="noopener">{p.phone}</a></p>}
+          </div>
+        ))}
         <div>
-          <h3>Email</h3>
+          <h3>General</h3>
           <p><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></p>
         </div>
         <div>
@@ -34,4 +49,5 @@ import Base from '../layouts/Base.astro';
   .cards { display: grid; gap: 2rem; }
   .cards > div { border-top: 1px solid var(--line); padding-top: 1.5rem; }
   .cards p { color: var(--text-soft); margin-top: .4rem; }
+  .cards .role { margin: 0 0 .3rem; font-size: .72rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
 </style>

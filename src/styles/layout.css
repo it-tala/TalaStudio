@@ -9,17 +9,33 @@
 .hero-full .inner { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; padding: 96px 56px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
 .hero-full .eyebrow { font-size: 12px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 18px; }
 .hero-full h1 { font-size: clamp(34px, 4vw + 1rem, 64px); max-width: 20ch; margin-bottom: 18px; }
+.hero-full .hero-stack span { display: block; }
+.hero-full .hero-stack .rule { width: 140px; height: 1px; background: #b0835c; margin: .3em 0 .45em; }
 .hero-full p.text { font-size: 18px; line-height: 1.6; max-width: 46ch; opacity: .92; margin-bottom: 32px; }
 @media (max-width: 700px) { .hero-full .inner { padding: 72px 20px 48px; } }
-/* Hero slideshow: covers stacked, the active one fades in; small dots bottom-right */
-.hero-full .slide { opacity: 0; transition: opacity 1.4s ease; pointer-events: none; }
-.hero-full .slide.on { opacity: 1; pointer-events: auto; }
+/* Hero slideshow: covers stacked. The new one fades in on top while the old one stays fully up underneath
+   (.was), so the picture never dips to the dark background mid-change. Small dots bottom-right. */
+.hero-full .slide { opacity: 0; transition: opacity 1.2s ease-in-out; pointer-events: none; }
+.hero-full { isolation: isolate; } /* lets the old cover sit at z-index -1, under the new one, whichever comes first in the page */
+.hero-full .slide.was { opacity: 1; z-index: -1; transition: none; }
+.hero-full .slide.on { opacity: 1; z-index: 0; pointer-events: auto; }
 .hero-full .slide:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -8px; }
 /* Clicks on the copy fall through to the picture's link; the buttons stay clickable */
-.hero-full .inner { pointer-events: none; }
+/* The page copy shows on the first picture; each other picture brings its collection's copy.
+   One after the other, never on top of each other: the old copy fades out (.5s), then the new one rises in (.9s),
+   both inside the 1.4s the picture takes. */
+.hero-full .inner { pointer-events: none; transition: opacity .9s ease .5s, transform .9s ease .5s, visibility 0s .5s; }
+.hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on) {
+  opacity: 0; visibility: hidden; transform: translateY(12px); animation: none; /* the load fade would otherwise hold it visible */
+  transition: opacity .5s ease, transform 0s .5s, visibility 0s .5s;
+}
+.hero-full .hero-alt { position: absolute; inset: 0; }
+.hero-full .hero-alt .eyebrow { text-transform: uppercase; }
+.hero-full .hero-title { font-size: clamp(34px, 4vw + 1rem, 64px); max-width: 20ch; margin-bottom: 18px; }
+@media (prefers-reduced-motion: reduce) { .hero-full .inner, .hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on), .hero-names span.on { transition: none; transform: none; } }
 .hero-full .inner a, .hero-full .inner button { pointer-events: auto; }
 .feat-card { scroll-margin-top: 4.5rem; } /* clears the sticky header when the hero links here */
-.hero-dots { position: absolute; z-index: 2; right: 48px; bottom: 64px; display: flex; gap: 4px; }
+.hero-dots { position: absolute; z-index: 2; right: 48px; bottom: 70px; display: flex; gap: 4px; }
 /* Arrows on the picture's left and right edges, same thin look as the collections page slider */
 /* Slider arrows (hero and collection card): large round buttons, dark glass with a white chevron, clear on light and dark photos */
 .hero-arrow, .fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 56px; height: 56px; padding: 0 0 4px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 50%; background: rgba(20, 17, 14, .45); color: #fff; font-size: 40px; font-weight: 400; line-height: 1; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, .25); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .2s, border-color .2s; }
@@ -33,7 +49,13 @@
 .hero-dots button:hover::before { opacity: 1; }
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
-@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 16px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
+/* The collection's name under the dots, cross-fading with its picture */
+.hero-names { position: absolute; z-index: 2; right: 52px; bottom: 14px; display: grid; justify-items: end; pointer-events: none; }
+.hero-names span { grid-area: 1 / 1; font: 400 clamp(26px, 1.6vw + 12px, 40px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; transition: opacity .5s ease; }
+.hero-names span.on { opacity: .95; transition: opacity .9s ease .5s; } /* same out-then-in as the copy */
+@media (max-width: 700px) { .hero-names { right: 16px; bottom: 10px; } .hero-names span { font-size: 22px; } }
+@media (prefers-reduced-motion: reduce) { .hero-names span { transition: none; } }
+@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 42px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
 @media (prefers-reduced-motion: reduce) { .hero-full .slide, .hero-dots button::before { transition: none; } }
 
 /* Proof strip: dark band, dividers, centred caps */
