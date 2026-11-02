@@ -17,7 +17,7 @@ const all = await getCollections();
 const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
 const homeItems: Record<string, string[]> = {
-  doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
+  doheny: ['Bed', '6 Drawer Dresser', 'Sofa', 'Coffee Table'],
 };
 // Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
@@ -40,7 +40,9 @@ const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.
       return { name, src, bg: await edgeBackground(src, 1) };
     })),
   })));
-const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
+// A landing page card covers the whole collection: its pieces from every room (Doheny bedroom and living together)
+const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined)
+  .map((c) => ({ ...c, gallery: all.filter((x) => x.name === c.name).flatMap((x) => x.gallery ?? []) }));
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
 const covers = (c: (typeof all)[number]) => groupItems(c).map((it) => ({ name: it.name, src: it.pics[0].src }));
 // The first three pieces in catalog order (bed first), leaving out hidden photos

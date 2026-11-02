@@ -118,7 +118,7 @@
 .chip { border: 1px solid var(--line); color: var(--text-soft); padding: 9px 16px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; text-decoration: none; }
 .chip:hover { border-color: var(--text); color: var(--text); }
 .dark .coll-intro { margin-bottom: 36px; }
-.coll-hero { min-height: calc(100svh - 4.5rem); display: flex; flex-direction: column; justify-content: center; background: linear-gradient(rgba(38, 34, 30, .58), rgba(38, 34, 30, .68)), url(/collections/dining/zuma/hero.jpg) center / cover no-repeat var(--bg-dark); }
+.coll-hero { min-height: calc(100svh - 4.5rem); display: flex; flex-direction: column; justify-content: center; background: linear-gradient(rgba(38, 34, 30, .58), rgba(38, 34, 30, .68)), url(/collections/zuma/dining/hero.jpg) center / cover no-repeat var(--bg-dark); }
 .coll-hero .coll-intro p { color: color-mix(in srgb, var(--on-dark) 88%, transparent); }
 
 .coll-grid { display: grid; align-items: start; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 24px; margin: 0 auto; padding-inline: 24px; max-width: 1448px; }
