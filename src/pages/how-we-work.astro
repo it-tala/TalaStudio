@@ -4,7 +4,7 @@ import Shot from '../components/Shot.astro';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-// How We Work (layout and copy from TalaStudio_How_We_Work_Layout.pdf, v1, 1 Nov 2026).
+// How We Work (layout from TalaStudio_How_We_Work_Layout.pdf, v1, 1 Nov 2026; copy of 2 Nov 2026).
 // Photos: public/how-we-work/<name>.jpg, named as in each <Shot name> below. Until a file is there, a labelled box shows.
 const heroExt = ['jpg', 'jpeg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'how-we-work', `hero.${e}`)));
 const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
@@ -16,7 +16,7 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
   <section class:list={['hww-hero', { photo: hero }]} style={hero ? `background-image:url(${hero})` : undefined}>
     {!hero && <p class="hero-ph" aria-hidden="true"><b>Hero · wide shot</b><span>Samplemakers at the bench in the converted factory</span></p>}
     <div class="wrap fade">
-      <p class="eyebrow">Jepara, Indonesia</p>
+      <p class="eyebrow">How we work · Jepara, Indonesia</p>
       <h1>Studio designed.</h1>
       <p class="sub">Shipped at scale.</p>
     </div>
@@ -26,9 +26,9 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
   <section class="section">
     <div class="wrap pair">
       <div>
-        <p class="num">01 — Who we are</p>
+        <p class="num">01 — Facility</p>
         <h2>A converted factory on the north coast of Java.</h2>
-        <p class="copy">TalaStudio works out of a converted factory in Jepara, a town on the north coast of Java where furniture has been made for as long as anyone can remember. A collection begins as a single idea, often just a line or a proportion. We draw it, render it and develop it. Then it moves to the bench.</p>
+        <p class="copy">TalaStudio works out of a converted factory in Jepara, a town on the north coast of Java where furniture has been made for as long as anyone can remember. Our studio is an actual factory with a full panel line, solid wood machining, and a finishing line. We use 3D printing, workstations, and CNC. We are a small team of designers, drafters, IT personnel, and sample makers.</p>
       </div>
       <Shot name="studio" label="Studio exterior / interior" hint="The converted factory building, or a wide of the studio floor" ratio="3 / 4" />
     </div>
@@ -36,42 +36,35 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
 
   <!-- 02 -->
   <section class="section rule">
-    <div class="wrap">
-      <p class="num">02 — How we work</p>
-      <h2>First it moves to the bench.</h2>
-      <div class="pair lead">
-        <Shot name="samplemaker" label="Samplemaker, hands on" hint="Close-up: shaping or fitting a detail by hand" ratio="3 / 4" />
-        <div class="copy">
-          <p>In our studio, a small team of samplemakers builds the first pieces by hand. This is where we work out the details, the finishes and the textures. We 3D print the handles, then have them hand cast. We keep refining until it's right, and then we build the key pieces.</p>
-          <p>When the key pieces are right, we take the collection to our factory partners to make the full set of pre-production samples (PPS). They build from our samples, as well as from detailed drawings, so what comes off their line still speaks in our voice.</p>
-        </div>
+    <div class="wrap pair">
+      <div>
+        <p class="num">02 — Design process</p>
+        <h2>A collection begins as a single idea.</h2>
+        <p class="copy">Often just a line or a proportion. We draw it, render it and develop it. We lavish attention on the details: handles, finishes, profiles. We model in CAD, Blender, D5 and hand sketches, every trick to visualize and refine the details and proportions. As we work, we consider how to build it and what it costs. Then it moves to the bench.</p>
       </div>
-      <div class="row four">
+      <div class="row two tight">
         <Shot name="sketch" label="Hand sketch" hint="Sketchbook or pencil drawing on the bench" ratio="1 / 1" />
-        <Shot name="printed-handle" label="3D-printed handle" hint="Printed prototype next to the drawing" ratio="1 / 1" />
-        <Shot name="brass" label="Hand-cast brass" hint="Cast handle, raw and finished" ratio="1 / 1" />
-        <Shot name="finish-samples" label="Finish samples" hint="Stain / lacquer test boards in a row" ratio="1 / 1" />
-      </div>
-      <div class="row two">
-        <Shot name="key-piece" label="Key piece in the studio" hint="A finished studio sample (e.g. Doheny bed or Calabasas night table)" />
-        <Shot name="factory-pps" label="Factory PPS line" hint="Partner factory building pre-production samples" />
+        <Shot name="render" label="Render on screen" hint="Blender / D5 view of a collection piece" ratio="1 / 1" />
+        <Shot name="shop-drawing" label="Shop drawing" hint="Detailed drawing on screen or printed" ratio="1 / 1" />
+        <Shot name="costing" label="Costing sheet" hint="BOM / costing, abstract close-up" ratio="1 / 1" />
       </div>
     </div>
   </section>
 
   <!-- 03 -->
   <section class="section rule">
-    <div class="wrap pair">
-      <div>
-        <p class="num">03 — Engineered, not just drawn</p>
-        <h2>We never design what we don't know how to make.</h2>
-        <p class="copy">We care about more than the look. Every item is engineered for performance and for cost, and we never design anything unless we know exactly how it will be made. The result is furniture with the right design, proportion and detail, at a very competitive cost.</p>
+    <div class="wrap">
+      <p class="num">03 — Product development</p>
+      <h2>First it moves to the bench.</h2>
+      <div class="pair lead">
+        <Shot name="samplemaker" label="Samplemaker, hands on" hint="Close-up: shaping or fitting a detail by hand" ratio="3 / 4" />
+        <p class="copy">In our studio, a small team of samplemakers builds the first pieces by hand. This is where we work out the details, the finishes and the textures. We 3D print the handles, then have them hand cast. We keep refining until it's right, and then we build the key pieces.</p>
       </div>
-      <div class="row two tight">
-        <Shot name="shop-drawing" label="Shop drawing" hint="Detailed drawing on screen or printed" ratio="1 / 1" />
-        <Shot name="costing" label="Costing sheet" hint="BOM / costing, abstract close-up" ratio="1 / 1" />
-        <Shot name="cnc" label="CNC" hint="Machine cutting a part" ratio="1 / 1" />
-        <Shot name="sanding" label="Sanding" hint="Hand finishing a curve" ratio="1 / 1" />
+      <div class="row four">
+        <Shot name="printed-handle" label="3D-printed handle" hint="Printed prototype next to the drawing" ratio="1 / 1" />
+        <Shot name="brass" label="Hand-cast brass" hint="Cast handle, raw and finished" ratio="1 / 1" />
+        <Shot name="finish-samples" label="Finish samples" hint="Stain / lacquer test boards in a row" ratio="1 / 1" />
+        <Shot name="key-piece" label="Key piece in the studio" hint="A finished studio sample (e.g. Doheny bed or Calabasas night table)" ratio="1 / 1" />
       </div>
     </div>
   </section>
@@ -79,16 +72,19 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
   <!-- 04 -->
   <section class="section rule">
     <div class="wrap">
-      <p class="num">04 — Built lean</p>
-      <h2>Twelve people and every tool we know.</h2>
+      <p class="num">04 — Sourcing and production</p>
+      <h2>We never design what we don't know how to make.</h2>
       <div class="pair lead">
-        <Shot name="team" label="Office / design team" hint="Team at work: drafting, rendering, planning. Candid, no group pose" ratio="4 / 3" />
-        <p class="copy">Our team is lean, and we use every tool we know, from hand sketches to 3D printing, from sanding to CNC. Because we draw and cost every piece in detail, we get the best possible prices from our factories. Because we run lean, we add only a low markup to the factory cost. That's how we bring beautiful furniture to market at scale, at an accessible price.</p>
+        <div class="copy">
+          <p>When the key pieces are right, we take the collection to our factory partners to make the full set of pre-production samples (PPS). They build from our samples, as well as from detailed drawings, material specifications and bills of materials, so what comes off their line still speaks in our voice.</p>
+          <p>We care about more than the look. Every item is engineered for performance and for cost, and we never design anything unless we know exactly how it will be made. The result is furniture with the right design, proportion and detail, at a very competitive cost.</p>
+        </div>
+        <Shot name="factory-pps" label="Factory PPS line" hint="Partner factory building pre-production samples" ratio="4 / 3" />
       </div>
       <div class="row three">
         <Shot name="materials" label="Materials" hint="Timber stack, veneer, rattan, rope, fabric bolts" />
-        <Shot name="printer" label="3D printer" hint="Printer running in the studio" />
-        <Shot name="render" label="Render on screen" hint="Blender / D5 view of a collection piece" />
+        <Shot name="cnc" label="CNC" hint="Machine cutting a part" />
+        <Shot name="sanding" label="Sanding" hint="Hand finishing a curve" />
       </div>
     </div>
   </section>
@@ -96,10 +92,22 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
   <!-- 05 -->
   <section class="section rule">
     <div class="wrap">
+      <p class="num">05 — Built lean</p>
+      <h2>Twelve people and every tool we know.</h2>
+      <div class="pair lead">
+        <Shot name="team" label="Office / design team" hint="Team at work: drafting, rendering, planning. Candid, no group pose" ratio="4 / 3" />
+        <p class="copy">Our team is lean, and we use every tool we know, from hand sketches to 3D printing, from sanding to CNC. Because we draw and cost every piece in detail, we get the best possible prices from our factories. Because we run lean, we add only a low markup to the factory cost. That's how we bring beautiful furniture to market at scale, at an accessible price.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="section rule">
+    <div class="wrap">
       <div class="pair lead top">
         <Shot name="qc" label="QC inspection" hint="Inspector checking and photographing a piece; barcode label visible" ratio="3 / 4" />
         <div>
-          <p class="num">05 — Every piece tracked</p>
+          <p class="num">06 — Quality control</p>
           <h2>Checked, barcoded, followed to the water.</h2>
           <p class="copy">Our QC team checks and documents every piece to our standards. Each item is barcoded and each carton is marked. We can trace every item, the container it went into, and that container on the water. We're building a dashboard that puts production status, order status, shipping status and every document online, in real time.</p>
         </div>
@@ -114,6 +122,7 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
 
   <section class="section rule close">
     <div class="wrap">
+      <p class="num">Our goal is simple</p>
       <h2>Well-designed, on-trend furniture, built right and shipped direct by the container, at scale.</h2>
       <a class="btn" href="/request-catalog">Request catalog</a>
     </div>
@@ -121,7 +130,8 @@ const hero = heroExt ? `/how-we-work/hero.${heroExt}` : null;
 </Base>
 
 <style>
-  .hww-hero { position: relative; display: flex; align-items: flex-end; aspect-ratio: 16 / 7; min-height: 26rem; max-height: 85svh; padding-block: 3rem; background: var(--bg-alt) center / cover no-repeat; overflow: hidden; }
+  /* One full screen under the header, edge to edge, like the home page hero */
+  .hww-hero { position: relative; display: flex; align-items: flex-end; width: 100%; min-height: calc(100svh - 4.5rem); padding-block: 3rem; background: var(--bg-alt) center / cover no-repeat; overflow: hidden; }
   .hww-hero.photo { color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 75%, transparent); }
   .hww-hero.photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.55)); }
   .hww-hero .wrap { position: relative; }

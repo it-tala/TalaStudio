@@ -12,15 +12,15 @@ const nav = [
 ---
 <style>
   header { border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 10; }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4.5rem; }
+  /* Full width with a side gutter that grows with the screen, so logo and menu sit out towards the edges */
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 4.5rem; padding-inline: clamp(20px, 4vw, 72px); }
   /* The TS mark is a mask, so it takes the logo brown here and the text colour on the dark palette */
   .logo { display: flex; align-items: center; gap: .7rem; color: #584538; font: 500 1.35rem 'Cormorant Garamond', Georgia, serif; text-transform: uppercase; letter-spacing: .16em; text-decoration: none; }
   .logo i { width: 2.6rem; aspect-ratio: 412 / 398; background: currentColor; -webkit-mask: url(/logo-mark.png) center / contain no-repeat; mask: url(/logo-mark.png) center / contain no-repeat; }
   :global([data-theme='charcoal']) .logo { color: var(--text); }
-  nav { display: none; gap: 1.6rem; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
+  nav { display: none; gap: clamp(1.6rem, 2.4vw, 3rem); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; }
   nav a { text-decoration: none; color: var(--text-soft); }
   nav a:hover { color: var(--text); }
-  nav .navcta { color: var(--accent); border-bottom: 1px solid currentColor; }
 
   /* Mobile: logo + three-line menu button only */
   details { position: static; }
@@ -32,7 +32,6 @@ const nav = [
   details[open] summary span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
   .menu { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--line); padding: 1.25rem 1.25rem 1.75rem; display: grid; gap: 1.1rem; }
   .menu a { text-decoration: none; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
-  .menu .btn { text-align: center; margin-top: .5rem; color: #fff; font-size: .85rem; }
 
   @media (min-width: 1000px) {
     nav { display: flex; }
@@ -40,17 +39,15 @@ const nav = [
   }
 </style>
 <header>
-  <div class="wrap bar">
+  <div class="bar">
     <a class="logo" href="/" aria-label="TalaStudio home"><i aria-hidden="true"></i>TalaStudio</a>
     <nav aria-label="Main">
       {nav.map(([t, h]) => <a href={h}>{t}</a>)}
-      <a class="navcta" href="/request-catalog">Request catalog</a>
     </nav>
     <details>
       <summary aria-label="Menu"><span></span><span></span><span></span></summary>
       <div class="menu">
         {nav.map(([t, h]) => <a href={h}>{t}</a>)}
-        <a class="btn" href="/request-catalog">Request catalog</a>
       </div>
     </details>
   </div>

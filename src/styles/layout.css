@@ -5,6 +5,9 @@
 /* Hero: near full screen, copy bottom-left over the image */
 .hero-full { position: relative; display: flex; min-height: calc(100svh - 4.5rem); color: var(--on-dark); background: var(--bg-dark); overflow: hidden; }
 .hero-full .media { position: absolute; inset: 0; background: linear-gradient(160deg, #4a3f35, #1d1a17 70%) center / cover no-repeat; }
+/* The cover picture sits in ::before (as --img), the shading in ::after */
+.hero-full .slide { overflow: hidden; }
+.hero-full .slide::before { content: ''; position: absolute; inset: 0; background: var(--img, none) center / cover no-repeat; }
 .hero-full .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), linear-gradient(90deg, rgba(0,0,0,.38) 0%, rgba(0,0,0,0) 65%); }
 .hero-full .inner { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; padding: 96px 56px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
 .hero-full .eyebrow { font-size: 12px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 18px; }
@@ -13,6 +16,12 @@
 .hero-full .hero-stack .rule { width: 140px; height: 1px; background: #b0835c; margin: .3em 0 .45em; }
 .hero-full p.text { font-size: 18px; line-height: 1.6; max-width: 46ch; opacity: .92; margin-bottom: 32px; }
 @media (max-width: 700px) { .hero-full .inner { padding: 72px 20px 48px; } }
+/* Very wide screens (ultrawide): the 16:9 covers would lose a third of their height to cover-cropping.
+   Show the whole picture instead, with a blurred, darker copy of it filling the sides. */
+@media (min-aspect-ratio: 21/10) {
+  .hero-full .slide::before { filter: blur(40px) brightness(.75); transform: scale(1.15); }
+  .hero-full .slide::after { background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), linear-gradient(90deg, rgba(0,0,0,.38) 0%, rgba(0,0,0,0) 65%), var(--img, none) center / contain no-repeat; }
+}
 /* Hero slideshow: covers stacked. The new one fades in on top while the old one stays fully up underneath
    (.was), so the picture never dips to the dark background mid-change. Small dots bottom-right. */
 .hero-full .slide { opacity: 0; transition: opacity 1.2s ease-in-out; pointer-events: none; }
@@ -216,3 +225,50 @@
   .cs-slide::after { background: linear-gradient(to top, var(--bg-dark) 0%, rgba(38, 34, 30, .9) 38%, transparent 75%); }
   .cs-body { width: 100%; padding: 28px 44px 44px; }
 }
+
+/* Picture viewer (src/lib/viewer.ts): full screen and dark. Big square picture, name, then a sideways strip of thumbnails */
+.cat-box { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(20, 17, 14, .96); color: #f3ece2; overflow: hidden; }
+.cat-box[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto auto; }
+.cat-box::backdrop { background: rgba(20, 17, 14, .96); }
+.cat-track { display: flex; min-height: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.cat-track::-webkit-scrollbar { display: none; }
+.cat-track:focus-visible { outline: 1px solid rgba(243, 236, 226, .4); outline-offset: -1px; }
+.cat-slide { flex: 0 0 100%; display: grid; place-items: center; min-height: 0; padding: 24px 88px 0; scroll-snap-align: start; container-type: size; }
+/* Each photo sits whole in a 1:1 square, as large as the slide allows */
+.cat-sq { width: min(100cqw, 100cqh); aspect-ratio: 1; display: grid; place-items: center; overflow: hidden; background: var(--bg-alt); }
+.cat-sq img { width: 100%; height: 100%; object-fit: contain; user-select: none; }
+.cat-cap { display: flex; justify-content: center; align-items: baseline; gap: 14px; padding: 16px 20px 12px; }
+.cat-cap h3 { font: 500 .8rem/1.4 Inter, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.cat-pos { font-size: .7rem; letter-spacing: .1em; opacity: .55; }
+.cat-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 20px 20px; scrollbar-width: thin; scrollbar-color: rgba(243, 236, 226, .3) transparent; }
+.cat-thumbs[hidden] { display: none; }
+.cat-thumbs > :first-child { margin-left: auto; }
+.cat-thumbs > :last-child { margin-right: auto; }
+.cat-thumbs button { flex: none; height: 76px; aspect-ratio: 1; padding: 0; border: 1px solid transparent; background: none; opacity: .5; cursor: pointer; transition: opacity .2s; }
+.cat-thumbs button:hover { opacity: .85; }
+.cat-thumbs button.on { opacity: 1; border-color: #f3ece2; }
+.cat-thumbs button:focus-visible { outline: 1px solid #f3ece2; outline-offset: 2px; }
+.cat-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.cat-btn { position: absolute; z-index: 2; width: 2.8rem; height: 2.8rem; border: 0; border-radius: 50%; background: rgba(243, 236, 226, .14); color: inherit; font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.cat-btn:hover:not(:disabled) { background: rgba(243, 236, 226, .28); }
+.cat-btn:disabled { opacity: .3; cursor: default; }
+.cat-btn[hidden] { display: none; }
+.cat-prev, .cat-next { top: calc(50% - 56px); transform: translateY(-50%); }
+.cat-prev { left: 1rem; }
+.cat-next { right: 1rem; }
+@media (max-width: 700px) {
+  .cat-slide { padding: 16px 12px 0; }
+  .cat-thumbs button { height: 56px; }
+  .cat-prev, .cat-next { width: 2.4rem; height: 2.4rem; font-size: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .cat-thumbs button { transition: none; } }
+/* The picture itself is the button: left half back, right half forward (the pointer shows which way) */
+.cat-sq { position: relative; }
+.cat-sq.to-prev { cursor: w-resize; }
+.cat-sq.to-next { cursor: e-resize; }
+/* Back, on the picture's top-right corner, close to where the eye is */
+.cat-back { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: rgba(20, 17, 14, .55); color: #f3ece2; font-size: 26px; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: background .2s; }
+.cat-back:hover { background: rgba(20, 17, 14, .8); }
+.cat-back:focus-visible { outline: 2px solid #f3ece2; outline-offset: 2px; }
+.cat-link { margin-left: 10px; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+.cat-link[hidden] { display: none; }

@@ -20,17 +20,25 @@ const homeItems: Record<string, string[]> = {
   doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
 };
 // Hero: one cover per published collection. Placeholder SVG covers are skipped; covers shared by two entries show once.
-// A click goes to that collection's card further down, or to its own page while it is not on the landing page.
-const heroSlides = [...new Map(all
+// A click opens that collection's pieces in the picture viewer (one front view per piece), with a link on to the collection:
+// its card further down, or its own page while it is not on the landing page.
+const heroSlides = await Promise.all([...new Map(all
   .filter((c) => c.hero_image_path && !c.hero_image_path.endsWith('.svg'))
-  .map((c) => [c.hero_image_path, {
+  .map((c) => [c.hero_image_path, c])).values()]
+  .map(async (c) => ({
     src: imageUrl(c.hero_image_path)!,
     label: `${c.name} collection, ${c.room} render`,
     name: `${c.name} collection`,
     href: featured.includes(c.slug) ? `#coll-${c.slug}` : `/collections/${c.slug}`,
     room: c.room === 'other' ? 'Collection' : `${c.room} collection`,
     text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
-  }])).values()];
+    // The front view of each piece (else its first picture that is not a room shot or spec sheet)
+    items: await Promise.all(groupItems(c).map(async ({ name, pics }) => {
+      const plain = pics.filter((p) => !p.cover && !p.spec);
+      const src = (plain.find((p) => p.front) ?? plain[0] ?? pics[0]).src;
+      return { name, src, bg: await edgeBackground(src, 1) };
+    })),
+  })));
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
 const covers = (c: (typeof all)[number]) => groupItems(c).map((it) => ({ name: it.name, src: it.pics[0].src }));
