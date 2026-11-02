@@ -19,13 +19,13 @@ const featured = ['doheny'];
 const homeItems: Record<string, string[]> = {
   doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
 };
-// Hero: one cover per collection name, from its first room that has a real room shot (hero.jpg); a room that only
-// borrows a product photo as its cover is skipped, and so are placeholder SVG covers.
+// Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
+// (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
 // A click opens that collection's pieces in the picture viewer (one front view per piece), with a link on to the collection:
 // its card further down, or its own page while it is not on the landing page.
-const heroSlides = await Promise.all([...new Map(all
-  .filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''))
-  .reverse().map((c) => [c.name, c])).values()].reverse()
+const withRoomShot = all.filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
+const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
+const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
   .map(async (c) => ({
     src: imageUrl(c.hero_image_path)!,
     label: `${c.name} collection, ${c.room} render`,
