@@ -49,8 +49,7 @@ export const collectionEntries: Entry[] = [
   { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: false },
   { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: false },
   { slug: 'doheny-living', name: 'Doheny', room: 'living', description: null, published: true, ...dohenyFinishes },
-  { slug: 'beechwood-living', name: 'Beechwood', room: 'living', description: null, published: true },
-  // Beechwood dining: room shot only so far (2 Nov 2026); its pieces are under living in the line sheet
+  // Beechwood has no living room (3 Nov 2026). Dining: room shot only so far; its pieces are under living in the line sheet
   { slug: 'beechwood-dining', name: 'Beechwood', room: 'dining', description: null, published: true },
   // Calabasas living: room shot only so far (2 Nov 2026), items to follow
   { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: null, published: true,
