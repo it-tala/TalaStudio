@@ -6,6 +6,7 @@
 import type { Collection } from '../lib/supabase';
 import { edgeBackground } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
+import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
 // link: "View the collection" in the heading row. only: show just these items (by name); the rest stay on the collection page.
 interface Props { collection: Collection; link?: boolean; only?: string[] }
@@ -36,7 +37,10 @@ const items = await Promise.all(groupItems(collection).filter((it) => !only || o
 const viewerSrcs = [...new Set(items.flatMap((it) => Object.values(it.photos).flat().concat(it.srcs)))];
 const squareBg = Object.fromEntries(await Promise.all(viewerSrcs.map(async (s) => [s, await edgeBackground(s, 1)])));
 const id = `cat-${collection.slug}`;
-const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 'view' : 'views'}`].join(' · ');
+// Under each card: the finish shown, then the item's code number from the line sheet; its size on the line below
+const finishLine = (parts: string[], code: string | null) => [...parts, code].filter(Boolean).join(' · ');
+const specOf = (name: string) => itemSpec(collection.name, collection.room, name);
+const codeOf = (name: string) => specOf(name)?.code ?? null;
 ---
 {items.length > 0 && (
   <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name} data-bgs={JSON.stringify(squareBg)}>
@@ -46,7 +50,7 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
-        <li class="cat-item" data-name={it.name} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
+        <li class="cat-item" data-name={it.name} data-code={codeOf(it.name) ?? undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
           <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
             <span class="frame" style={it.bg ? `background:${it.bg}` : undefined}>
               <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" />
@@ -65,7 +69,8 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
             </div>
           )}
           <span class="cat-name">{it.name}</span>
-          <span class="cat-views">{finishLine([shownWood, it.shownFabric].filter((s): s is string => !!s), it.srcs.length)}</span>
+          <span class="cat-views">{finishLine([shownWood ?? specOf(it.name)?.finish, it.shownFabric].filter((s): s is string => !!s), codeOf(it.name))}</span>
+          {specOf(it.name)?.size && <span class="cat-size">{specOf(it.name)!.size}</span>}
         </li>
       ))}
     </ul>
@@ -93,7 +98,7 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
         const f = finish(li);
         img.src = f.srcs[0];
         img.alt = `${sec.dataset.collection} ${li.dataset.name}, ${f.labels.join(', ')}`;
-        views.textContent = [...f.labels, f.soon ? 'photo soon' : `${f.srcs.length} ${f.srcs.length === 1 ? 'view' : 'views'}`].join(' · ');
+        views.textContent = [...f.labels, f.soon ? 'photo soon' : li.dataset.code].filter(Boolean).join(' · ');
       }));
     });
 
@@ -133,6 +138,7 @@ const finishLine = (parts: string[], n: number) => [...parts, `${n} ${n === 1 ? 
   .sw[aria-pressed='true'] { outline-color: var(--text); }
   .sw:focus-visible { outline: 1px solid var(--text); }
   .cat-name { margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; line-height: 1.15; }
+  .cat-size { margin-top: 4px; font-size: 11px; letter-spacing: .08em; color: var(--text-soft); }
   .cat-views { margin-top: 6px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
   @media (max-width: 1000px) { .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr; } }

@@ -13,18 +13,19 @@ import { groupItems, itemRooms } from '../lib/items';
 
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
-// Slots ready for 'calabasas' and 'temescal' (same layout); hidden until their pieces are in.
+// Slots ready for 'calabasas' and 'palisades' (same layout); hidden until their pieces are in.
 const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
 const homeItems: Record<string, string[]> = {
   doheny: ['Bed', '6-Drawer Dresser', 'Sofa', 'Coffee Table'],
 };
-// Hero: one cover per published collection. Placeholder SVG covers are skipped; covers shared by two entries show once.
+// Hero: one cover per collection name, from its first room that has a real room shot (hero.jpg); a room that only
+// borrows a product photo as its cover is skipped, and so are placeholder SVG covers.
 // A click opens that collection's pieces in the picture viewer (one front view per piece), with a link on to the collection:
 // its card further down, or its own page while it is not on the landing page.
 const heroSlides = await Promise.all([...new Map(all
-  .filter((c) => c.hero_image_path && !c.hero_image_path.endsWith('.svg'))
-  .map((c) => [c.hero_image_path, c])).values()]
+  .filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''))
+  .reverse().map((c) => [c.name, c])).values()].reverse()
   .map(async (c) => ({
     src: imageUrl(c.hero_image_path)!,
     label: `${c.name} collection, ${c.room} render`,
@@ -42,7 +43,8 @@ const heroSlides = await Promise.all([...new Map(all
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined);
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
 const covers = (c: (typeof all)[number]) => groupItems(c).map((it) => ({ name: it.name, src: it.pics[0].src }));
-const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
+// The first three pieces in catalog order (bed first), leaving out hidden photos
+const pieceNames = (c: (typeof all)[number]) => groupItems(c).map((it) => it.name).slice(0, 3).join(', ');
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())

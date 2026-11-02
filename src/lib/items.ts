@@ -9,7 +9,7 @@ const ORDER: [(typeof ROOMS)[number], RegExp][] = [
   ['Bedroom', /^bed\b/i],
   ['Bedroom', /night ?table|nightstand|bedside/i],
   ['Bedroom', /dresser/i],
-  ['Bedroom', /chest|tallboy/i],
+  ['Bedroom', /chest|tall ?boy/i],
   ['Bedroom', /console|mirror|vanity/i],
   ['Living', /^sofa\b|settee|loveseat/i],
   ['Living', /armchair|single sofa|lounge chair/i],

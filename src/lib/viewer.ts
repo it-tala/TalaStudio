@@ -1,6 +1,7 @@
 // Full-screen picture viewer, shared by the item catalog (every angle of one item) and the home hero (every item of a collection).
 // Big square picture on top, its name and position, then a sideways strip of thumbnails. Styles: .cat-box in layout.css.
-// A click on the left or right half of the picture goes back or forward; the back button sits on the picture's top-right corner.
+// A click anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
+// the back button on the picture's top-right corner (or Esc) closes it.
 export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string };
 export type ViewerOptions = {
   slides: ViewerSlide[];
@@ -41,24 +42,14 @@ function build() {
   d.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
     if (t.closest('.cat-back')) return d.close();
-    // Invisible buttons: the left half of the picture goes back, the right half forward
-    const sq = t.closest<HTMLElement>('.cat-sq');
-    if (sq) {
-      const r = sq.getBoundingClientRect();
-      return go(at() + ((e as MouseEvent).clientX < r.left + r.width / 2 ? -1 : 1));
-    }
-    // A click on the dark space around the picture closes the viewer
-    if (t === d || t.classList.contains('cat-slide') || t.classList.contains('cat-cap')) d.close();
+    // Invisible buttons: the left half of the screen goes back, the right half forward
+    if (t.closest('.cat-track') || t === d) go(at() + ((e as MouseEvent).clientX < innerWidth / 2 ? -1 : 1));
   });
-  // The pointer shows which way a click on the picture goes
-  d.addEventListener('mousemove', (e) => {
-    const sq = (e.target as HTMLElement).closest<HTMLElement>('.cat-sq');
-    if (!sq) return;
-    const r = sq.getBoundingClientRect();
-    const back = e.clientX < r.left + r.width / 2;
-    const n = track.children.length;
-    sq.classList.toggle('to-prev', back && at() > 0);
-    sq.classList.toggle('to-next', !back && at() < n - 1);
+  // The pointer shows which way a click goes (and nothing at either end)
+  track.addEventListener('mousemove', (e) => {
+    const back = e.clientX < innerWidth / 2;
+    track.classList.toggle('to-prev', back && at() > 0);
+    track.classList.toggle('to-next', !back && at() < track.children.length - 1);
   });
   d.addEventListener('close', () => { document.documentElement.style.overflow = ''; current?.opener?.focus(); });
   (d as HTMLDialogElement & { go: typeof go }).go = go;

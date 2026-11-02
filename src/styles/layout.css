@@ -10,11 +10,13 @@
 .hero-full .slide::before { content: ''; position: absolute; inset: 0; background: var(--img, none) center / cover no-repeat; }
 .hero-full .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), linear-gradient(90deg, rgba(0,0,0,.38) 0%, rgba(0,0,0,0) 65%); }
 .hero-full .inner { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; padding: 96px 56px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
-.hero-full .eyebrow { font-size: 12px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 18px; }
-.hero-full h1 { font-size: clamp(34px, 4vw + 1rem, 64px); max-width: 20ch; margin-bottom: 18px; }
+.hero-full .eyebrow { font-size: 12px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 12px; }
+/* Kept compact so the copy covers as little of the picture as it can */
+.hero-full h1 { font-size: clamp(30px, 2.6vw + 1rem, 50px); line-height: 1.05; max-width: 20ch; margin-bottom: 14px; }
 .hero-full .hero-stack span { display: block; }
-.hero-full .hero-stack .rule { width: 140px; height: 1px; background: #b0835c; margin: .3em 0 .45em; }
-.hero-full p.text { font-size: 18px; line-height: 1.6; max-width: 46ch; opacity: .92; margin-bottom: 32px; }
+.hero-full .hero-stack .rule { width: 140px; height: 1px; background: #b0835c; margin: .22em 0 .28em; }
+.hero-full p.text { font-size: 16px; line-height: 1.5; max-width: 42ch; opacity: .92; margin-bottom: 22px; }
+.hero-full .btn { padding: .75rem 1.6rem; font-size: .78rem; }
 @media (max-width: 700px) { .hero-full .inner { padding: 72px 20px 48px; } }
 /* Very wide screens (ultrawide): the 16:9 covers would lose a third of their height to cover-cropping.
    Show the whole picture instead, with a blurred, darker copy of it filling the sides. */
@@ -44,7 +46,8 @@
 @media (prefers-reduced-motion: reduce) { .hero-full .inner, .hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on), .hero-names span.on { transition: none; transform: none; } }
 .hero-full .inner a, .hero-full .inner button { pointer-events: auto; }
 .feat-card { scroll-margin-top: 4.5rem; } /* clears the sticky header when the hero links here */
-.hero-dots { position: absolute; z-index: 2; right: 48px; bottom: 70px; display: flex; gap: 4px; }
+.hero-dots { position: absolute; z-index: 2; right: 46px; bottom: 100px; display: flex; gap: 6px; opacity: .5; transition: opacity .3s; }
+.hero-dots:hover, .hero-dots:focus-within { opacity: 1; }
 /* Arrows on the picture's left and right edges, same thin look as the collections page slider */
 /* Slider arrows (hero and collection card): large round buttons, dark glass with a white chevron, clear on light and dark photos */
 .hero-arrow, .fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 56px; height: 56px; padding: 0 0 4px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 50%; background: rgba(20, 17, 14, .45); color: #fff; font-size: 40px; font-weight: 400; line-height: 1; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, .25); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .2s, border-color .2s; }
@@ -53,18 +56,18 @@
 .hero-arrow.prev { left: 20px; }
 .hero-arrow.next { right: 20px; }
 .hero-arrow:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; }
-.hero-dots button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; }
-.hero-dots button::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--on-dark); opacity: .75; transition: background .3s, opacity .3s; }
+.hero-dots button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; }
+.hero-dots button::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--on-dark); opacity: .75; transition: background .3s, opacity .3s; }
 .hero-dots button:hover::before { opacity: 1; }
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
 /* The collection's name under the dots, cross-fading with its picture */
-.hero-names { position: absolute; z-index: 2; right: 52px; bottom: 14px; display: grid; justify-items: end; pointer-events: none; }
-.hero-names span { grid-area: 1 / 1; font: 400 clamp(26px, 1.6vw + 12px, 40px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; transition: opacity .5s ease; }
-.hero-names span.on { opacity: .95; transition: opacity .9s ease .5s; } /* same out-then-in as the copy */
-@media (max-width: 700px) { .hero-names { right: 16px; bottom: 10px; } .hero-names span { font-size: 22px; } }
+.hero-names { position: absolute; z-index: 2; right: 52px; bottom: 18px; display: grid; justify-items: end; pointer-events: none; }
+.hero-names span { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 14px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; transition: opacity .5s ease; }
+.hero-names span.on { opacity: .5; transition: opacity .9s ease .5s; } /* same out-then-in as the copy */
+@media (max-width: 700px) { .hero-names { right: 16px; bottom: 12px; } .hero-names span { font-size: 30px; } }
 @media (prefers-reduced-motion: reduce) { .hero-names span { transition: none; } }
-@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 42px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
+@media (max-width: 700px) { .hero-dots { right: 12px; bottom: 56px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
 @media (prefers-reduced-motion: reduce) { .hero-full .slide, .hero-dots button::before { transition: none; } }
 
 /* Proof strip: dark band, dividers, centred caps */
@@ -115,7 +118,7 @@
 .chip { border: 1px solid var(--line); color: var(--text-soft); padding: 9px 16px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; text-decoration: none; }
 .chip:hover { border-color: var(--text); color: var(--text); }
 .dark .coll-intro { margin-bottom: 36px; }
-.coll-hero { min-height: calc(100svh - 4.5rem); display: flex; flex-direction: column; justify-content: center; background: linear-gradient(rgba(38, 34, 30, .58), rgba(38, 34, 30, .68)), url(/collections/living/silver-lake/hero.jpg) center / cover no-repeat var(--bg-dark); }
+.coll-hero { min-height: calc(100svh - 4.5rem); display: flex; flex-direction: column; justify-content: center; background: linear-gradient(rgba(38, 34, 30, .58), rgba(38, 34, 30, .68)), url(/collections/dining/zuma/hero.jpg) center / cover no-repeat var(--bg-dark); }
 .coll-hero .coll-intro p { color: color-mix(in srgb, var(--on-dark) 88%, transparent); }
 
 .coll-grid { display: grid; align-items: start; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px 24px; margin: 0 auto; padding-inline: 24px; max-width: 1448px; }
@@ -262,10 +265,10 @@
   .cat-prev, .cat-next { width: 2.4rem; height: 2.4rem; font-size: 1.5rem; }
 }
 @media (prefers-reduced-motion: reduce) { .cat-thumbs button { transition: none; } }
-/* The picture itself is the button: left half back, right half forward (the pointer shows which way) */
+/* The whole picture area is the button: left half of the screen back, right half forward (the pointer shows which way) */
 .cat-sq { position: relative; }
-.cat-sq.to-prev { cursor: w-resize; }
-.cat-sq.to-next { cursor: e-resize; }
+.cat-track.to-prev { cursor: w-resize; }
+.cat-track.to-next { cursor: e-resize; }
 /* Back, on the picture's top-right corner, close to where the eye is */
 .cat-back { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: rgba(20, 17, 14, .55); color: #f3ece2; font-size: 26px; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: background .2s; }
 .cat-back:hover { background: rgba(20, 17, 14, .8); }

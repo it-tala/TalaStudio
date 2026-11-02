@@ -39,18 +39,18 @@ export const collectionEntries: Entry[] = [
       '02': { name: '6-Drawer Dresser', hide: true }, // portrait crop of cover 24
       '03': { name: 'Drawer Console with Mirror', hide: true }, // portrait crop of cover 23
       // '04' (bed 3/4 on white, no night tables) taken out of the catalog: no caption.
-      '05': { name: 'Bed', front: true },
-      '06': { name: 'Night Table' },
+      '05': { name: 'Bed', hide: true }, // replaced by 55-57
+      '06': { name: 'Night Table', hide: true }, // 06, 15, 16 replaced by 58-59
       '07': { name: '6-Drawer Dresser', hide: true }, // 3/4 on white, taken out of the catalog
-      '08': { name: 'Drawer Console with Mirror', front: true },
+      '08': { name: 'Drawer Console with Mirror', hide: true }, // 08, 12-14 replaced by 62-66
       // '09' is the old, squarer mirror: no caption, so it stays out of the catalog. Delete the file when it is not locked.
-      '10': { name: '6-Drawer Dresser', front: true },
-      '11': { name: '6-Drawer Dresser' },
-      '12': { name: 'Drawer Console with Mirror' },
-      '13': { name: 'Drawer Console with Mirror' },
-      '14': { name: 'Drawer Console with Mirror' },
-      '15': { name: 'Night Table', front: true },
-      '16': { name: 'Night Table' },
+      '10': { name: '6-Drawer Dresser', hide: true }, // 10-11 replaced by 76-78
+      '11': { name: '6-Drawer Dresser', hide: true },
+      '12': { name: 'Drawer Console with Mirror', hide: true },
+      '13': { name: 'Drawer Console with Mirror', hide: true },
+      '14': { name: 'Drawer Console with Mirror', hide: true },
+      '15': { name: 'Night Table', hide: true },
+      '16': { name: 'Night Table', hide: true },
       // 17-21 and 36: the first sofa (two seat cushions), replaced by 47-50. Hidden; 17 keeps the sofa's place in the order.
       '17': { name: 'Sofa', hide: true },
       '18': { name: 'Sofa', hide: true },
@@ -62,10 +62,11 @@ export const collectionEntries: Entry[] = [
       '23': { name: 'Drawer Console with Mirror', cover: true },
       '24': { name: '6-Drawer Dresser', hide: true }, // old room shot (cut-out pulls), replaced by 54
       // '25' is the first sofa spec sheet (sizes left blank), replaced by 36: no caption.
-      '26': { name: 'Coffee Table' },
-      '27': { name: 'Coffee Table', front: true },
-      '28': { name: 'Coffee Table' },
-      '29': { name: 'Coffee Table' },
+      // 26-29 replaced by 67-69
+      '26': { name: 'Coffee Table', hide: true },
+      '27': { name: 'Coffee Table', hide: true },
+      '28': { name: 'Coffee Table', hide: true },
+      '29': { name: 'Coffee Table', hide: true },
       '30': { name: 'Coffee Table', cover: true }, // room shot
       // 31-36: spec sheets (finishes, sizes)
       '31': { name: '6-Drawer Dresser', spec: true },
@@ -76,40 +77,63 @@ export const collectionEntries: Entry[] = [
       '36': { name: 'Sofa', hide: true },
       '37': { name: 'Tallboy', cover: true }, // room shot
       // '38' is the first tallboy front view, replaced by 45: no caption.
-      '39': { name: 'Tallboy' },
-      '40': { name: 'Tallboy' },
+      // 39, 40, 45 replaced by 60-61
+      '39': { name: 'Tallboy', hide: true },
+      '40': { name: 'Tallboy', hide: true },
       '41': { name: 'Tallboy', spec: true },
-      '42': { name: 'Armchair', front: true },
-      '43': { name: 'Armchair' },
+      '42': { name: 'Armchair', hide: true }, // 42-43 replaced by 72-73
+      '43': { name: 'Armchair', hide: true },
       // '44' and '46' are earlier armchair spec sheets (titled "Single Sofa"), replaced by 52.
-      '45': { name: 'Tallboy', front: true },
+      '45': { name: 'Tallboy', hide: true },
       '46': { name: 'Armchair', hide: true },
       // 47-50: the sofa with one long seat cushion
       '47': { name: 'Sofa', cover: true }, // room shot
-      '48': { name: 'Sofa' },
-      '49': { name: 'Sofa', front: true },
+      '48': { name: 'Sofa', hide: true }, // 48-49 replaced by 74-75
+      '49': { name: 'Sofa', hide: true },
       '50': { name: 'Sofa', hide: true }, // first spec sheet (sizes blank), replaced by 53
       '51': { name: 'Armchair', cover: true }, // room shot
       '52': { name: 'Armchair', spec: true }, // sizes and finishes still blank
       '53': { name: 'Sofa', spec: true }, // seat height and wood finish still blank
       '54': { name: '6-Drawer Dresser', cover: true }, // room shot, bar pulls
+      // 55-71: the newer studio shots (2 Nov 2026), in place of the older views above
+      '55': { name: 'Bed', front: true }, '56': { name: 'Bed' }, '57': { name: 'Bed' }, // front, 3/4, side
+      '58': { name: 'Night Table', front: true }, '59': { name: 'Night Table' },
+      '60': { name: 'Tallboy', front: true }, '61': { name: 'Tallboy' },
+      '62': { name: 'Drawer Console with Mirror', front: true }, '63': { name: 'Drawer Console with Mirror' }, // console
+      '64': { name: 'Drawer Console with Mirror' }, '65': { name: 'Drawer Console with Mirror' }, '66': { name: 'Drawer Console with Mirror' }, // mirror, corner close-up
+      '67': { name: 'Coffee Table', front: true }, '68': { name: 'Coffee Table' }, '69': { name: 'Coffee Table' }, // 69: glass close-up
+      '70': { name: 'Side Table', front: true }, '71': { name: 'Side Table' }, // new piece: textured glass top
+      '72': { name: 'Armchair', front: true }, '73': { name: 'Armchair' },
+      '74': { name: 'Sofa', front: true }, '75': { name: 'Sofa' },
+      '76': { name: '6-Drawer Dresser', front: true }, '77': { name: '6-Drawer Dresser' }, '78': { name: '6-Drawer Dresser' }, // 78: edge pull close-up
     } },
-  { slug: 'temescal', name: 'Temescal', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true, captions: {
+  // Palisades was listed as Temescal until 2 Nov 2026 ("Palasides" in the line sheet)
+  { slug: 'palisades', name: 'Palisades', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true, captions: {
       '02': { name: 'Bed' }, '03': { name: 'Bed' }, '04': { name: 'Night Table' }, '05': { name: 'Night Table' },
       '06': { name: '6-Drawer Dresser' }, '07': { name: '5-Drawer Chest' },
     } },
-  { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: null, published: true, captions: {
-      '01': { name: 'Night Table' },
-      '02': { name: 'Bed' },
+  // Calabasas: names, finish and codes per the SPEC SHEET DATA tab (CA-101 to CA-105), 2 Nov 2026. 01-02 are the old renders.
+  { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: 'Honey Oak with tan leather cord: wrapped on the round top rail of the bed, the mirror rails and every brass pull. A bed, night table, six-drawer dresser, tall boy and mirror.', published: true,
+    woods: ['Honey Oak'], captions: {
+      '01': { name: 'Night Table', hide: true }, '02': { name: 'Bed', hide: true },
+      '11': { name: 'Bed', front: true }, '12': { name: 'Bed' },
+      '13': { name: 'Night Table' }, '18': { name: 'Night Table', front: true }, '19': { name: 'Night Table' }, // 19: pull close-up
+      '14': { name: '6 Drawer Dresser' }, '20': { name: '6 Drawer Dresser', front: true }, '21': { name: '6 Drawer Dresser' }, // 21: pull close-up
+      '15': { name: 'Tall Boy' }, /* 15: three-quarter view */ '22': { name: 'Tall Boy', front: true }, '23': { name: 'Tall Boy' }, // 23: pull close-up
+      '16': { name: 'Mirror', front: true }, '17': { name: 'Mirror' }, '24': { name: 'Mirror' }, // 24: cord-wrap close-up
+      // 25-29: spec sheets from Calabasas_Bedroom_Spec_Sheets.zip (2 Nov 2026), the last picture of each item
+      '25': { name: 'Bed', spec: true }, '26': { name: 'Night Table', spec: true }, '27': { name: '6 Drawer Dresser', spec: true },
+      '28': { name: 'Tall Boy', spec: true }, '29': { name: 'Mirror', spec: true },
     } },
   { slug: 'beechwood', name: 'Beechwood', room: 'bedroom', description: null, published: true, captions: {
       '01': { name: 'Night Table' },
       '02': { name: 'Bed' },
     } },
-  { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: true, captions: {
+  // Silver Lake: off since 2 Nov 2026
+  { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: false, captions: {
       '01': { name: 'Bed' }, '02': { name: 'Night Table' },
     } },
-  { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: true, captions: {
+  { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: false, captions: {
       '01': { name: 'Sofa' }, '02': { name: 'Sofa' }, '03': { name: 'Single Sofa' }, '04': { name: 'Sofa' }, '05': { name: 'Single Sofa' },
     } },
   { slug: 'doheny-living', dir: 'doheny', name: 'Doheny', room: 'living', description: null, published: true, captions: {
@@ -117,6 +141,26 @@ export const collectionEntries: Entry[] = [
     } },
   { slug: 'beechwood-living', dir: 'beechwood', name: 'Beechwood', room: 'living', description: null, published: true, captions: {
       '01': { name: 'Sofa' }, '02': { name: 'Single Sofa' },
+    } },
+  // Zuma, room by room (2 Nov 2026). Bedroom and living have no room shot yet, so their first photo stands in as the cover.
+  { slug: 'zuma', dir: 'zuma', name: 'Zuma', room: 'bedroom', description: null, published: true, captions: {
+      '01': { name: 'Bed', front: true }, '02': { name: 'Bed' },
+      '03': { name: 'Night Table', front: true }, '04': { name: 'Night Table' }, // two drawers
+      '05': { name: 'Open Night Table', front: true }, '06': { name: 'Open Night Table' }, // one drawer between open shelves
+      '07': { name: '6 Drawer Dresser', front: true }, '08': { name: '6 Drawer Dresser' },
+      '09': { name: 'Tall Boy', front: true }, '10': { name: 'Tall Boy' },
+    } },
+  { slug: 'zuma-living', dir: 'zuma', name: 'Zuma', room: 'living', description: null, published: true, captions: {
+      '01': { name: 'Sofa' }, '02': { name: 'Sofa', front: true }, '03': { name: 'Sofa' }, // 03: arm close-up
+      '04': { name: 'Armchair', front: true },
+      '05': { name: 'TV Unit', front: true }, '06': { name: 'TV Unit' },
+    } },
+  // Dining hero is a temporary room shot. 01-03 are the first buffet photos, replaced by 12-14.
+  { slug: 'zuma-dining', dir: 'zuma', name: 'Zuma', room: 'dining', description: null, published: true, captions: {
+      '01': { name: 'Buffet', hide: true }, '02': { name: 'Buffet', hide: true }, '03': { name: 'Buffet', hide: true },
+      '08': { name: 'Dining Table', front: true }, '09': { name: 'Dining Table' },
+      '10': { name: 'Dining Chair', front: true }, '11': { name: 'Dining Chair' }, // 11: back view, rope-woven back
+      '12': { name: 'Buffet', front: true }, '13': { name: 'Buffet' }, '14': { name: 'Buffet' }, // 14: pull close-up
     } },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: false },
 ];

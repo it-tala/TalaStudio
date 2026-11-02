@@ -8,6 +8,7 @@ const SWATCHES: Record<string, { color: string; image?: string }> = {
   'Bleached Oak': { color: '#e8d8b8', image: '/swatches/bleached-oak.webp' },
   'Smoked Oak': { color: '#785848', image: '/swatches/smoked-oak.webp' },
   Walnut: { color: '#584838', image: '/swatches/walnut.webp' },
+  'Honey Oak': { color: '#b17642', image: '/swatches/honey-oak.webp' }, // cut from the Calabasas tall boy render
   // Fabric
   Cream: { color: '#e4dccf' },
   Grey: { color: '#b4aeab' },

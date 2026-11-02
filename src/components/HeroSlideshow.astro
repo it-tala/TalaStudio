@@ -2,19 +2,11 @@
 // Hero background: one cover per collection, cross-fading behind the hero copy.
 // The first cover loads with the page; the rest load once it is up. A click on a cover opens its collection's pieces
 // in the picture viewer, with a link on to the collection (the plain link still works without script).
-// The page's own hero copy sits on the first cover; every other cover brings its collection's copy, fading with the picture.
+// The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 type Item = { name: string; src: string; bg: string | null };
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; items?: Item[] }[] }
 const { slides } = Astro.props;
 ---
-{slides.slice(1).map((s, i) => (
-  <div class="inner hero-alt" data-slide={i + 1} aria-hidden="true">
-    <p class="eyebrow">{s.room}</p>
-    <h2 class="hero-title">{s.name}</h2>
-    <p class="text">{s.text}</p>
-    <div class="btns"><a class="btn" href={s.href} tabindex="-1">Explore the collection</a></div>
-  </div>
-))}
 {slides.length === 0 && <div class="media"></div>}
 {slides.map((s, i) => (
   <a
@@ -49,7 +41,6 @@ const { slides } = Astro.props;
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
-    const alts = [...hero.querySelectorAll<HTMLElement>('.hero-alt')];
     const names = [...hero.querySelectorAll<HTMLElement>('.hero-names span')];
     if (slides.length < 2) return;
     const still = matchMedia('(prefers-reduced-motion: reduce)');
@@ -95,14 +86,8 @@ const { slides } = Astro.props;
       });
       dots.forEach((d, j) => (j === cur ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
       names.forEach((n, j) => n.classList.toggle('on', j === cur));
-      // The page copy sits on the first picture; the others show their collection's copy
+      // The page copy sits on the first picture only; the others carry just the name
       hero.classList.toggle('copy-off', cur !== 0);
-      alts.forEach((a) => {
-        const on = Number(a.dataset.slide) === cur;
-        a.classList.toggle('on', on);
-        a.setAttribute('aria-hidden', String(!on));
-        a.querySelectorAll('a').forEach((l) => (on ? l.removeAttribute('tabindex') : l.setAttribute('tabindex', '-1')));
-      });
     };
     const start = () => {
       clearInterval(timer);

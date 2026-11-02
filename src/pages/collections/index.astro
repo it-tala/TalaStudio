@@ -3,16 +3,24 @@ import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getCollections, imageUrl } from '../../lib/supabase';
+import { groupItems } from '../../lib/items';
 
 const all = await getCollections();
-const pieceNames = (c: (typeof all)[number]) => [...new Set((c.gallery ?? []).map((g) => g.name).filter(Boolean))].slice(0, 3).join(', ');
-const groups = [['bedroom', 'Bedroom'], ['living', 'Living'], ['dining', 'Dining'], ['other', 'Collections']] as const;
-// Bedroom, living and dining always show (dining reads "coming soon" until its first collection); "other" only when it has one.
-const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room === r));
+// The first three pieces in catalog order (bed first), leaving out hidden photos
+const pieceNames = (c: (typeof all)[number]) => groupItems(c).map((it) => it.name).slice(0, 3).join(', ');
+const roomOrder = ['bedroom', 'living', 'dining', 'other'];
+const roomLabel = (r: string) => (r === 'other' ? 'Collection' : r[0].toUpperCase() + r.slice(1));
+// One group per collection name (Doheny, Zuma, ...), in list order; inside each, one slide per room it covers,
+// bedroom → living → dining.
+const groups = [...new Set(all.map((c) => c.name))].map((name) => ({
+  name,
+  id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+  rows: all.filter((c) => c.name === name).sort((x, y) => roomOrder.indexOf(x.room) - roomOrder.indexOf(y.room)),
+}));
 ---
 <Base
   title="Collections"
-  description="TalaStudio bedroom, living and dining collections, designed and engineered in Jepara, Indonesia. The full range is in the catalog."
+  description="TalaStudio furniture collections, each shown room by room, designed and engineered in Jepara, Indonesia. The full range is in the catalog."
 >
   <section class="section dark coll-hero">
     <div class="coll-intro">
@@ -26,70 +34,56 @@ const present = groups.filter(([r]) => r !== 'other' || all.some((c) => c.room =
     <section class="section alt"><p class="coll-intro" style="margin:0 auto">Collections are being rendered now. They appear here as each one is ready.</p></section>
   )}
 
-  {present.length > 1 && (
+  {groups.length > 1 && (
     <section class="section chips-bar" id="all">
       <div class="coll-intro">
-        <p class="eyebrow">By room</p>
-        <h2>Start with the room.</h2>
-        <p>Bedroom and living are open. Dining is on its way. Every collection is built the same way: we choose the joint, the finish and the hardware with the maker while we draw, so the piece you see is the piece we build. Open a collection to see it up close.</p>
+        <p class="eyebrow">By collection</p>
+        <h2>Start with the collection.</h2>
+        <p>Every collection is built the same way: we choose the joint, the finish and the hardware with the maker while we draw, so the piece you see is the piece we build. Open a collection to see each room up close.</p>
       </div>
-      <nav class="chips" aria-label="Rooms">
+      <nav class="chips" aria-label="Collections">
         <a class="chip" href="#all">All</a>
-        {present.map(([r, l]) => <a class="chip" href={`#${r}`}>{l}</a>)}
+        {groups.map((g) => <a class="chip" href={`#${g.id}`}>{g.name}</a>)}
       </nav>
     </section>
   )}
 
-  {present.map(([room, label]) => {
-    const rows = all.filter((c) => c.room === room);
-    return (
-    <section class="section room" id={room} style="padding-top:2rem">
-      {room !== 'other' && (
-        <div class="coll-intro room-head"><h2>{label}</h2></div>
-      )}
-      <div class="cslider" aria-roledescription="carousel" aria-label={`${label} collections`}>
+  {groups.map(({ name, id, rows }) => (
+    <section class="section room" id={id} style="padding-top:2rem">
+      <div class="coll-intro room-head"><h2>{name}</h2></div>
+      <div class="cslider" aria-roledescription="carousel" aria-label={`${name} collection, by room`}>
         <div class="cs-track" tabindex="0">
           {rows.map((c) => (
             <a class="cs-slide" href={`/collections/${c.slug}`}>
-              {imageUrl(c.hero_image_path) && <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} collection, ${c.room} render`} loading="lazy" draggable="false" />}
+              {imageUrl(c.hero_image_path) && <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} collection, ${roomLabel(c.room).toLowerCase()} render`} loading="lazy" draggable="false" />}
               <div class="cs-body">
-                {room !== 'other' && <small>{label}</small>}
-                <h3>{c.name}</h3>
+                <small>{name} collection</small>
+                <h3>{roomLabel(c.room)}</h3>
                 {c.description && <p>{c.description}</p>}
                 <span class="feat-meta">
-                  <span><i>Room</i>{c.room === 'other' ? 'Collection' : c.room}</span>
+                  <span><i>Room</i>{roomLabel(c.room)}</span>
                   {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
                 </span>
-                <em>Explore the collection</em>
+                <em>Explore the {roomLabel(c.room).toLowerCase()}</em>
               </div>
             </a>
           ))}
-          {rows.length === 0 && (
-            <div class="cs-slide soon">
-              <div class="cs-body">
-                <small>{label}</small>
-                <h3>New collection in progress</h3>
-                <p>Coming soon.</p>
-              </div>
-            </div>
-          )}
         </div>
         {rows.length > 1 && (
           <>
-            <button type="button" class="cs-arrow prev" aria-label="Previous collection">&#8249;</button>
-            <button type="button" class="cs-arrow next" aria-label="Next collection">&#8250;</button>
+            <button type="button" class="cs-arrow prev" aria-label="Previous room">&#8249;</button>
+            <button type="button" class="cs-arrow next" aria-label="Next room">&#8250;</button>
           </>
         )}
       </div>
     </section>
-    );
-  })}
+  ))}
 
   <CtaBand />
 </Base>
 
 <script>
-  // One collection per slide, cover as background. Arrows step a slide; touch and trackpad scroll natively.
+  // One room of a collection per slide, cover as background. Arrows step a slide; touch and trackpad scroll natively.
   document.querySelectorAll<HTMLElement>('.cslider').forEach((box) => {
     const track = box.querySelector<HTMLElement>('.cs-track')!;
     const prev = box.querySelector<HTMLButtonElement>('.prev');
