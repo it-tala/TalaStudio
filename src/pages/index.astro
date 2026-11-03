@@ -12,6 +12,7 @@ import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
 import { heroPos } from '../data/hero-pos';
+import { versioned } from '../lib/version';
 
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
@@ -19,23 +20,25 @@ const all = await getCollections();
 const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
 const homeItems: Record<string, string[]> = {
-  doheny: ['Queen Bed', '6 Drawer Dresser', '7 Foot Sofa', 'Coffee Table'],
+  doheny: ['Queen Bed', 'Night Table', '6 Drawer Dresser', '7 Foot Sofa'],
 };
 // Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
-// A click goes to that room's collection page.
+// A click opens all these room shots in the picture viewer, from the one clicked, each linking to its collection page.
 const withRoomShot = all.filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
-const heroSlides = [...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
-  .map((c) => ({
-    src: imageUrl(c.hero_image_path)!,
+const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
+  .map(async (c) => ({
+    src: versioned(imageUrl(c.hero_image_path)!),
     label: `${c.name} collection, ${c.room} render`,
     name: `${c.name} collection`,
     href: `/collections/${c.slug}`,
     pos: heroPos[c.slug]?.pos,
     room: c.room === 'other' ? 'Collection' : `${c.room} collection`,
     text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
-  }));
+    // Colour round the picture when the viewer shows it whole in its square
+    edge: await edgeBackground(imageUrl(c.hero_image_path)!, 1),
+  })));
 // A landing page card covers the whole collection: its pieces from every room (Doheny bedroom and living together)
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined)
   .map((c) => ({ ...c, gallery: all.filter((x) => x.name === c.name).flatMap((x) => x.gallery ?? []) }));

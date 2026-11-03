@@ -2,7 +2,8 @@
 // Big square picture on top, its name and position, then a sideways strip of thumbnails. Styles: .cat-box in layout.css.
 // A click anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
 // the back button on the picture's top-right corner (or Esc) closes it.
-export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string };
+// A slide's own info and link (the home hero: each room shot names and links its own collection) replace the viewer's
+export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string; info?: string; link?: { href: string; text: string } };
 export type ViewerOptions = {
   slides: ViewerSlide[];
   title: string;                           // shown under the picture when a slide has no name of its own
@@ -11,6 +12,7 @@ export type ViewerOptions = {
   spec?: string[];                         // specification lines under that ("Body: ...", "Packing: ...")
   link?: { href: string; text: string };   // optional link under the picture
   opener?: HTMLElement | null;             // gets focus back on close
+  start?: number;                          // the slide shown first (default the first)
 };
 
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}) => Object.assign(document.createElement(tag), props);
@@ -75,7 +77,11 @@ function sync(d: HTMLDialogElement) {
   shown = i;
   const s = current.slides[i];
   d.querySelector('h3')!.textContent = s?.name ?? current.title;
-  d.querySelector('.cat-pos')!.textContent = [current.info, n > 1 ? `${i + 1} / ${n}` : ''].filter(Boolean).join(' · ');
+  d.querySelector('.cat-pos')!.textContent = [s?.info ?? current.info, n > 1 ? `${i + 1} / ${n}` : ''].filter(Boolean).join(' · ');
+  const own = s?.link ?? current.link;
+  const link = d.querySelector<HTMLAnchorElement>('.cat-link')!;
+  link.hidden = !own;
+  if (own) { link.href = own.href; link.textContent = own.text; }
   [...thumbs.children].forEach((t, j) => {
     t.classList.toggle('on', j === i);
     if (j === i) { t.setAttribute('aria-current', 'true'); t.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
@@ -130,6 +136,6 @@ export function openViewer(opts: ViewerOptions) {
   shown = -1;
   d.showModal();
   document.documentElement.style.overflow = 'hidden';
-  track.scrollLeft = 0;
+  track.scrollLeft = (opts.start ?? 0) * track.clientWidth;
   sync(d);
 }
