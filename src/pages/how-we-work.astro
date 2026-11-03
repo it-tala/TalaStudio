@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Shot from '../components/Shot.astro';
+import { pageOn } from '../data/sections';
 
 // How We Work, laid out as TalaStudio_How_We_Work_Layout_v5.pdf (2 Nov 2026); photos taken from that PDF.
 // Photos: public/how-we-work/<name>.jpg, named as in each <Shot name> below. Until a file is there, a labelled box shows
@@ -155,7 +156,7 @@ const trace = ['Item barcoded', 'Carton marked', 'Container loaded', 'On the wat
       <div>
         <p class="num">Our goal is simple</p>
         <h2>Well-designed, on-trend furniture, built right and shipped direct by the container, at scale.</h2>
-        <a class="btn" href="/request-catalog">Request catalog</a>
+        {pageOn('/request-catalog') && <a class="btn" href="/request-catalog">Request catalog</a>}
       </div>
     </div>
   </section>

@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import ItemCatalog from '../../components/ItemCatalog.astro';
+import { heroPos } from '../../data/hero-pos';
 import { getCollections, getProducts, getProductImages, imageUrl } from '../../lib/supabase';
 
 export async function getStaticPaths() {
@@ -17,6 +18,7 @@ export async function getStaticPaths() {
 
 const { collection, pieces } = Astro.props;
 const hero = imageUrl(collection.hero_image_path);
+const fit = heroPos[collection.slug];
 const materials = [...new Set(pieces.flatMap((p) => p.materials ?? []))];
 const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
 ---
@@ -26,7 +28,7 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   image={hero ?? undefined}
 >
   <section class="hero dark">
-    {hero ? <img src={hero} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    {hero ? <img src={hero} style={fit && [`object-position:center ${fit.pos}`, fit.minHeight && `min-height:${fit.minHeight}`].filter(Boolean).join(';')} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
     <div class="wrap over fade">
       <p class="eyebrow">{collection.room === 'other' ? 'Collection' : `${collection.room} collection`}</p>
       <h1>{collection.name}</h1>
@@ -78,8 +80,10 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
 
 <style>
   .hero { position: relative; }
-  .hero :global(.ph), .hero img { aspect-ratio: 21 / 9; width: 100%; object-fit: cover; min-height: 22rem; }
-  .over { position: absolute; inset: auto 0 2.5rem 0; margin-inline: auto; }
+  .hero :global(.ph) { aspect-ratio: 21 / 9; width: 100%; min-height: 22rem; }
+  /* Fills the screen under the header, like the landing page hero, so the room shot is cut as little as it can be */
+  .hero img { display: block; width: 100%; height: calc(100svh - 4.5rem); min-height: 22rem; object-fit: cover; }
+  .over { position: absolute; inset: auto 0 2.5rem 0; margin-inline: auto; text-shadow: 0 1px 14px rgba(0, 0, 0, .45); }
   .intro { font: 400 clamp(1.5rem, 3vw, 2.2rem)/1.35 'Cormorant Garamond', Georgia, serif; max-width: 48rem; }
   .items { padding-bottom: clamp(4rem, 9vw, 8rem); }
   .cards { display: grid; gap: 2rem; margin-top: 2.5rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }

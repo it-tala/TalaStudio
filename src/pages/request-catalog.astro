@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { pageOn } from '../data/sections';
+if (!pageOn('/request-catalog')) return Astro.redirect('/');
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 <Base

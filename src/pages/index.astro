@@ -5,10 +5,13 @@ import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
 import { edgeBackground } from '../lib/edge';
+import sharp from 'sharp';
+import { join } from 'node:path';
 import { showSection } from '../data/sections';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
+import { heroPos } from '../data/hero-pos';
 
 const all = await getCollections();
 // Landing page collections, in this order. Each card has its item catalog right underneath. Add a slug to show another.
@@ -16,34 +19,35 @@ const all = await getCollections();
 const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
 const homeItems: Record<string, string[]> = {
-  doheny: ['Bed', '6 Drawer Dresser', 'Sofa', 'Coffee Table'],
+  doheny: ['Queen Bed', '6 Drawer Dresser', '7 Foot Sofa', 'Coffee Table'],
 };
 // Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
-// A click opens that collection's pieces in the picture viewer (one front view per piece), with a link on to the collection:
-// its card further down, or its own page while it is not on the landing page.
+// A click goes to that room's collection page.
 const withRoomShot = all.filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
-const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
-  .map(async (c) => ({
+const heroSlides = [...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
+  .map((c) => ({
     src: imageUrl(c.hero_image_path)!,
     label: `${c.name} collection, ${c.room} render`,
     name: `${c.name} collection`,
-    href: featured.includes(c.slug) ? `#coll-${c.slug}` : `/collections/${c.slug}`,
+    href: `/collections/${c.slug}`,
+    pos: heroPos[c.slug]?.pos,
     room: c.room === 'other' ? 'Collection' : `${c.room} collection`,
     text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
-    // The front view of each piece (else its first picture that is not a room shot or spec sheet)
-    items: await Promise.all(groupItems(c).map(async ({ name, pics }) => {
-      const plain = pics.filter((p) => !p.cover && !p.spec);
-      const src = (plain.find((p) => p.front) ?? plain[0] ?? pics[0]).src;
-      return { name, src, bg: await edgeBackground(src, 1) };
-    })),
-  })));
+  }));
 // A landing page card covers the whole collection: its pieces from every room (Doheny bedroom and living together)
 const collections = featured.map((s) => all.find((c) => c.slug === s)).filter((c): c is (typeof all)[number] => c !== undefined)
   .map((c) => ({ ...c, gallery: all.filter((x) => x.name === c.name).flatMap((x) => x.gallery ?? []) }));
-// Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath
-const covers = (c: (typeof all)[number]) => groupItems(c).map((it) => ({ name: it.name, src: it.pics[0].src }));
+// Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath. The frame is 16:9 like
+// the room shots; a taller shot (the mirror's) is shown whole, on its own edge colour, instead of being cut.
+const coverList = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, await Promise.all(groupItems(c).map(async (it) => {
+  const src = it.pics[0].src;
+  const meta = await sharp(join(process.cwd(), 'public', src)).metadata().catch(() => null);
+  const tall = !!meta?.width && !!meta.height && meta.width / meta.height < 1.5;
+  return { name: it.name, src, bg: tall ? await edgeBackground(src, 16 / 9) : null };
+}))])));
+const covers = (c: (typeof all)[number]) => coverList[c.slug] ?? [];
 // The first three pieces in catalog order (bed first), leaving out hidden photos
 const pieceNames = (c: (typeof all)[number]) => groupItems(c).map((it) => it.name).slice(0, 3).join(', ');
 const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
@@ -51,12 +55,6 @@ const posts = (await getCollection('insights', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 
-const proof = [
-  ['One place', 'Design, engineering, costing'],
-  ['Every piece checked', 'Inspected before it ships'],
-  ['Fully visible', 'Orders and QC photos online'],
-  ['Container direct', 'Jepara to your warehouse'],
-];
 const rooms = [
   ['Bedroom', 'Rest, in calm shapes', 'bedroom'],
   ['Living', 'Seating made to be sat in', 'living'],
@@ -75,19 +73,14 @@ const materials = [
   <!-- 1. Hero -->
   <section class="hero-full">
     <HeroSlideshow slides={heroSlides} />
-    <div class="inner fade">
+    <div class="inner">
       <p class="eyebrow">Jepara, Indonesia</p>
-      <h1 class="hero-stack"><span>{story.headline[0]}</span><span class="rule" aria-hidden="true"></span><span>{story.headline[1]}</span></h1>
+      <h1 class="hero-stack"><span>{story.headline[0]}</span><span>{story.headline[1]}</span></h1>
       <p class="text">{story.promise}</p>
       <div class="btns">
         <a class="btn ghost" href="/collections">View collections</a>
       </div>
     </div>
-  </section>
-
-  <!-- 2. Proof strip -->
-  <section class="proof-strip">
-    <ul>{proof.map(([t, d]) => <li><b>{t}</b><span>{d}</span></li>)}</ul>
   </section>
 
   <!-- 3. Shop by space (overlay tiles) -->
@@ -142,7 +135,7 @@ const materials = [
               <div class="frame feat-slides" role="group" aria-roledescription="carousel" aria-label={`${c.name} pieces`}>
                 <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
                   {covers(c).map((p, i) => (
-                    <figure class="fs-slide">
+                    <figure class:list={['fs-slide', { whole: p.bg }]} style={p.bg ? `background:${p.bg}` : undefined}>
                       <img src={p.src} alt={`${c.name} ${p.name}`} loading={i === 0 ? 'eager' : 'lazy'} />
                       <figcaption>{p.name}<span aria-hidden="true">|</span>{c.name}</figcaption>
                     </figure>
@@ -170,7 +163,7 @@ const materials = [
         ))}
       </div>
     ) : (
-      <p class="coll-intro">First collections arrive soon. <a href="/request-catalog">Request the catalog</a> to be first to see them.</p>
+      <p class="coll-intro">First collections arrive soon.</p>
     )}
   </section>
 

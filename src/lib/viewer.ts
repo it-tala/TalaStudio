@@ -7,6 +7,8 @@ export type ViewerOptions = {
   slides: ViewerSlide[];
   title: string;                           // shown under the picture when a slide has no name of its own
   info?: string;                           // after the name, e.g. the finish or the collection
+  text?: string;                           // a short description under the name (the item's line from the tracker)
+  spec?: string[];                         // specification lines under that ("Body: ...", "Packing: ...")
   link?: { href: string; text: string };   // optional link under the picture
   opener?: HTMLElement | null;             // gets focus back on close
 };
@@ -24,6 +26,8 @@ function build() {
   d.innerHTML = `
     <div class="cat-track" tabindex="0" aria-label="Pictures, scroll sideways"></div>
     <div class="cat-cap"><h3></h3><span class="cat-pos" aria-live="polite"></span><a class="cat-link" hidden></a></div>
+    <p class="cat-desc" hidden></p>
+    <ul class="cat-spec" hidden></ul>
     <div class="cat-thumbs" role="group" aria-label="All pictures"></div>
     <button type="button" class="cat-btn cat-prev" aria-label="Previous picture">‹</button>
     <button type="button" class="cat-btn cat-next" aria-label="Next picture">›</button>`;
@@ -104,6 +108,19 @@ export function openViewer(opts: ViewerOptions) {
     t.append(el('img', { src: s.src, alt: '' }));
     t.addEventListener('click', () => go(i));
     return t;
+  }));
+  const desc = d.querySelector<HTMLElement>('.cat-desc')!;
+  desc.hidden = !opts.text;
+  desc.textContent = opts.text ?? '';
+  // "Body: Mindy solids..." -> the part name in bold, then its line
+  const spec = d.querySelector<HTMLElement>('.cat-spec')!;
+  spec.hidden = !opts.spec?.length;
+  spec.replaceChildren(...(opts.spec ?? []).map((line) => {
+    const [, part, rest] = line.match(/^([^:]{1,24}):\s*(.*)$/) ?? [, '', line];
+    const li = el('li');
+    if (part) li.append(el('b', { textContent: `${part}: ` }));
+    li.append(rest);
+    return li;
   }));
   link.hidden = !opts.link;
   if (opts.link) { link.href = opts.link.href; link.textContent = opts.link.text; }

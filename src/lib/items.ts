@@ -6,21 +6,25 @@ export type Pic = NonNullable<Collection['gallery']>[number];
 // An item goes to the first pattern its name matches; a name that matches none goes last, in gallery order.
 const ROOMS = ['Bedroom', 'Living', 'Dining'] as const;
 const ORDER: [(typeof ROOMS)[number], RegExp][] = [
-  ['Bedroom', /^bed\b/i],
+  ['Bedroom', /^((queen|king) )?bed\b/i],
   ['Bedroom', /night ?table|nightstand|bedside/i],
   ['Bedroom', /dresser/i],
   ['Bedroom', /chest|tall ?boy/i],
-  ['Bedroom', /console|mirror|vanity/i],
-  ['Living', /^sofa\b|settee|loveseat/i],
-  ['Living', /armchair|single sofa|lounge chair/i],
+  ['Bedroom', /drawer console|vanity/i],
+  ['Living', /^(\d+ foot )?sofa\b|settee|loveseat/i],
+  ['Living', /armchair|arm chair|single sofa|lounge chair/i],
   ['Living', /ottoman|pouf/i],
   ['Living', /coffee table/i],
   ['Living', /side table|end table/i],
-  ['Living', /media|tv unit/i],
+  ['Living', /console table/i],
+  ['Living', /media|tv unit|tv console/i],
+  ['Living', /cabinet|armoire|bookcase/i],
   ['Dining', /dining table/i],
   ['Dining', /chair/i],
   ['Dining', /bench/i],
   ['Dining', /sideboard|buffet/i],
+  // Last, so a dining room mirror follows the buffet; in a bedroom it still follows the tall boy
+  ['Bedroom', /mirror/i],
 ];
 const rank = (name: string) => {
   const i = ORDER.findIndex(([, re]) => re.test(name));

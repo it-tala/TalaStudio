@@ -1,0 +1,814 @@
+[
+ {
+  "code": "DH-101",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "Queen Bed",
+  "folder": "doheny/bedroom/queen-bed",
+  "description": "Queen bed, timber bed box with upholstered headboard",
+  "specification": [
+   "Headboard: Mindy solid timber, FR foam, fabric",
+   "Bed box: solid timber, plywood, metal deck with steamed beechwood slats",
+   "Packing: to meet ISTA 1A"
+  ],
+  "size": [
+   1600,
+   2130,
+   1050
+  ]
+ },
+ {
+  "code": "DH-102",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "King Bed",
+  "folder": "doheny/bedroom/king-bed",
+  "description": "King bed timber bed box with upholstered headboard",
+  "specification": [
+   "Headboard: Mindy solid timber, FR foam, fabric",
+   "Bed box: solid timber, plywood, metal deck with steamed beechwood slats",
+   "Packing: to meet ISTA 1A"
+  ],
+  "size": null
+ },
+ {
+  "code": "DH-103",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "Night Table",
+  "folder": "doheny/bedroom/night-table",
+  "description": "Night table mindy solids and veneers brushed bronze pull",
+  "specification": [
+   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
+   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
+   "Pull: hand cast brass, teak and leather cord",
+   "Packing: to meet ISTA 1A standard"
+  ],
+  "size": [
+   450,
+   450,
+   450
+  ]
+ },
+ {
+  "code": "DH-104",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "6 Drawer Dresser",
+  "folder": "doheny/bedroom/6-drawer-dresser",
+  "description": "6 drawer dresser mindy solids and veneers brushed bronze pull",
+  "specification": [
+   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
+   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
+   "Pull: hand cast brass, teak and leather cord",
+   "Packing: to meet ISTA 1A standard"
+  ],
+  "size": [
+   1400,
+   570,
+   700
+  ]
+ },
+ {
+  "code": "DH-105",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "Tall Boy",
+  "folder": "doheny/bedroom/tall-boy",
+  "description": "Tall boy 4 drawer dresser mountain oak (mindy) solids and veneers brushed bronze pull",
+  "specification": [
+   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
+   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
+   "Pull: hand cast brass, teak and leather cord",
+   "Packing: to meet ISTA 1A standard"
+  ],
+  "size": [
+   950,
+   450,
+   1200
+  ]
+ },
+ {
+  "code": "DH-106",
+  "collection": "Doheny",
+  "room": "bedroom",
+  "name": "Mirror",
+  "folder": "doheny/bedroom/mirror",
+  "description": "Mirror, timber frame",
+  "specification": [
+   "Solid timber frame, 5mm mirror glass with safety film backing, 6M plywood back, french cleats"
+  ],
+  "size": [
+   1200,
+   550,
+   25
+  ]
+ },
+ {
+  "code": "DH-202",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "7 Foot Sofa",
+  "folder": "doheny/living/7-foot-sofa",
+  "description": "Sofa, timber arms upholstered in boucle fabric",
+  "specification": [
+   "Frame: plywood and hardwood",
+   "Foam: meets cal TB-117/en 1021",
+   "Fabric: see fabric options"
+  ],
+  "size": [
+   1820,
+   950,
+   900
+  ]
+ },
+ {
+  "code": "DH-205",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "Arm Chair",
+  "folder": "doheny/living/arm-chair",
+  "description": "Arm chair, timber arms upholstered in boucle fabric",
+  "specification": [
+   "Frame: plywood and hardwood",
+   "Foam: meets cal TB-117/en 1021",
+   "Fabric: see fabric options"
+  ],
+  "size": [
+   900,
+   800,
+   900
+  ]
+ },
+ {
+  "code": "DH-210",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "Side Table",
+  "folder": "doheny/living/side-table",
+  "description": "Side table, solid mindy with textured tempered glass top",
+  "specification": [
+   "Body: Mindy solids finished in PU sealer/hard NC topcoat",
+   "Packing: to meet ISTA 1A standard",
+   "Glass top: textured 9mm glass, tempered"
+  ],
+  "size": [
+   500,
+   500,
+   500
+  ]
+ },
+ {
+  "code": "DH-209",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "Coffee Table",
+  "folder": "doheny/living/coffee-table",
+  "description": "Coffee table, solid mindy with textured tempered glass top",
+  "specification": [
+   "Body: Mindy solids finished in PU sealer/hard NC topcoat",
+   "Packing: to meet ISTA 1A standard",
+   "Glass top: textured 9mm glass, tempered"
+  ],
+  "size": [
+   1250,
+   600,
+   400
+  ]
+ },
+ {
+  "code": "DH-211",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "Console Table",
+  "folder": "doheny/living/console-table",
+  "description": "Desk, solid mindy and veneers, bronze handle, 2 drawers",
+  "specification": [
+   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
+   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
+   "Pull: hand cast brass, teak and leather cord",
+   "Packing: to meet ISTA 1A standard"
+  ],
+  "size": [
+   1400,
+   450,
+   750
+  ]
+ },
+ {
+  "code": "CA-101",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "Queen Bed",
+  "folder": "calabasas/bedroom/queen-bed",
+  "description": "Queen bed, mindy solids and veneers, upholstered headboard, leather cord wrapped top rail",
+  "specification": null,
+  "size": [
+   1965,
+   2080,
+   1030
+  ]
+ },
+ {
+  "code": "CA-102",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "King Bed",
+  "folder": "calabasas/bedroom/king-bed",
+  "description": "King bed, mindy solids and veneers, upholstered headboard, leather cord wrapped top rail",
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "CA-103",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "Night Table",
+  "folder": "calabasas/bedroom/night-table",
+  "description": "Night table, 2 drawer with hand cast brass, leather and teak handle",
+  "specification": null,
+  "size": [
+   500,
+   450,
+   450
+  ]
+ },
+ {
+  "code": "CA-104",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "6 Drawer Dresser",
+  "folder": "calabasas/bedroom/6-drawer-dresser",
+  "description": "6 drawer dresser with hand cast brass, leather and teak handle",
+  "specification": null,
+  "size": [
+   1190,
+   560,
+   700
+  ]
+ },
+ {
+  "code": "CA-105",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "Tall Boy",
+  "folder": "calabasas/bedroom/tall-boy",
+  "description": "Tall boy 6 drawer with hand cast brass, leather and teak handle",
+  "specification": null,
+  "size": [
+   600,
+   500,
+   1100
+  ]
+ },
+ {
+  "code": "CA-106",
+  "collection": "Calabasas",
+  "room": "bedroom",
+  "name": "Mirror",
+  "folder": "calabasas/bedroom/mirror",
+  "description": "Mirror, mindy solids with leather cord wrap detail",
+  "specification": null,
+  "size": [
+   1000,
+   50,
+   550
+  ]
+ },
+ {
+  "code": "CA-201",
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "Sofa",
+  "folder": "calabasas/living/sofa",
+  "description": "7 foot sofa in boucle with timber base",
+  "specification": null,
+  "size": [
+   2000,
+   800,
+   760
+  ]
+ },
+ {
+  "code": "CA-205",
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "Arm Chair",
+  "folder": "calabasas/living/arm-chair",
+  "description": "Arm chair in boucle with timber base",
+  "specification": null,
+  "size": [
+   900,
+   800,
+   685
+  ]
+ },
+ {
+  "code": "CA-210",
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "Side Table",
+  "folder": "calabasas/living/side-table",
+  "description": "Side table, mindy solids and veneers with natural rattan webbing shelf",
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "CA-209",
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "Coffee Table",
+  "folder": "calabasas/living/coffee-table",
+  "description": "Side table, mindy solids and veneers with natural rattan webbing shelf",
+  "specification": null,
+  "size": [
+   1300,
+   600,
+   450
+  ]
+ },
+ {
+  "code": "CA-211",
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "TV Console",
+  "folder": "calabasas/living/tv-console",
+  "description": null,
+  "specification": null,
+  "size": [
+   1400,
+   460,
+   600
+  ]
+ },
+ {
+  "code": null,
+  "collection": "Calabasas",
+  "room": "living",
+  "name": "Open Cabinet",
+  "folder": "calabasas/living/open-cabinet",
+  "description": null,
+  "specification": null,
+  "size": [
+   1215,
+   460,
+   1700
+  ]
+ },
+ {
+  "code": "PA-101",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "Queen Bed",
+  "folder": "palisades/bedroom/queen-bed",
+  "description": null,
+  "specification": null,
+  "size": [
+   1710,
+   2130,
+   1120
+  ]
+ },
+ {
+  "code": "PA-102",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "King Bed",
+  "folder": "palisades/bedroom/king-bed",
+  "description": null,
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "PA-103",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "Night Table",
+  "folder": "palisades/bedroom/night-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   450,
+   450,
+   455
+  ]
+ },
+ {
+  "code": "PA-104",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "6 Drawer Dresser",
+  "folder": "palisades/bedroom/6-drawer-dresser",
+  "description": null,
+  "specification": null,
+  "size": [
+   1485,
+   470,
+   810
+  ]
+ },
+ {
+  "code": "PA-105",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "Tall Boy",
+  "folder": "palisades/bedroom/tall-boy",
+  "description": null,
+  "specification": null,
+  "size": [
+   495,
+   450,
+   1060
+  ]
+ },
+ {
+  "code": "PA-106",
+  "collection": "Palisades",
+  "room": "bedroom",
+  "name": "Mirror",
+  "folder": "palisades/bedroom/mirror",
+  "description": null,
+  "specification": null,
+  "size": [
+   1000,
+   25,
+   550
+  ]
+ },
+ {
+  "code": "BW-101",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "Queen Bed",
+  "folder": "beechwood/bedroom/queen-bed",
+  "description": null,
+  "specification": null,
+  "size": [
+   1740,
+   2090,
+   1025
+  ]
+ },
+ {
+  "code": "BW-102",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "King Bed",
+  "folder": "beechwood/bedroom/king-bed",
+  "description": null,
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "BW-103",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "Night Table",
+  "folder": "beechwood/bedroom/night-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   550,
+   500,
+   500
+  ]
+ },
+ {
+  "code": "BW-104",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "6 Drawer Dresser",
+  "folder": "beechwood/bedroom/6-drawer-dresser",
+  "description": null,
+  "specification": null,
+  "size": [
+   1185,
+   600,
+   700
+  ]
+ },
+ {
+  "code": "BW-105",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "Tall Boy",
+  "folder": "beechwood/bedroom/tall-boy",
+  "description": null,
+  "specification": null,
+  "size": [
+   600,
+   500,
+   1100
+  ]
+ },
+ {
+  "code": "BW-106",
+  "collection": "Beechwood",
+  "room": "bedroom",
+  "name": "Mirror",
+  "folder": "beechwood/bedroom/mirror",
+  "description": null,
+  "specification": null,
+  "size": [
+   900,
+   80,
+   550
+  ]
+ },
+ {
+  "code": "BW-301",
+  "collection": "Beechwood",
+  "room": "dining",
+  "name": "Dining Table",
+  "folder": "beechwood/dining/dining-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   2100,
+   800,
+   750
+  ]
+ },
+ {
+  "code": "BW-310",
+  "collection": "Beechwood",
+  "room": "dining",
+  "name": "Buffet",
+  "folder": "beechwood/dining/buffet",
+  "description": null,
+  "specification": null,
+  "size": [
+   1800,
+   600,
+   900
+  ]
+ },
+ {
+  "code": null,
+  "collection": "Beechwood",
+  "room": "dining",
+  "name": "Mirror",
+  "folder": "beechwood/dining/mirror",
+  "description": null,
+  "specification": null,
+  "size": [
+   1200,
+   50,
+   600
+  ]
+ },
+ {
+  "code": "BW-316",
+  "collection": "Beechwood",
+  "room": "dining",
+  "name": "Dining Chair",
+  "folder": "beechwood/dining/dining-chair",
+  "description": null,
+  "specification": null,
+  "size": [
+   550,
+   620,
+   860
+  ]
+ },
+ {
+  "code": "BW-333",
+  "collection": "Beechwood",
+  "room": "dining",
+  "name": "Barstool",
+  "folder": "beechwood/dining/barstool",
+  "description": null,
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "ZA-101",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "Queen Bed",
+  "folder": "zuma/bedroom/queen-bed",
+  "description": null,
+  "specification": null,
+  "size": [
+   1700,
+   2115,
+   1020
+  ]
+ },
+ {
+  "code": "ZA-102",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "King Bed",
+  "folder": "zuma/bedroom/king-bed",
+  "description": null,
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "ZA-103",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "Night Table",
+  "folder": "zuma/bedroom/night-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   650,
+   450,
+   525
+  ]
+ },
+ {
+  "code": "ZA-104",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "6 Drawer Dresser",
+  "folder": "zuma/bedroom/6-drawer-dresser",
+  "description": null,
+  "specification": null,
+  "size": [
+   1505,
+   550,
+   755
+  ]
+ },
+ {
+  "code": "ZA-105",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "Tall Boy",
+  "folder": "zuma/bedroom/tall-boy",
+  "description": null,
+  "specification": null,
+  "size": [
+   800,
+   500,
+   1200
+  ]
+ },
+ {
+  "code": "ZA-106",
+  "collection": "Zuma",
+  "room": "bedroom",
+  "name": "Mirror",
+  "folder": "zuma/bedroom/mirror",
+  "description": null,
+  "specification": null,
+  "size": [
+   1000,
+   35,
+   600
+  ]
+ },
+ {
+  "code": "ZA-201",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Sofa",
+  "folder": "zuma/living/sofa",
+  "description": null,
+  "specification": null,
+  "size": [
+   2000,
+   850,
+   840
+  ]
+ },
+ {
+  "code": "ZA-205",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Arm Chair",
+  "folder": "zuma/living/arm-chair",
+  "description": null,
+  "specification": null,
+  "size": [
+   850,
+   850,
+   840
+  ]
+ },
+ {
+  "code": "ZA-210",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Side Table",
+  "folder": "zuma/living/side-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   550,
+   550,
+   505
+  ]
+ },
+ {
+  "code": "ZA-209",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Coffee Table",
+  "folder": "zuma/living/coffee-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   1400,
+   650,
+   380
+  ]
+ },
+ {
+  "code": "ZA-112",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Armoire",
+  "folder": "zuma/living/armoire",
+  "description": null,
+  "specification": null,
+  "size": null
+ },
+ {
+  "code": "ZA-213",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "TV Unit",
+  "folder": "zuma/living/tv-unit",
+  "description": null,
+  "specification": null,
+  "size": [
+   1250,
+   400,
+   400
+  ]
+ },
+ {
+  "code": "ZA-211",
+  "collection": "Zuma",
+  "room": "living",
+  "name": "Console Table",
+  "folder": "zuma/living/console-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   1250,
+   400,
+   800
+  ]
+ },
+ {
+  "code": "ZA-311",
+  "collection": "Zuma",
+  "room": "dining",
+  "name": "Dining Table",
+  "folder": "zuma/dining/dining-table",
+  "description": null,
+  "specification": null,
+  "size": [
+   2100,
+   1000,
+   750
+  ]
+ },
+ {
+  "code": "ZA-310",
+  "collection": "Zuma",
+  "room": "dining",
+  "name": "Buffet",
+  "folder": "zuma/dining/buffet",
+  "description": null,
+  "specification": null,
+  "size": [
+   1460,
+   500,
+   750
+  ]
+ },
+ {
+  "code": "ZA-106",
+  "collection": "Zuma",
+  "room": "dining",
+  "name": "Mirror",
+  "folder": "zuma/dining/mirror",
+  "description": null,
+  "specification": null,
+  "size": [
+   1000,
+   35,
+   600
+  ]
+ },
+ {
+  "code": "ZA-315",
+  "collection": "Zuma",
+  "room": "dining",
+  "name": "Dining Chair",
+  "folder": "zuma/dining/dining-chair",
+  "description": null,
+  "specification": null,
+  "size": [
+   525,
+   580,
+   870
+  ]
+ }
+]

@@ -10,7 +10,7 @@
 // <collection> = the collection name in lower case with dashes (silver-lake), <room> = bedroom | living | dining (| other),
 // <item> = the item name the same way (night-table, 6-drawer-dresser, tv-unit). Any of .jpg / .jpeg / .png / .webp / .svg.
 // The item name shown on the site comes from its folder (6-drawer-dresser -> 6 Drawer Dresser); names lists exceptions.
-// Item codes and sizes come from the line sheet (item-codes.ts), matched on that name.
+// Item codes, sizes and descriptions come from the WEBSITE TRACKER sheet (item-codes.ts), matched on that name.
 // Only watermarked images go in public/. Keep the originals outside the repo.
 //
 // To show a collection room: add an entry below with published: true. To hide one: published: false.
@@ -33,13 +33,13 @@ type Entry = {
 };
 
 const dohenyFinishes = {
-  woods: ['Bleached Oak', 'Natural Oak', 'Smoked Oak', 'Walnut'], fabrics: ['Cream Bouclé', 'Cream', 'Grey'], upholstered: ['Bed', 'Sofa', 'Armchair'],
+  woods: ['Bleached Oak', 'Natural Oak', 'Smoked Oak', 'Walnut'], fabrics: ['Cream Bouclé', 'Cream', 'Grey'], upholstered: ['Queen Bed', '7 Foot Sofa', 'Arm Chair'],
   shown: ['Natural Oak', 'Cream'],
 };
 
 export const collectionEntries: Entry[] = [
   { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: 'A low bed with rounded wood edges and a padded headboard, with a night table, dresser and mirror to match.', published: true,
-    names: { 'drawer-console-with-mirror': 'Drawer Console with Mirror' }, ...dohenyFinishes },
+    ...dohenyFinishes },
   // Palisades was listed as Temescal until 2 Nov 2026 ("Palasides" in the line sheet)
   { slug: 'palisades', name: 'Palisades', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true },
   { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: 'Honey Oak with tan leather cord: wrapped on the round top rail of the bed, the mirror rails and every brass pull. A bed, night table, six-drawer dresser, tall boy and mirror.', published: true,
@@ -49,11 +49,10 @@ export const collectionEntries: Entry[] = [
   { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: false },
   { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: false },
   { slug: 'doheny-living', name: 'Doheny', room: 'living', description: null, published: true, ...dohenyFinishes },
-  // Beechwood has no living room (3 Nov 2026). Dining: room shot only so far; its pieces are under living in the line sheet
+  // Beechwood has no living room (3 Nov 2026)
   { slug: 'beechwood-dining', name: 'Beechwood', room: 'dining', description: null, published: true },
-  // Calabasas living: room shot only so far (2 Nov 2026), items to follow
-  { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: null, published: true,
-    woods: ['Honey Oak'] },
+  // Calabasas living (items from the WEBSITE TRACKER photo links, 3 Nov 2026)
+  { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: null, published: true },
   // Zuma, room by room (2 Nov 2026)
   { slug: 'zuma', name: 'Zuma', room: 'bedroom', description: null, published: true },
   { slug: 'zuma-living', name: 'Zuma', room: 'living', description: null, published: true },

@@ -3,81 +3,56 @@
 .wide { width: min(1340px, 100% - 40px); margin-inline: auto; }
 
 /* Hero: near full screen, copy bottom-left over the image */
-.hero-full { position: relative; display: flex; min-height: calc(100svh - 4.5rem); color: var(--on-dark); background: var(--bg-dark); overflow: hidden; }
+/* Fills the screen under the header; the cover is cropped to fit, placed by its --pos so the furniture stays in */
+.hero-full { position: relative; display: flex; height: calc(100svh - 4.5rem); min-height: 420px; color: var(--on-dark); background: var(--bg-dark); overflow: hidden; }
 .hero-full .media { position: absolute; inset: 0; background: linear-gradient(160deg, #4a3f35, #1d1a17 70%) center / cover no-repeat; }
 /* The cover picture sits in ::before (as --img), the shading in ::after */
 .hero-full .slide { overflow: hidden; }
-.hero-full .slide::before { content: ''; position: absolute; inset: 0; background: var(--img, none) center / cover no-repeat; }
-.hero-full .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), linear-gradient(90deg, rgba(0,0,0,.38) 0%, rgba(0,0,0,0) 65%); }
-.hero-full .inner { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; padding: 96px 56px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
-.hero-full .eyebrow { font-size: 12px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 12px; }
+.hero-full .slide::before { content: ''; position: absolute; inset: 0; background: var(--img, none) center var(--pos, center) / cover no-repeat; }
+.hero-full .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.28) 100%), linear-gradient(90deg, rgba(0,0,0,.22) 0%, rgba(0,0,0,0) 50%); }
+.hero-full .inner { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; padding: 48px 56px 28px; display: flex; flex-direction: column; justify-content: flex-end; }
+.hero-full .eyebrow { font-size: 11px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 8px; text-shadow: 0 1px 8px rgba(0,0,0,.35); }
 /* Kept compact so the copy covers as little of the picture as it can */
-.hero-full h1 { font-size: clamp(30px, 2.6vw + 1rem, 50px); line-height: 1.05; max-width: 20ch; margin-bottom: 14px; }
+.hero-full h1 { font-size: clamp(24px, 1.6vw + .8rem, 36px); line-height: 1.1; max-width: 20ch; margin-bottom: 10px; text-shadow: 0 1px 12px rgba(0,0,0,.35); }
 .hero-full .hero-stack span { display: block; }
-.hero-full .hero-stack .rule { width: 140px; height: 1px; background: #b0835c; margin: .22em 0 .28em; }
-.hero-full p.text { font-size: 16px; line-height: 1.5; max-width: 42ch; opacity: .92; margin-bottom: 22px; }
-.hero-full .btn { padding: .75rem 1.6rem; font-size: .78rem; }
-@media (max-width: 700px) { .hero-full .inner { padding: 72px 20px 48px; } }
-/* Very wide screens (ultrawide): the 16:9 covers would lose a third of their height to cover-cropping.
-   Show the whole picture instead, with a blurred, darker copy of it filling the sides. */
-@media (min-aspect-ratio: 21/10) {
-  .hero-full .slide::before { filter: blur(40px) brightness(.75); transform: scale(1.15); }
-  .hero-full .slide::after { background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,.62) 100%), linear-gradient(90deg, rgba(0,0,0,.38) 0%, rgba(0,0,0,0) 65%), var(--img, none) center / contain no-repeat; }
-}
-/* Hero slideshow: covers stacked. The new one fades in on top while the old one stays fully up underneath
-   (.was), so the picture never dips to the dark background mid-change. Small dots bottom-right. */
-.hero-full .slide { opacity: 0; transition: opacity 1.2s ease-in-out; pointer-events: none; }
-.hero-full { isolation: isolate; } /* lets the old cover sit at z-index -1, under the new one, whichever comes first in the page */
-.hero-full .slide.was { opacity: 1; z-index: -1; transition: none; }
+.hero-full p.text { font-size: 14px; line-height: 1.5; max-width: 40ch; opacity: .95; margin-bottom: 16px; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
+.hero-full .btn { padding: .6rem 1.3rem; font-size: .72rem; }
+@media (max-width: 700px) { .hero-full { height: auto; min-height: 70svh; } .hero-full .inner { padding: 72px 20px 48px; } }
+/* Hero slideshow: covers stacked, the current one shown. No animation: pictures, copy and names switch at once.
+   Small dots bottom-right. */
+.hero-full .slide { opacity: 0; pointer-events: none; }
+.hero-full { isolation: isolate; }
 .hero-full .slide.on { opacity: 1; z-index: 0; pointer-events: auto; }
 .hero-full .slide:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -8px; }
 /* Clicks on the copy fall through to the picture's link; the buttons stay clickable */
-/* The page copy shows on the first picture; each other picture brings its collection's copy.
-   One after the other, never on top of each other: the old copy fades out (.5s), then the new one rises in (.9s),
-   both inside the 1.4s the picture takes. */
-.hero-full .inner { pointer-events: none; transition: opacity .9s ease .5s, transform .9s ease .5s, visibility 0s .5s; }
-.hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on) {
-  opacity: 0; visibility: hidden; transform: translateY(12px); animation: none; /* the load fade would otherwise hold it visible */
-  transition: opacity .5s ease, transform 0s .5s, visibility 0s .5s;
-}
+/* The page copy shows on the first picture only */
+.hero-full .inner { pointer-events: none; }
+.hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on) { visibility: hidden; }
 .hero-full .hero-alt { position: absolute; inset: 0; }
 .hero-full .hero-alt .eyebrow { text-transform: uppercase; }
 .hero-full .hero-title { font-size: clamp(34px, 4vw + 1rem, 64px); max-width: 20ch; margin-bottom: 18px; }
-@media (prefers-reduced-motion: reduce) { .hero-full .inner, .hero-full.copy-off > .inner:not(.hero-alt), .hero-full .hero-alt:not(.on), .hero-names span.on { transition: none; transform: none; } }
 .hero-full .inner a, .hero-full .inner button { pointer-events: auto; }
 .feat-card { scroll-margin-top: 4.5rem; } /* clears the sticky header when the hero links here */
-.hero-dots { position: absolute; z-index: 2; right: 46px; bottom: 100px; display: flex; gap: 6px; opacity: .5; transition: opacity .3s; }
-.hero-dots:hover, .hero-dots:focus-within { opacity: 1; }
+.hero-dots { position: absolute; z-index: 2; right: 46px; bottom: 100px; display: flex; gap: 6px; opacity: .8; }
 /* Arrows on the picture's left and right edges, same thin look as the collections page slider */
 /* Slider arrows (hero and collection card): large round buttons, dark glass with a white chevron, clear on light and dark photos */
 .hero-arrow, .fs-arrow { position: absolute; z-index: 2; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 56px; height: 56px; padding: 0 0 4px; border: 1px solid rgba(255, 255, 255, .35); border-radius: 50%; background: rgba(20, 17, 14, .45); color: #fff; font-size: 40px; font-weight: 400; line-height: 1; cursor: pointer; box-shadow: 0 4px 16px rgba(0, 0, 0, .25); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: background .2s, border-color .2s; }
-.hero-arrow:hover, .fs-arrow:hover { background: rgba(20, 17, 14, .7); border-color: rgba(255, 255, 255, .7); }
+.fs-arrow:hover { background: rgba(20, 17, 14, .7); border-color: rgba(255, 255, 255, .7); }
 .hero-arrow:focus-visible, .fs-arrow:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .hero-arrow.prev { left: 20px; }
 .hero-arrow.next { right: 20px; }
 .hero-arrow:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; }
 .hero-dots button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; }
-.hero-dots button::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--on-dark); opacity: .75; transition: background .3s, opacity .3s; }
-.hero-dots button:hover::before { opacity: 1; }
+.hero-dots button::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--on-dark); opacity: .75; }
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
 /* The collection's name under the dots, cross-fading with its picture */
 .hero-names { position: absolute; z-index: 2; right: 52px; bottom: 18px; display: grid; justify-items: end; pointer-events: none; }
-.hero-names span { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 14px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; transition: opacity .5s ease; }
-.hero-names span.on { opacity: .5; transition: opacity .9s ease .5s; } /* same out-then-in as the copy */
+.hero-names span { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 14px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; }
+.hero-names span.on { opacity: .5; }
 @media (max-width: 700px) { .hero-names { right: 16px; bottom: 12px; } .hero-names span { font-size: 30px; } }
-@media (prefers-reduced-motion: reduce) { .hero-names span { transition: none; } }
 @media (max-width: 700px) { .hero-dots { right: 12px; bottom: 56px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }
-@media (prefers-reduced-motion: reduce) { .hero-full .slide, .hero-dots button::before { transition: none; } }
 
-/* Proof strip: dark band, dividers, centred caps */
-.proof-strip { background: var(--bg-dark); color: var(--on-dark); padding: 44px 0; }
-.proof-strip ul { list-style: none; margin: 0 auto; padding: 0; max-width: 1340px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.proof-strip li { padding: 4px 24px; border-left: 1px solid rgba(255,255,255,.18); text-align: center; }
-.proof-strip li:first-child { border-left: 0; }
-.proof-strip b { display: block; font-weight: 500; font-size: 14px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 8px; text-decoration: underline; text-underline-offset: 4px; }
-.proof-strip span { display: block; font-size: 14px; line-height: 1.5; opacity: .75; }
-@media (max-width: 800px) { .proof-strip { display: none; } }
 
 /* Tiles: heading row + 3-up grid, optional overlay text */
 .tiles-head { max-width: 1340px; margin: 0 auto 40px; padding-inline: 20px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap; }
@@ -177,7 +152,7 @@
 .feat-card:nth-of-type(even) .frame, .feat-card:nth-of-type(even) > .ph { order: 0; }
 .feat-card:nth-of-type(odd) { background: var(--bg); }
 .feat-card:nth-of-type(even) { background: var(--bg-dark); color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 65%, transparent); --line: rgba(236, 229, 217, .2); }
-.feat-card .frame, .feat-card > .ph { aspect-ratio: 4 / 3; min-height: 100%; }
+.feat-card .frame, .feat-card > .ph { aspect-ratio: 16 / 9; align-self: center; } /* the room shots' own shape, so they are not cut */
 .feat-card .frame img { position: absolute; inset: 0; object-fit: cover; }
 .feat-body { padding: clamp(28px, 4vw, 64px); justify-content: center; display: flex; flex-direction: column; }
 .feat-body small { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-soft); }
@@ -192,6 +167,7 @@
 .fs-track::-webkit-scrollbar { display: none; }
 .fs-track:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -6px; }
 .fs-slide { position: relative; flex: 0 0 100%; margin: 0; scroll-snap-align: start; }
+.fs-slide.whole img { object-fit: contain; }
 .fs-slide figcaption { position: absolute; left: 28px; bottom: 24px; z-index: 1; font-size: clamp(14px, 1.2vw, 18px); font-weight: 300; letter-spacing: .18em; text-transform: uppercase; color: rgba(255, 255, 255, .92); text-shadow: 0 1px 3px rgba(0, 0, 0, .55), 0 2px 14px rgba(0, 0, 0, .45); }
 .fs-slide figcaption span { margin: 0 .7em; opacity: .7; } /* divider between product and collection name */
 .fs-arrow.prev { left: 20px; }
@@ -243,6 +219,11 @@
 .cat-cap { display: flex; justify-content: center; align-items: baseline; gap: 14px; padding: 16px 20px 12px; }
 .cat-cap h3 { font: 500 .8rem/1.4 Inter, system-ui, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
 .cat-pos { font-size: .7rem; letter-spacing: .1em; opacity: .55; }
+.cat-desc { max-width: 62ch; margin: -4px auto 12px; padding-inline: 20px; text-align: center; font-size: .82rem; line-height: 1.5; opacity: .8; }
+.cat-desc[hidden] { display: none; }
+.cat-spec { list-style: none; max-width: 70ch; margin: -6px auto 12px; padding: 0 20px; display: grid; gap: 2px; text-align: center; font-size: .74rem; line-height: 1.45; opacity: .7; }
+.cat-spec b { font-weight: 600; }
+.cat-spec[hidden] { display: none; }
 .cat-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 20px 20px; scrollbar-width: thin; scrollbar-color: rgba(243, 236, 226, .3) transparent; }
 .cat-thumbs[hidden] { display: none; }
 .cat-thumbs > :first-child { margin-left: auto; }

@@ -1,10 +1,9 @@
 ---
-// Hero background: one cover per collection, cross-fading behind the hero copy.
-// The first cover loads with the page; the rest load once it is up. A click on a cover opens its collection's pieces
-// in the picture viewer, with a link on to the collection (the plain link still works without script).
+// Hero background: one cover per collection behind the hero copy, switched without animation.
+// The first cover loads with the page; the rest load once it is up. A click on a cover goes to its collection page.
+// The pictures only change with the arrows and dots, never by themselves.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
-type Item = { name: string; src: string; bg: string | null };
-interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; items?: Item[] }[] }
+interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string }[] }
 const { slides } = Astro.props;
 ---
 {slides.length === 0 && <div class="media"></div>}
@@ -15,10 +14,8 @@ const { slides } = Astro.props;
     aria-label={`${s.name}: ${s.label}`}
     aria-hidden={i === 0 ? undefined : 'true'}
     tabindex={i === 0 ? undefined : -1}
-    style={i === 0 ? `--img:url(${s.src})` : undefined}
+    style={[i === 0 && `--img:url(${s.src})`, s.pos && `--pos:${s.pos}`].filter(Boolean).join(';') || undefined}
     data-bg={i === 0 ? undefined : s.src}
-    data-items={s.items?.length ? JSON.stringify(s.items) : undefined}
-    aria-haspopup={s.items?.length ? 'dialog' : undefined}
   ></a>
 ))}
 {slides.length > 1 && (
@@ -33,17 +30,12 @@ const { slides } = Astro.props;
 )}
 
 <script>
-  import { openViewer } from '../lib/viewer';
-
-  // Auto-advance every 12 seconds, also under the mouse. Pauses while a keyboard user is inside the hero, while the viewer is open
-  // and in a background tab.
-  // With reduced motion it never advances by itself; the arrows and dots still switch pictures.
+  // The arrows and dots switch pictures; nothing advances by itself.
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
     const names = [...hero.querySelectorAll<HTMLElement>('.hero-names span')];
     if (slides.length < 2) return;
-    const still = matchMedia('(prefers-reduced-motion: reduce)');
     // A cover is only switched in once its picture is decoded, so it never fades in half-drawn
     const ready = new Map<HTMLElement, Promise<void>>();
     const load = (s: HTMLElement) => {
@@ -60,26 +52,15 @@ const { slides } = Astro.props;
     };
     const loadAll = () => slides.forEach(load);
     if (document.readyState === 'complete') loadAll(); else addEventListener('load', loadAll, { once: true });
-    // The page copy's load fade would restart each time it comes back; drop it once it has played
-    hero.querySelectorAll('.inner.fade').forEach((el) => el.addEventListener('animationend', () => el.classList.remove('fade'), { once: true }));
 
     let cur = 0;
     let want = 0;
-    let timer = 0;
-    let settle = 0;
-    let focus = false;
-    let viewing = false;
     const show = async (i: number) => {
       const next = (i + slides.length) % slides.length;
       want = next;
       await load(slides[next]);
       if (want !== next || next === cur) return; // a later click won, or nothing to change
-      const prev = cur;
       cur = next;
-      // The old cover stays fully up under the new one until the fade is done
-      clearTimeout(settle);
-      slides.forEach((s, j) => s.classList.toggle('was', j === prev));
-      settle = window.setTimeout(() => slides[prev].classList.remove('was'), 1300);
       slides.forEach((s, j) => {
         if (j === cur) { s.classList.add('on'); s.removeAttribute('aria-hidden'); s.removeAttribute('tabindex'); }
         else { s.classList.remove('on'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('tabindex', '-1'); }
@@ -89,35 +70,8 @@ const { slides } = Astro.props;
       // The page copy sits on the first picture only; the others carry just the name
       hero.classList.toggle('copy-off', cur !== 0);
     };
-    const start = () => {
-      clearInterval(timer);
-      if (!still.matches && !focus && !viewing && !document.hidden) timer = window.setInterval(() => show(cur + 1), 12000);
-    };
-    dots.forEach((d, j) => d.addEventListener('click', () => { show(j); start(); }));
-    hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => { show(cur - 1); start(); });
-    hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => { show(cur + 1); start(); });
-    // Only keyboard focus pauses: a mouse click on an arrow or dot leaves focus there but should not stop the show
-    hero.addEventListener('focusin', (e) => { focus = (e.target as Element).matches(':focus-visible'); start(); });
-    hero.addEventListener('focusout', (e) => { if (!hero.contains(e.relatedTarget as Node | null)) { focus = false; start(); } });
-    document.addEventListener('visibilitychange', start);
-    still.addEventListener('change', start);
-    // A cover opens its collection's pieces; the show waits while the viewer is open
-    slides.forEach((s) => s.addEventListener('click', (e) => {
-      const items: { name: string; src: string; bg: string | null }[] = JSON.parse(s.dataset.items ?? '[]');
-      if (!items.length) return;
-      e.preventDefault();
-      const collection = (s.getAttribute('aria-label') ?? '').split(':')[0];
-      viewing = true;
-      clearInterval(timer);
-      openViewer({
-        title: collection,
-        info: collection,
-        opener: s,
-        link: { href: s.getAttribute('href')!, text: 'Explore the collection' },
-        slides: items.map((it) => ({ src: it.src, bg: it.bg, name: it.name, alt: `${collection}: ${it.name}` })),
-      });
-      document.querySelector('dialog.cat-box')?.addEventListener('close', () => { viewing = false; start(); }, { once: true });
-    }));
-    start();
+    dots.forEach((d, j) => d.addEventListener('click', () => show(j)));
+    hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => show(cur - 1));
+    hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => show(cur + 1));
   });
 </script>
