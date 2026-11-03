@@ -23,6 +23,12 @@
 .hero-full .slide { opacity: 0; pointer-events: none; }
 .hero-full { isolation: isolate; }
 .hero-full .slide.on { opacity: 1; z-index: 0; pointer-events: auto; }
+/* A quick crossfade; the name fades with it */
+.hero-full .slide { transition: opacity .2s ease; }
+.hero-names span { transition: opacity .2s ease; }
+@media (prefers-reduced-motion: reduce) { .hero-full .slide, .hero-names span { transition: none; } }
+.hero-full .slide.to-prev { cursor: w-resize; }
+.hero-full .slide.to-next { cursor: e-resize; }
 .hero-full .slide:focus-visible { outline: 2px solid var(--on-dark); outline-offset: -8px; }
 /* Clicks on the copy fall through to the picture's link; the buttons stay clickable */
 /* The page copy shows on the first picture only */

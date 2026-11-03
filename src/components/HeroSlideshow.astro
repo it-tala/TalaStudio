@@ -1,8 +1,8 @@
 ---
-// Hero background: one cover per collection behind the hero copy, switched without animation.
-// The first cover loads with the page; the rest load once it is up. A click on a cover opens all the covers in the
-// picture viewer, from that one on, each with a link to its collection page (the plain link still works without script).
-// The pictures only change with the arrows and dots, never by themselves.
+// Hero background: one cover per collection behind the hero copy, switched with a short crossfade.
+// The first cover loads with the page; the rest load once it is up. A click on the right half of a cover moves to the
+// next one, on the left half to the previous one, like the picture viewer (without script the cover is a plain link
+// to its collection page). The pictures only change with clicks, arrows and dots, never by themselves.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
 const { slides } = Astro.props;
@@ -20,7 +20,6 @@ const { slides } = Astro.props;
     data-src={s.src}
     data-room={s.room}
     data-edge={s.edge ?? undefined}
-    aria-haspopup="dialog"
   ></a>
 ))}
 {slides.length > 1 && (
@@ -35,8 +34,6 @@ const { slides } = Astro.props;
 )}
 
 <script>
-  import { openViewer } from '../lib/viewer';
-
   // The arrows and dots switch pictures; nothing advances by itself.
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
@@ -80,19 +77,19 @@ const { slides } = Astro.props;
     dots.forEach((d, j) => d.addEventListener('click', () => show(j)));
     hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => show(cur - 1));
     hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => show(cur + 1));
-    // A cover opens every hero picture in the viewer, starting at the one clicked; each names and links its own collection
-    const all = slides.map((s) => {
-      const [name, label] = (s.getAttribute('aria-label') ?? '').split(': ');
-      return { name, room: s.dataset.room ?? '', href: s.getAttribute('href')!, src: s.dataset.src!, bg: s.dataset.edge, alt: label ?? name };
-    });
-    slides.forEach((s, i) => s.addEventListener('click', (e) => {
-      e.preventDefault();
-      openViewer({
-        title: all[i].name,
-        opener: s,
-        start: i,
-        slides: all.map((h) => ({ src: h.src, bg: h.bg, alt: h.alt, name: h.name, info: h.room, link: { href: h.href, text: 'Explore the collection' } })),
+    // Invisible buttons on the cover, as in the picture viewer: the left half goes back, the right half forward
+    const back = (s: HTMLElement, x: number) => { const r = s.getBoundingClientRect(); return x < r.left + r.width / 2; };
+    slides.forEach((s) => {
+      s.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(cur + (back(s, e.clientX) ? -1 : 1));
       });
-    }));
+      // The pointer shows which way a click goes
+      s.addEventListener('mousemove', (e) => {
+        const b = back(s, e.clientX);
+        s.classList.toggle('to-prev', b);
+        s.classList.toggle('to-next', !b);
+      });
+    });
   });
 </script>

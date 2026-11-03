@@ -40,15 +40,24 @@ export const itemRooms = (collection: Collection) => {
   return ROOMS.filter((r) => found.has(r));
 };
 
-// The items of a collection: gallery pictures grouped by caption name, in catalog order (above).
-// Hidden pictures are left out; the cover picture leads and the spec sheet closes. Pictures without a caption are skipped.
-export function groupItems(collection: Collection): { name: string; pics: Pic[] }[] {
+// The folder a picture sits in ("doheny/living/console-table"), without the /collections/ prefix
+const folderOf = (src: string) => src.slice(0, src.lastIndexOf('/')).replace(/^\/collections\//, '');
+
+// The items of a collection: gallery pictures grouped by caption name and folder (two items may share a name), in
+// catalog order (above). Hidden pictures are left out; the cover picture leads and the spec sheet closes.
+// Pictures without a caption are skipped.
+export function groupItems(collection: Collection): { name: string; folder: string; pics: Pic[] }[] {
   const groups = new Map<string, Pic[]>();
-  for (const g of collection.gallery ?? []) if (g.name) groups.set(g.name, [...(groups.get(g.name) ?? []), g]);
+  for (const g of collection.gallery ?? []) {
+    if (!g.name) continue;
+    const k = `${g.name}\n${folderOf(g.src)}`;
+    groups.set(k, [...(groups.get(k) ?? []), g]);
+  }
   return [...groups]
-    .map(([name, named]) => {
+    .map(([k, named]) => {
       const all = named.filter((p) => !p.hide);
-      return { name, pics: [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover && !p.spec), ...all.filter((p) => p.spec && !p.cover)] };
+      const [name, folder] = k.split('\n');
+      return { name, folder, pics: [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover && !p.spec), ...all.filter((p) => p.spec && !p.cover)] };
     })
     .filter((it) => it.pics.length > 0)
     .sort((a, b) => rank(a.name, a.pics[0].src) - rank(b.name, b.pics[0].src));

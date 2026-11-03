@@ -9,8 +9,8 @@
 //   public/collections/<collection>/<room>/<item>/spec.jpg          the spec sheet, always the last picture in the viewer
 // <collection> = the collection name in lower case with dashes (silver-lake), <room> = bedroom | living | dining (| other),
 // <item> = the item name the same way (night-table, 6-drawer-dresser, tv-unit). Any of .jpg / .jpeg / .png / .webp / .svg.
-// The item name shown on the site comes from its folder (6-drawer-dresser -> 6 Drawer Dresser); names lists exceptions.
-// Item codes, sizes and descriptions come from the WEBSITE TRACKER sheet (item-codes.ts), matched on that name.
+// The item name shown on the site is its WEBSITE TRACKER name, else it comes from its folder (6-drawer-dresser ->
+// 6 Drawer Dresser); names lists exceptions. Codes, sizes and descriptions come from the tracker too (item-codes.ts).
 // Only watermarked images go in public/. Keep the originals outside the repo.
 //
 // To show a collection room: add an entry below with published: true. To hide one: published: false.
@@ -25,6 +25,7 @@
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Collection } from '../lib/supabase';
+import { trackerName } from './item-codes';
 
 type Entry = {
   slug: string; name: string; room: Collection['room']; description: string | null; published: boolean;
@@ -94,7 +95,8 @@ function galleryItems(base: string, url: string, names: Record<string, string> =
   return dirs(base).flatMap((folder) => {
     const dir = join(base, folder);
     const at = `${url}/${folder}`;
-    const name = names[folder] ?? itemName(folder);
+    // Two tracker items with the same name get a code suffix on the folder (console-table-za-211): the tracker gives the name
+    const name = names[folder] ?? trackerName(`${url.replace('/collections/', '')}/${folder}`) ?? itemName(folder);
     const finishes = finishPhotos(dir, at);
     const files = images(dir);
     const rooms = files.filter((f) => /^room/i.test(f));
