@@ -12,6 +12,5 @@ export const showSection = {
     materials: false,    // needs 3 close-up photos
     forBuyers: false,    // needs container photo
     visit: false,        // needs showroom photo
-    catalogImage: false, // needs catalog cover (a text-only catalog band shows instead)
   },
 };

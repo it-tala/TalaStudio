@@ -6,7 +6,6 @@ import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
 import { edgeBackground } from '../lib/edge';
 import { showSection } from '../data/sections';
-import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
@@ -240,23 +239,6 @@ const materials = [
       </div>
     </div>
   </section>
-  )}
-
-  <!-- 10. Catalog -->
-  {showSection.home.catalogImage ? (
-  <section class="section alt">
-    <div class="split">
-      <div class="media"><Ph label="Catalog cover" /></div>
-      <div>
-        <p class="eyebrow">Catalog</p>
-        <h2>The full range, in one catalog.</h2>
-        <p class="text">Sizes, materials, finishes and container data for every piece. Tell us who you are and we will send it.</p>
-        <div class="btns"><a class="btn" href="/request-catalog">Request catalog</a></div>
-      </div>
-    </div>
-  </section>
-  ) : (
-    <CtaBand title="The full range, in one catalog." text="Sizes, materials, finishes and container data for every piece. Tell us who you are and we will send it." />
   )}
 </Base>
 
