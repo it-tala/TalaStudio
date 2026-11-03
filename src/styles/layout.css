@@ -222,9 +222,6 @@
 .cat-pos { font-size: .7rem; letter-spacing: .1em; opacity: .55; }
 .cat-desc { max-width: 62ch; margin: -4px auto 12px; padding-inline: 20px; text-align: center; font-size: .82rem; line-height: 1.5; opacity: .8; }
 .cat-desc[hidden] { display: none; }
-.cat-spec { list-style: none; max-width: 70ch; margin: -6px auto 12px; padding: 0 20px; display: grid; gap: 2px; text-align: center; font-size: .74rem; line-height: 1.45; opacity: .7; }
-.cat-spec b { font-weight: 600; }
-.cat-spec[hidden] { display: none; }
 .cat-thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 20px 20px; scrollbar-width: thin; scrollbar-color: rgba(243, 236, 226, .3) transparent; }
 .cat-thumbs[hidden] { display: none; }
 .cat-thumbs > :first-child { margin-left: auto; }

@@ -19,13 +19,11 @@ const all = await getCollections();
 // Slots ready for 'calabasas' and 'palisades' (same layout); hidden until their pieces are in.
 const featured = ['doheny'];
 // The pieces each landing page catalog shows (in catalog order); the rest are on the collection page. Leave a slug out to show all.
-const homeItems: Record<string, string[]> = {
-  doheny: ['Queen Bed', 'Night Table', '6 Drawer Dresser', '7 Foot Sofa'],
-};
+const homeItems: Record<string, string[]> = {};
 // Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
 // A click opens all these room shots in the picture viewer, from the one clicked, each linking to its collection page.
-const withRoomShot = all.filter((c) => /\/hero\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
+const withRoomShot = all.filter((c) => /\/hero(-\w+)?\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
 const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
   .map(async (c) => ({

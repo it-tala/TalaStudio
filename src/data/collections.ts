@@ -68,8 +68,10 @@ const images = (dir: string) => readdirSync(dir).filter((f) => IMAGE.test(f)).so
 const itemName = (folder: string) =>
   folder.split('-').map((w) => (w === 'tv' ? 'TV' : ['with', 'and', 'of'].includes(w) ? w : w[0].toUpperCase() + w.slice(1))).join(' ');
 
+// hero.jpg, or the newest of hero.jpg / hero-2.jpg / ... (a new room shot can go in beside one Windows keeps locked)
 function heroPath(base: string, url: string): string | null {
-  const f = existsSync(base) ? images(base).find((x) => /^hero\./i.test(x)) : undefined;
+  const all = existsSync(base) ? images(base).filter((x) => /^hero([.-]|$)/i.test(x)) : [];
+  const f = all.sort((a, b) => statSync(join(base, b)).mtimeMs - statSync(join(base, a)).mtimeMs)[0];
   return f ? `${url}/${f}` : null;
 }
 

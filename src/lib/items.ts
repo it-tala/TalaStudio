@@ -23,11 +23,14 @@ const ORDER: [(typeof ROOMS)[number], RegExp][] = [
   ['Dining', /chair/i],
   ['Dining', /bench/i],
   ['Dining', /sideboard|buffet/i],
-  // Last, so a dining room mirror follows the buffet; in a bedroom it still follows the tall boy
+  // Last, so a dining room mirror follows the buffet; a bedroom mirror is moved up after the tall boy (rank below)
   ['Bedroom', /mirror/i],
 ];
-const rank = (name: string) => {
+const TALL_BOY = ORDER.findIndex(([, re]) => re.source.includes('tall'));
+// src: one of the item's pictures; a mirror whose pictures sit in a bedroom folder ranks right after the tall boy
+const rank = (name: string, src = '') => {
   const i = ORDER.findIndex(([, re]) => re.test(name));
+  if (/mirror/i.test(name) && src.includes('/bedroom/')) return TALL_BOY + 0.5;
   return i < 0 ? ORDER.length : i;
 };
 
@@ -48,5 +51,5 @@ export function groupItems(collection: Collection): { name: string; pics: Pic[] 
       return { name, pics: [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover && !p.spec), ...all.filter((p) => p.spec && !p.cover)] };
     })
     .filter((it) => it.pics.length > 0)
-    .sort((a, b) => rank(a.name) - rank(b.name));
+    .sort((a, b) => rank(a.name, a.pics[0].src) - rank(b.name, b.pics[0].src));
 }
