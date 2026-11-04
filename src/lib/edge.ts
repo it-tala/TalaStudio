@@ -31,3 +31,34 @@ export async function edgeBackground(src: string, frameRatio = 4 / 3): Promise<s
   cache.set(src, out);
   return out;
 }
+
+// A photo wider than its 4:3 card is shown whole, with bands above and below. This zooms it in as far as the piece
+// allows: the piece's left and right edges are found from the columns with many sharp steps (wood edges, handles),
+// a soft shadow or plain wall has none. The guess errs wide, so the piece is never cut; it is centred in the card.
+const fits = new Map<string, { scale: number; shift: number } | null>();
+export async function cardFit(src: string, frameRatio = 4 / 3): Promise<{ scale: number; shift: number } | null> {
+  if (fits.has(src)) return fits.get(src)!;
+  let out: { scale: number; shift: number } | null = null;
+  try {
+    const file = join(process.cwd(), 'public', src);
+    const meta = src.startsWith('/') && existsSync(file) ? await sharp(file).metadata() : null;
+    const ratio = meta ? (meta.width ?? 1) / (meta.height ?? 1) : 0;
+    if (ratio > frameRatio * 1.02) {
+      const W = 240;
+      const { data, info } = await sharp(file).greyscale().resize(W).blur(0.8).raw().toBuffer({ resolveWithObject: true });
+      const steps = new Array(W).fill(0);
+      for (let y = 0; y < info.height; y++) for (let x = 1; x < W; x++) if (Math.abs(data[y * W + x] - data[y * W + x - 1]) > 14) steps[x]++;
+      const busy = (n: number) => n > Math.max(2, info.height * 0.03);
+      const l = steps.findIndex(busy) / W;
+      const r = (W - 1 - [...steps].reverse().findIndex(busy)) / W;
+      const margin = 0.04;
+      const scale = Math.max(1, Math.min(ratio / frameRatio, 1 / (r - l + 2 * margin)));
+      // As near the photo's middle as the piece allows (a shadow can stretch the guess to one side), never past its edges
+      const half = 1 / (2 * scale);
+      const centre = Math.min(1 - half, Math.max(half, Math.min(l - margin + half, Math.max(r + margin - half, 0.5))));
+      if (l >= 0 && r > l && scale > 1.01) out = { scale: +scale.toFixed(3), shift: +((0.5 - centre) * scale * 100).toFixed(2) };
+    }
+  } catch { out = null; }
+  fits.set(src, out);
+  return out;
+}

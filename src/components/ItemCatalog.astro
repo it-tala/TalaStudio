@@ -4,7 +4,7 @@
 // Pictures without a caption are left out.
 // Wood (and, for upholstered items, fabric) swatches under the picture switch the item to the photos of that finish.
 import type { Collection } from '../lib/supabase';
-import { edgeBackground } from '../lib/edge';
+import { edgeBackground, cardFit } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
@@ -15,7 +15,8 @@ const woods = collection.woods ?? [];
 // The finish the default photos show: named in `shown`, else the first of the list
 const shownOf = (list: string[]) => list.find((x) => collection.shown?.includes(x)) ?? list[0];
 const shownWood = shownOf(woods);
-const items = await Promise.all(groupItems(collection).filter((it) => !only || only.includes(it.name)).map(async ({ name, folder, pics: grouped }) => {
+// An item with nothing but its spec sheet (no photo yet) stays off the catalog: the spec sheet is never the card picture
+const items = await Promise.all(groupItems(collection).filter((it) => (!only || only.includes(it.name)) && it.pics.some((p) => !p.spec)).map(async ({ name, folder, pics: grouped }) => {
   // Room shots (covers) belong to the card slider, not here, unless an item has nothing else. The card and viewer open on the front view.
   const all = grouped.some((p) => !p.cover) ? grouped.filter((p) => !p.cover) : grouped;
   const pics = [...all.filter((p) => p.front), ...all.filter((p) => !p.front)];
@@ -31,7 +32,7 @@ const items = await Promise.all(groupItems(collection).filter((it) => !only || o
     const found = w === shownWood && f === shownFabric ? srcs : pics.flatMap((p) => p.finishes?.[key] ?? (f === shownFabric ? p.finishes?.[wk] : undefined) ?? []);
     if (found.length) photos[key] = found;
   }));
-  return { name, folder, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]) };
+  return { name, folder, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]), fit: await cardFit(srcs[0]) };
 }));
 // The viewer shows every photo whole in a square (1:1); the space around it takes the photo's own edge colour
 const viewerSrcs = [...new Set(items.flatMap((it) => Object.values(it.photos).flat().concat(it.srcs)))];
@@ -52,7 +53,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
         <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
           <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
             <span class="frame" style={it.bg ? `background:${it.bg}` : undefined}>
-              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" />
+              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% 0` : undefined} />
             </span>
           </button>
           {woods.length > 0 && (
