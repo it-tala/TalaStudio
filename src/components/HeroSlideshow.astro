@@ -2,7 +2,8 @@
 // Hero background: one cover per collection behind the hero copy, switched with a short crossfade.
 // The first cover loads with the page; the rest load once it is up. A click on the right half of a cover moves to the
 // next one, on the left half to the previous one, like the picture viewer (without script the cover is a plain link
-// to its collection page). The pictures only change with clicks, arrows and dots, never by themselves.
+// to its collection page). The pictures only change with clicks, arrows and dots, never by themselves. Each change sends a
+// hero-slide event (detail.href = the collection page) that the home collections section follows.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
 const { slides } = Astro.props;
@@ -73,6 +74,8 @@ const { slides } = Astro.props;
       names.forEach((n, j) => n.classList.toggle('on', j === cur));
       // The page copy sits on the first picture only; the others carry just the name
       hero.classList.toggle('copy-off', cur !== 0);
+      // The collections section further down follows: it shows the room of the collection on this picture
+      hero.dispatchEvent(new CustomEvent('hero-slide', { bubbles: true, detail: { href: slides[cur].getAttribute('href') } }));
     };
     dots.forEach((d, j) => d.addEventListener('click', () => show(j)));
     hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => show(cur - 1));

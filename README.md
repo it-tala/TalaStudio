@@ -141,12 +141,13 @@ The update only touches what changed since the last run. The record of the last 
 | RM 1 LINK, RM 2 LINK | The item in a room (`<item>/room.jpg`, `room-2.jpg`) |
 | STANDARD CODE, NAME, DIMENSION, WEBSITE DESCRIPTION, WEBSITE SPECIFICATION | `src/data/tracker-items.json` (code, name, size, text) |
 | SPEC SHEET DATA tab, with WEBSITE TRACKER as fallback | `<item>/spec.jpg`, the last slide in the item viewer, plus PNG files and zips in `06_SPEC_SHEET\hasil` and `export` |
+| FINISH 1–4 (MAT 1–4, MAT n LINK), HANDLE COLOR | On the spec sheet: the Finish and Hardware rows, and a picture swatch per finish (first photo of its MAT LINK album) |
 
 Each link uses the first photo in its Google Photos album.
 
 - **Empty album or broken (404) link:** the current image stays.
 - **No product photo link:** the row is skipped.
-- **Spec sheets:** every item with a code and photos gets one. Each field comes from SPEC SHEET DATA. Empty fields there are filled from WEBSITE TRACKER: size, and WEBSITE SPECIFICATION as the notes. An item with no SPEC row, or whose SPEC text belongs to another item (reported as `[ISI]`), uses the tracker data only. Empty photo slots and empty rows are left off the image.
+- **Spec sheets:** every item with a code and photos gets one. Each field comes from SPEC SHEET DATA. Empty fields there are filled from WEBSITE TRACKER: size, and WEBSITE SPECIFICATION as the notes. An item with no SPEC row, or whose SPEC text belongs to another item (reported as `[ISI]`), uses the tracker data only. The finishes, hardware and swatches always come from the tracker when it has them. Empty photo slots and empty rows are left off the image.
 - **Clashes:** the run stops without writing anything if two rows would become the same item, or if a code or description names another collection.
 - **Item folders no longer in the sheet:** only reported. To delete them, run `python isi_item_website.py --hapus`.
 

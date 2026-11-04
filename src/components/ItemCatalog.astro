@@ -121,6 +121,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
   /* Edge to edge, lined up with the collection card's text */
   .cat { --cat-edge: clamp(20px, 4vw, 64px); padding-block: clamp(48px, 6vw, 88px) 0; }
   .cat .tiles-head { max-width: none; padding-inline: var(--cat-edge); margin-bottom: 28px; align-items: center; }
+  .cat .tiles-head .eyebrow { scroll-margin-top: 6rem; } /* "Explore the collection" lands here, clear of the sticky header */
   .cat-grid { list-style: none; margin: 0; padding: 0 var(--cat-edge); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
   .cat-item { display: flex; flex-direction: column; align-items: flex-start; }
   .cat-card { display: flex; flex-direction: column; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: zoom-in; }
@@ -139,9 +140,9 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
   .sw[aria-pressed='true'] { outline-color: var(--text); }
   .sw:focus-visible { outline: 1px solid var(--text); }
   .cat-name { margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; line-height: 1.15; }
-  .cat-size { margin-top: 4px; font-size: 11px; letter-spacing: .08em; color: var(--text-soft); }
+  .cat-size { margin-top: 4px; font-size: 13px; letter-spacing: .08em; color: var(--text-soft); }
   .cat-more { margin-top: 64px; padding-inline: var(--cat-edge); text-align: center; }
-  .cat-views { margin-top: 6px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
+  .cat-views { margin-top: 6px; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
   @media (max-width: 1000px) { .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .cat-card .frame img, .sw, .sw::after { transition: none; } }

@@ -2,6 +2,8 @@
 //
 // Assets live per collection, per room, per item:
 //   public/collections/<collection>/<room>/hero.jpg                 the room shot behind the collection (hero, cards)
+//   public/collections/<collection>/<room>/room.jpg, room-2.jpg …   more shots of the whole room, for the landing page
+//                                                                    card when none of the room's items has a room shot
 //   public/collections/<collection>/<room>/<item>/01.jpg, 02.jpg …  the item's photos in order; 01 is the front view
 //                                                                    (the catalog card), the rest follow in the viewer
 //   public/collections/<collection>/<room>/<item>/room.jpg          the item in a room (card slider on the landing page,
@@ -30,6 +32,7 @@ import { trackerName } from './item-codes';
 type Entry = {
   slug: string; name: string; room: Collection['room']; description: string | null; published: boolean;
   names?: Record<string, string>; // item folder -> name shown, where the folder name alone is not right
+  hidden?: string[]; // item folders kept on disk but left off the site
   woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[];
 };
 
@@ -45,19 +48,21 @@ export const collectionEntries: Entry[] = [
   { slug: 'palisades', name: 'Palisades', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true },
   { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: 'Honey Oak with tan leather cord: wrapped on the round top rail of the bed, the mirror rails and every brass pull. A bed, night table, six-drawer dresser, tall boy and mirror.', published: true,
     woods: ['Honey Oak'] },
-  { slug: 'beechwood', name: 'Beechwood', room: 'bedroom', description: null, published: true },
+  { slug: 'beechwood', name: 'Beechwood', room: 'bedroom', description: 'A rounded timber headboard with two open cut-outs over a padded panel. A night table, six-drawer dresser, tall boy and mirror, with milled pulls and johar wood accents.', published: true },
   // Silver Lake: off since 2 Nov 2026
   { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: false },
   { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: false },
-  { slug: 'doheny-living', name: 'Doheny', room: 'living', description: null, published: true, ...dohenyFinishes },
+  // console-table-za-211: the old ZA-211 folder, no longer in the sheet (it is DH-211 now): off since 4 Nov 2026
+  { slug: 'doheny-living', name: 'Doheny', room: 'living', hidden: ['console-table-za-211'], description: 'Bouclé seats held by rounded timber arms, with side and coffee tables topped in textured glass. A TV console and console table complete the room.', published: true, ...dohenyFinishes },
   // Beechwood has no living room (3 Nov 2026)
-  { slug: 'beechwood-dining', name: 'Beechwood', room: 'dining', description: null, published: true },
+  { slug: 'beechwood-dining', name: 'Beechwood', room: 'dining', description: 'A rectangular table and low-arm chairs with woven seats, a buffet with four doors inset with rattan webbing, and a mirror to match.', published: true },
   // Calabasas living (items from the WEBSITE TRACKER photo links, 3 Nov 2026)
-  { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: null, published: true },
+  { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: 'Bouclé seating on a low timber base, with oval tables over woven rattan shelves. A TV console and an open cabinet complete the room.', published: true },
   // Zuma, room by room (2 Nov 2026)
-  { slug: 'zuma', name: 'Zuma', room: 'bedroom', description: null, published: true },
-  { slug: 'zuma-living', name: 'Zuma', room: 'living', description: null, published: true },
-  { slug: 'zuma-dining', name: 'Zuma', room: 'dining', description: null, published: true },
+  { slug: 'zuma', name: 'Zuma', room: 'bedroom', description: 'An upholstered bed on a timber box, with drawer pieces finished in hand-cast antique brass pulls. The mirror is Venetian antique glass.', published: true },
+  // The old TV Unit and Console Table are now Doheny items (DH-213, DH-211): off since 4 Nov 2026
+  { slug: 'zuma-living', name: 'Zuma', room: 'living', description: 'A sofa and armchair with side and coffee tables and an armoire, drawn to sit with the Zuma bedroom and dining pieces.', published: true, hidden: ['tv-unit', 'console-table'] },
+  { slug: 'zuma-dining', name: 'Zuma', room: 'dining', description: 'A dining table and low-arm chairs with woven loom backs, a buffet, and a mirror in Venetian antique glass.', published: true },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: false },
 ];
 
@@ -90,9 +95,9 @@ function finishPhotos(dir: string, url: string): Map<string, Record<string, stri
 }
 
 // Every item folder of a room, its pictures in the order the site expects: room shots, numbered photos, spec sheet
-function galleryItems(base: string, url: string, names: Record<string, string> = {}): NonNullable<Collection['gallery']> {
+function galleryItems(base: string, url: string, names: Record<string, string> = {}, hidden: string[] = []): NonNullable<Collection['gallery']> {
   if (!existsSync(base)) return [];
-  return dirs(base).flatMap((folder) => {
+  return dirs(base).filter((folder) => !hidden.includes(folder)).flatMap((folder) => {
     const dir = join(base, folder);
     const at = `${url}/${folder}`;
     // Two tracker items with the same name get a code suffix on the folder (console-table-za-211): the tracker gives the name
@@ -117,7 +122,7 @@ export function staticCollections(): Collection[] {
       const folder = `${slugify(c.name)}/${c.room}`;
       const base = join(process.cwd(), 'public', 'collections', folder);
       const url = `/collections/${folder}`;
-      const gallery = galleryItems(base, url, c.names);
+      const gallery = galleryItems(base, url, c.names, c.hidden);
       return {
         id: c.slug,
         slug: c.slug,
@@ -126,6 +131,7 @@ export function staticCollections(): Collection[] {
         description: c.description,
         // Without a room shot the first photo stands in
         hero_image_path: heroPath(base, url) ?? gallery.find((g) => !g.spec)?.src ?? null,
+        room_shots: existsSync(base) ? images(base).filter((f) => /^room([.-]|$)/i.test(f)).map((f) => `${url}/${f}`) : [],
         gallery,
         woods: c.woods,
         fabrics: c.fabrics,

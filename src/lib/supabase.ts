@@ -6,6 +6,7 @@ export type Collection = {
   description: string | null; hero_image_path: string | null; sort_order: number;
   gallery?: { src: string; name?: string; code?: string; cover?: boolean; hide?: boolean; spec?: boolean; front?: boolean; finishes?: Record<string, string> }[]; // static v1 only: extra images from /public
   woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[]; // static v1 only: swatches on the landing page catalog
+  room_shots?: string[]; // static v1 only: extra room shots of the whole room (room.jpg, room-2.jpg … beside hero.jpg)
 };
 
 export type Product = {

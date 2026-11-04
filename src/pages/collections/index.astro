@@ -4,6 +4,9 @@ import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getCollections, imageUrl } from '../../lib/supabase';
 import { groupItems } from '../../lib/items';
+import { pageOn } from '../../data/sections';
+// Switched off in src/data/sections.ts: the address sends visitors to the collections on the home page
+if (!pageOn('/collections')) return Astro.redirect('/#collections');
 
 const all = await getCollections();
 // The first three pieces in catalog order (bed first), leaving out hidden photos

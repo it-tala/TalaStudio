@@ -5,6 +5,7 @@ import CtaBand from '../../components/CtaBand.astro';
 import ItemCatalog from '../../components/ItemCatalog.astro';
 import { heroPos } from '../../data/hero-pos';
 import { versioned } from '../../lib/version';
+import { pageOn } from '../../data/sections';
 import { getCollections, getProducts, getProductImages, imageUrl } from '../../lib/supabase';
 
 export async function getStaticPaths() {
@@ -18,6 +19,8 @@ export async function getStaticPaths() {
 }
 
 const { collection, pieces } = Astro.props;
+// Switched off with /collections in src/data/sections.ts: the address opens this room on the home page
+if (!pageOn('/collections')) return Astro.redirect(`/#coll-${collection.slug}`);
 const hero = imageUrl(collection.hero_image_path);
 const fit = heroPos[collection.slug];
 const materials = [...new Set(pieces.flatMap((p) => p.materials ?? []))];
@@ -94,7 +97,7 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   .card { text-decoration: none; }
   .card h3 { margin-top: 1rem; font-size: 1.35rem; }
   .card p { color: var(--text-soft); font-size: .9rem; }
-  .card .link { margin-top: .6rem; font-size: .75rem; }
+  .card .link { margin-top: .6rem; font-size: .8rem; }
   .mats { display: grid; gap: 3rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
   .mats ul { list-style: none; padding: 0; margin-top: 1rem; display: grid; gap: .4rem; color: var(--text-soft); }
 </style>

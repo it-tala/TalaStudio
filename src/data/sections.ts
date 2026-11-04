@@ -1,6 +1,7 @@
 // Pages switched off for now: left out of the menu, footer and links, and their address sends visitors to the home page.
 // Take a path out of this list to bring the page back (and out of the sitemap filter in astro.config.mjs).
-export const disabledPages = ['/the-studio', '/how-a-container-works', '/partner-with-us', '/request-catalog'];
+// /collections (4 Nov 2026): the home page shows every collection room with its items; links go to /#collections instead
+export const disabledPages = ['/the-studio', '/how-a-container-works', '/partner-with-us', '/request-catalog', '/collections'];
 export const pageOn = (path: string) => !disabledPages.includes(path);
 
 // V1 shows the collections only. Set a flag to true to bring a section back.

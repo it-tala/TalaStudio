@@ -16,7 +16,14 @@
    1600,
    2130,
    1050
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-101",
@@ -31,7 +38,9 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "DH-103",
@@ -52,7 +61,14 @@
    450,
    450,
    450
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "DH-104",
@@ -73,7 +89,14 @@
    1400,
    570,
    700
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "DH-105",
@@ -94,7 +117,14 @@
    950,
    450,
    1200
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "DH-106",
@@ -113,7 +143,14 @@
    1200,
    550,
    25
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-201",
@@ -131,7 +168,14 @@
    2130,
    950,
    900
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-205",
@@ -149,7 +193,14 @@
    900,
    800,
    900
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-210",
@@ -168,7 +219,14 @@
    500,
    500,
    500
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-209",
@@ -187,10 +245,17 @@
    1250,
    600,
    400
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
-  "code": "ZA-213",
+  "code": "DH-213",
   "collection": "Doheny",
   "room": "living",
   "name": "TV Console",
@@ -206,14 +271,21 @@
    1250,
    400,
    400
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
-  "code": "ZA-211",
+  "code": "DH-211",
   "collection": "Doheny",
   "room": "living",
   "name": "Console Table",
-  "folder": "doheny/living/console-table-za-211",
+  "folder": "doheny/living/console-table",
   "description": "Zuma Console Table in solid mindi/mahogany with a veneered top.",
   "specification": [
    "Body: solid mindi/mahogany",
@@ -225,14 +297,21 @@
    1250,
    400,
    800
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "DH-211",
   "collection": "Doheny",
   "room": "living",
   "name": "Console Table",
-  "folder": "doheny/living/console-table",
+  "folder": "doheny/living/console-table-dh-211",
   "description": "Doheny Console Table, a two-drawer console desk in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
   "specification": [
    "Body: mindi/mahogany solids and veneers",
@@ -246,7 +325,14 @@
    1400,
    450,
    750
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "CA-102",
@@ -266,7 +352,9 @@
    1965,
    2080,
    1030
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "CA-101",
@@ -282,7 +370,9 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "CA-103",
@@ -304,7 +394,14 @@
    500,
    450,
    450
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "CA-104",
@@ -325,7 +422,14 @@
    1190,
    560,
    700
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "CA-105",
@@ -346,7 +450,14 @@
    600,
    500,
    1100
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "CA-106",
@@ -365,7 +476,14 @@
    1000,
    50,
    550
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "CA-201",
@@ -383,7 +501,9 @@
    2000,
    800,
    760
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "CA-205",
@@ -401,7 +521,9 @@
    900,
    800,
    685
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "CA-210",
@@ -417,7 +539,14 @@
    "Shelf: woven natural rattan",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "CA-209",
@@ -437,7 +566,14 @@
    1300,
    600,
    450
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "CA-213",
@@ -456,7 +592,14 @@
    1400,
    460,
    600
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "CA-215",
@@ -475,7 +618,14 @@
    1215,
    460,
    1700
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "PA-102",
@@ -494,7 +644,9 @@
    1710,
    2130,
    1120
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "PA-101",
@@ -509,7 +661,9 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "PA-103",
@@ -530,7 +684,14 @@
    450,
    450,
    455
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "PA-104",
@@ -551,7 +712,14 @@
    1485,
    470,
    810
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "PA-105",
@@ -572,7 +740,14 @@
    495,
    450,
    1060
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Brushed Bronze"
  },
  {
   "code": "PA-106",
@@ -591,7 +766,14 @@
    1000,
    25,
    550
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-102",
@@ -610,7 +792,14 @@
    1740,
    2090,
    1025
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-101",
@@ -625,7 +814,9 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "BW-103",
@@ -646,7 +837,14 @@
    550,
    500,
    500
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Johar Wood"
  },
  {
   "code": "BW-104",
@@ -667,7 +865,14 @@
    1185,
    600,
    700
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Johar Wood"
  },
  {
   "code": "BW-105",
@@ -688,7 +893,14 @@
    600,
    500,
    1100
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Johar Wood"
  },
  {
   "code": "BW-106",
@@ -707,7 +919,14 @@
    900,
    80,
    550
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-301",
@@ -727,7 +946,14 @@
    2100,
    800,
    750
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-319",
@@ -747,7 +973,14 @@
    1800,
    600,
    900
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "BW-901",
@@ -766,7 +999,14 @@
    1200,
    50,
    600
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-316",
@@ -783,7 +1023,14 @@
    550,
    620,
    860
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "BW-333",
@@ -793,7 +1040,9 @@
   "folder": "beechwood/dining/barstool",
   "description": null,
   "specification": null,
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-102",
@@ -812,7 +1061,14 @@
    1700,
    2115,
    1020
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "ZA-101",
@@ -827,7 +1083,9 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-103",
@@ -848,7 +1106,14 @@
    650,
    450,
    525
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "ZA-104",
@@ -869,7 +1134,14 @@
    1505,
    550,
    755
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "ZA-105",
@@ -890,7 +1162,14 @@
    800,
    500,
    1200
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "ZA-106",
@@ -907,7 +1186,9 @@
    1000,
    35,
    600
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-201",
@@ -921,7 +1202,9 @@
    2000,
    850,
    840
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-205",
@@ -935,7 +1218,9 @@
    850,
    850,
    840
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-210",
@@ -949,7 +1234,14 @@
    550,
    550,
    505
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "ZA-209",
@@ -963,7 +1255,14 @@
    1400,
    650,
    380
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "ZA-112",
@@ -973,7 +1272,9 @@
   "folder": "zuma/living/armoire",
   "description": null,
   "specification": null,
-  "size": null
+  "size": null,
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-301",
@@ -987,7 +1288,14 @@
    2100,
    1000,
    750
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  },
  {
   "code": "ZA-319",
@@ -1001,7 +1309,14 @@
    1460,
    500,
    750
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": "Antique Brass"
  },
  {
   "code": "ZA-901",
@@ -1018,7 +1333,9 @@
    1000,
    35,
    600
-  ]
+  ],
+  "finishes": null,
+  "handle": null
  },
  {
   "code": "ZA-316",
@@ -1038,6 +1355,13 @@
    525,
    580,
    870
-  ]
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
+  "handle": null
  }
 ]

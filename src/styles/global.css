@@ -16,10 +16,19 @@
 }
 
 * { box-sizing: border-box; margin: 0; }
-html { scroll-behavior: smooth; }
+/* 18px base (browser default 16px): the site is read by buyers in their 40s and 50s; every rem size grows with it */
+html { scroll-behavior: smooth; font-size: 112.5%; zoom: var(--z); }
+/* Wide screens (2K / 4K monitors at 100%): the whole page scales up from its ~1920 px design, so text and buttons keep
+   their size next to the pictures. Zoom also scales vh / vw, so full-screen heights divide by --z (layout.css). */
+:root { --z: 1; }
+@media (min-width: 2200px) { :root { --z: 1.35; } }
+@media (min-width: 2500px) { :root { --z: 1.6; } } /* 2560 px lays out like a 1600 px laptop screen */
+@media (min-width: 2850px) { :root { --z: 1.8; } }
+@media (min-width: 3400px) { :root { --z: 2.1; } }
+@media (min-width: 3800px) { :root { --z: 2.4; } }
 body {
   background: var(--bg); color: var(--text);
-  font: 400 1.0625rem/1.65 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font: 400 1rem/1.65 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; font-weight: 500; line-height: 1.08; letter-spacing: -.01em; }
@@ -32,7 +41,7 @@ img { max-width: 100%; display: block; }
 .section { padding-block: clamp(4rem, 9vw, 8rem); }
 .dark { background: var(--bg-dark); color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 65%, transparent); --line: rgba(236, 229, 217, .2); }
 .alt { background: var(--bg-alt); }
-.eyebrow { font-size: .75rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 1rem; }
+.eyebrow { font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 1rem; }
 .lede { font-size: 1.25rem; color: var(--text-soft); max-width: 40rem; margin-top: 1.25rem; }
 .link { display: inline-block; margin-top: 1.5rem; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; font-size: .9rem; letter-spacing: .08em; text-transform: uppercase; }
 .btn { display: inline-block; padding: .95rem 2rem; background: var(--accent); color: #fff; text-decoration: none; letter-spacing: .08em; text-transform: uppercase; font-size: .85rem; border: 0; cursor: pointer; font-family: inherit; }
@@ -48,5 +57,5 @@ img { max-width: 100%; display: block; }
 /* Image placeholder: renders and studio shots replace these. */
 .ph { position: relative; background: linear-gradient(160deg, var(--bg-alt), var(--bg-dark)); aspect-ratio: 4 / 5; overflow: hidden; }
 .ph.wide { aspect-ratio: 16 / 9; }
-.ph span { position: absolute; left: 1rem; bottom: 1rem; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--on-dark); opacity: .7; }
+.ph span { position: absolute; left: 1rem; bottom: 1rem; font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; color: var(--on-dark); opacity: .7; }
 .wm { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font: 600 clamp(1rem, 3vw, 2rem)/1 Inter, sans-serif; letter-spacing: .4em; color: rgba(255, 255, 255, .22); transform: rotate(-18deg); user-select: none; }
