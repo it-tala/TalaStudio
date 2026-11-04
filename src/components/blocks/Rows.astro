@@ -1,0 +1,55 @@
+---
+// Page title, then labelled rows of text, people cards with a photo and a closing line (Who We Are)
+import type { RowsBlock } from '../../data/pages';
+
+interface Props { block: RowsBlock }
+const { eyebrow, title, rows, peopleLabel, people = [], outro } = Astro.props.block;
+---
+<section class="section who">
+  <div class="wrap">
+    <p class="eyebrow fade">{eyebrow}</p>
+    <h1 class="fade">{title}</h1>
+
+    {rows.map(([label, paras]) => (
+      <div class="row">
+        <h2 class="label">{label}</h2>
+        <div class="body">{paras.map((p) => <p>{p}</p>)}</div>
+      </div>
+    ))}
+
+    {people.length > 0 && (
+      <div class="founders">
+        <h2 class="label">{peopleLabel}</h2>
+        {people.map((f) => (
+          <article class="founder">
+            <img src={f.photo} alt={f.name} width="600" height="720" loading="lazy" />
+            <div>
+              <h3>{f.name}</h3>
+              <p class="role">{f.role}</p>
+              <p>{f.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+
+    {outro && <p class="outro" set:html={outro} />}
+  </div>
+</section>
+
+<style>
+  .who .wrap { max-width: 62rem; }
+  .who h1 { padding-bottom: clamp(1.5rem, 3vw, 2.5rem); border-bottom: 1px solid var(--line); }
+  .label { font: 500 .8rem/1.5 'Inter', system-ui, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .row { display: grid; gap: .8rem 3rem; padding-block: clamp(1.5rem, 3vw, 2.2rem); border-bottom: 1px solid var(--line); }
+  .row .label { max-width: 14ch; }
+  .body p + p { margin-top: 1rem; }
+  .founders { padding-block: clamp(1.5rem, 3vw, 2.2rem) 0; display: grid; gap: 1.25rem; }
+  .founder { display: grid; grid-template-columns: 11rem 1fr; gap: 1.8rem; align-items: start; padding: 1.4rem; background: color-mix(in srgb, var(--bg) 55%, #fff); }
+  .founder img { width: 100%; height: auto; aspect-ratio: 5 / 6; object-fit: cover; border-radius: 3px; }
+  .founder h3 { font-size: 1.8rem; }
+  .founder .role { margin: .2rem 0 .8rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .outro { margin-top: clamp(2rem, 4vw, 3rem); padding-top: 1.5rem; border-top: 1px solid var(--line); font: italic 400 1.3rem/1.5 'Cormorant Garamond', Georgia, serif; color: var(--text-soft); }
+  @media (min-width: 760px) { .row { grid-template-columns: 14rem 1fr; } }
+  @media (max-width: 560px) { .founder { grid-template-columns: 1fr; } .founder img { width: 11rem; } }
+</style>

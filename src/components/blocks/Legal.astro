@@ -1,0 +1,52 @@
+---
+// Long numbered text in parts, with a sticky contents list on wide screens (Privacy and terms)
+import type { LegalBlock } from '../../data/pages';
+
+interface Props { block: LegalBlock }
+const { parts } = Astro.props.block;
+---
+<section class="section">
+  <div class="wrap legal">
+    <aside>
+      <nav aria-label="On this page">
+        {parts.map((part) => (
+          <>
+            <p class="eyebrow">{part.title}</p>
+            <ul>{part.items.map(([id, title]) => <li><a href={`#${id}`}>{title}</a></li>)}</ul>
+          </>
+        ))}
+      </nav>
+    </aside>
+
+    <div class="body">
+      {parts.map((part, n) => (
+        <>
+          <h2 id={part.id} style={n > 0 ? 'margin-top:4rem' : undefined}>{part.title}</h2>
+          <p class="intro">{part.intro}</p>
+          {part.items.map(([id, title, paras], i) => (
+            <section id={id}>
+              <h3>{i + 1}. {title}</h3>
+              {paras.map((p) => <p>{p}</p>)}
+            </section>
+          ))}
+        </>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .legal { display: grid; gap: 3rem; }
+  aside nav { position: sticky; top: 6rem; font-size: .9rem; }
+  aside ul { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: .5rem; }
+  aside a { text-decoration: none; color: var(--text-soft); }
+  aside a:hover { color: var(--text); }
+  .body { max-width: 46rem; }
+  .body h2 { font-size: clamp(2rem, 4vw, 2.8rem); }
+  .body h3 { font-size: 1.5rem; margin-top: 2.2rem; }
+  .body p { margin-top: .8rem; color: var(--text-soft); }
+  .body .intro { font-size: 1.1rem; }
+  .body section { scroll-margin-top: 6rem; }
+  @media (min-width: 900px) { .legal { grid-template-columns: 15rem 1fr; gap: 5rem; } }
+  @media (max-width: 899px) { aside { display: none; } }
+</style>

@@ -1,0 +1,28 @@
+---
+// Draws a page's sections in order, each by its block type. The pages and their blocks are in src/data/pages.ts.
+import PageHero from './PageHero.astro';
+import CtaBand from './CtaBand.astro';
+import StepsHero from './blocks/StepsHero.astro';
+import Story from './blocks/Story.astro';
+import Rows from './blocks/Rows.astro';
+import ContactCards from './blocks/ContactCards.astro';
+import Prose from './blocks/Prose.astro';
+import Posts from './blocks/Posts.astro';
+import Legal from './blocks/Legal.astro';
+import Dashboard from './blocks/Dashboard.astro';
+import type { Block } from '../data/pages';
+
+interface Props { blocks: Block[] }
+const { blocks } = Astro.props;
+---
+{blocks.map((b) =>
+  b.type === 'hero' ? <PageHero eyebrow={b.eyebrow} title={b.title} lede={b.lede} />
+  : b.type === 'cta' ? <CtaBand title={b.title} text={b.text} href={b.href} label={b.label} />
+  : b.type === 'steps-hero' ? <StepsHero block={b} />
+  : b.type === 'story' ? <Story block={b} />
+  : b.type === 'rows' ? <Rows block={b} />
+  : b.type === 'contact' ? <ContactCards block={b} />
+  : b.type === 'prose' ? <Prose block={b} />
+  : b.type === 'posts' ? <Posts block={b} />
+  : b.type === 'legal' ? <Legal block={b} />
+  : <Dashboard />)}

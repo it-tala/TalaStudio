@@ -1,0 +1,24 @@
+---
+// A column of headings, paragraphs and numbered lists (Sourcing from Indonesia).
+// An item with `when` shows only while that page is switched on (see disabledPages).
+import { pageOn } from '../../data/sections';
+import type { ProseBlock } from '../../data/pages';
+
+interface Props { block: ProseBlock }
+const { items } = Astro.props.block;
+---
+<section class="section">
+  <div class="wrap prose">
+    {items.filter((it) => !it.when || pageOn(it.when)).map((it) =>
+      it.h ? <h2>{it.h}</h2>
+      : it.ol ? <ol>{it.ol.map((li) => <li>{li}</li>)}</ol>
+      : <p set:html={it.p} />)}
+  </div>
+</section>
+
+<style>
+  .prose { max-width: 46rem; }
+  .prose h2 { font-size: 1.9rem; margin-top: 2.5rem; }
+  .prose p, .prose li { margin-top: .8rem; color: var(--text-soft); }
+  .prose ol { padding-left: 1.4rem; }
+</style>

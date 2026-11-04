@@ -1,0 +1,33 @@
+---
+// The text of a Story section: paragraphs, a pull quote, a document list or a numbered trace line
+import type { StoryCopy } from '../../data/pages';
+
+interface Props { copy: StoryCopy[] }
+const { copy } = Astro.props;
+---
+<div class="copy">
+  {copy.map((c) =>
+    typeof c === 'string' ? <p>{c}</p>
+    : 'quote' in c ? <blockquote>{c.quote}</blockquote>
+    : 'docs' in c ? <dl class="docs">{c.docs.map(([t, d]) => <div><dt>{t}</dt><dd>{d}</dd></div>)}</dl>
+    : <ol class="trace">{c.trace.map((t) => <li>{t}</li>)}</ol>)}
+</div>
+
+<style>
+  .copy { color: var(--text-soft); max-width: 34rem; }
+  .copy > * + * { margin-top: 1rem; }
+  blockquote { margin: 1.4rem 0; padding-left: 1.2rem; border-left: 2px solid var(--accent); font: 400 clamp(1.3rem, 2vw, 1.6rem) / 1.3 'Cormorant Garamond', Georgia, serif; color: var(--text); }
+
+  .docs { margin: 1.4rem 0; border-top: 1px solid var(--line); }
+  .docs div { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--line); }
+  .docs dt { color: var(--text); }
+  .docs dd { margin: 0; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; align-self: center; text-align: right; }
+
+  .trace { list-style: none; padding: 0; margin: 1.6rem 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; counter-reset: t; }
+  .trace li { counter-increment: t; padding-top: .8rem; border-top: 2px solid var(--accent); font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text); }
+  .trace li::before { content: '0' counter(t); display: block; margin-bottom: .3rem; color: var(--accent); }
+
+  @media (min-width: 700px) {
+    .trace { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>

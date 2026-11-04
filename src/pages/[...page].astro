@@ -1,0 +1,15 @@
+---
+// Every content page in src/data/pages.ts, drawn from its list of section blocks
+import Base from '../layouts/Base.astro';
+import Blocks from '../components/Blocks.astro';
+import { pages, type Page } from '../data/pages';
+
+export function getStaticPaths() {
+  return pages.map((page) => ({ params: { page: page.path }, props: { page } }));
+}
+
+const { page } = Astro.props as { page: Page };
+---
+<Base title={page.title} description={page.description}>
+  <Blocks blocks={page.blocks} />
+</Base>

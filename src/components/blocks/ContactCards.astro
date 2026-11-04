@@ -1,0 +1,40 @@
+---
+// Title on the left, contact cards on the right (Contact). Leave a person's phone empty to hide that line.
+import type { ContactBlock } from '../../data/pages';
+
+interface Props { block: ContactBlock }
+const { eyebrow, title, lede, people, cards = [] } = Astro.props.block;
+const digits = (p: string) => p.replace(/\D/g, '');
+---
+<section class="section">
+  <div class="wrap grid-2" style="align-items:start">
+    <div>
+      <p class="eyebrow">{eyebrow}</p>
+      <h1>{title}</h1>
+      <p class="lede">{lede}</p>
+    </div>
+    <div class="cards">
+      {people.map((p) => (
+        <div>
+          <p class="role">{p.role}</p>
+          <h3>{p.name}</h3>
+          <p>Email: <a href={`mailto:${p.email}`}>{p.email}</a></p>
+          {p.phone && <p>Phone / WhatsApp: <a href={`https://wa.me/${digits(p.phone)}`} target="_blank" rel="noopener">{p.phone}</a></p>}
+        </div>
+      ))}
+      {cards.map((c) => (
+        <div>
+          <h3>{c.title}</h3>
+          <p set:html={c.html} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cards { display: grid; gap: 2rem; }
+  .cards > div { border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .cards p { color: var(--text-soft); margin-top: .4rem; }
+  .cards .role { margin: 0 0 .3rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+</style>

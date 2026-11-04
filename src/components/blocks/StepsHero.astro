@@ -1,0 +1,38 @@
+---
+// Big page title with a row of numbered links to the sections below (How We Work)
+import type { StepsHeroBlock } from '../../data/pages';
+
+interface Props { block: StepsHeroBlock }
+const { eyebrow, title, intro, steps } = Astro.props.block;
+---
+<section class="hww-hero">
+  <div class="wrap">
+    <p class="eyebrow">{eyebrow}</p>
+    <div class="hero-row">
+      <h1>{title}</h1>
+      <p class="intro">{intro}</p>
+    </div>
+    <nav class="steps" aria-label="On this page">
+      {steps.map(([n, t, id]) => <a href={`#${id}`}><span>{n}</span>{t}</a>)}
+    </nav>
+  </div>
+</section>
+
+<style>
+  .hww-hero { padding-block: clamp(3rem, 8vw, 6rem) 0; }
+  .hero-row { display: grid; gap: 1.5rem; align-items: end; margin-top: 1rem; }
+  .hww-hero h1 { font-size: clamp(3rem, 8vw, 6.5rem); line-height: .95; }
+  .intro { color: var(--text-soft); max-width: 26rem; font-size: 1.05rem; }
+  .steps { display: grid; grid-template-columns: repeat(2, 1fr); margin-top: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .steps a { display: flex; gap: .7rem; padding: 1rem .5rem 1rem 0; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: var(--text-soft); }
+  .steps a:hover { color: var(--text); }
+  .steps span { color: var(--accent); }
+
+  @media (min-width: 700px) {
+    .steps { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 900px) {
+    .hero-row { grid-template-columns: 1fr auto; }
+    .steps { grid-template-columns: repeat(6, 1fr); }
+  }
+</style>
