@@ -5,6 +5,7 @@
 // to its collection page). The pictures only change with clicks, arrows and dots, never by themselves. Each change sends a
 // hero-slide event (detail.href = the collection page) that the home collections section follows.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
+// That name is a link down to the collections section, which already shows that collection's room.
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
 const { slides } = Astro.props;
 ---
@@ -26,8 +27,8 @@ const { slides } = Astro.props;
 {slides.length > 1 && (
   <button type="button" class="hero-arrow prev" aria-label="Previous picture">‹</button>
   <button type="button" class="hero-arrow next" aria-label="Next picture">›</button>
-  <div class="hero-names" aria-hidden="true">
-    {slides.map((s, i) => <span class:list={{ on: i === 0 }}>{s.name}</span>)}
+  <div class="hero-names">
+    {slides.map((s, i) => <a href="#collections" class:list={{ on: i === 0 }} aria-hidden={i === 0 ? undefined : 'true'} tabindex={i === 0 ? undefined : -1}>{s.name}</a>)}
   </div>
   <div class="hero-dots" role="group" aria-label="Hero pictures">
     {slides.map((s, i) => <button type="button" aria-label={`Show ${s.label}`} aria-current={i === 0 ? 'true' : undefined}></button>)}
@@ -39,7 +40,7 @@ const { slides } = Astro.props;
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
-    const names = [...hero.querySelectorAll<HTMLElement>('.hero-names span')];
+    const names = [...hero.querySelectorAll<HTMLElement>('.hero-names a')];
     if (slides.length < 2) return;
     // A cover is only switched in once its picture is decoded, so it never fades in half-drawn
     const ready = new Map<HTMLElement, Promise<void>>();
@@ -71,7 +72,11 @@ const { slides } = Astro.props;
         else { s.classList.remove('on'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('tabindex', '-1'); }
       });
       dots.forEach((d, j) => (j === cur ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
-      names.forEach((n, j) => n.classList.toggle('on', j === cur));
+      names.forEach((n, j) => {
+        n.classList.toggle('on', j === cur);
+        if (j === cur) { n.removeAttribute('aria-hidden'); n.removeAttribute('tabindex'); }
+        else { n.setAttribute('aria-hidden', 'true'); n.setAttribute('tabindex', '-1'); }
+      });
       // The page copy sits on the first picture only; the others carry just the name
       hero.classList.toggle('copy-off', cur !== 0);
       // The collections section further down follows: it shows the room of the collection on this picture
