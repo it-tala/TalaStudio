@@ -8,6 +8,7 @@ import { edgeBackground } from '../lib/edge';
 import sharp from 'sharp';
 import { join } from 'node:path';
 import { showSection } from '../data/sections';
+import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
@@ -234,6 +235,9 @@ const materials = [
     </div>
   </section>
   )}
+
+  <!-- 10. Closing call to action -->
+  <CtaBand />
 </Base>
 
 <script>

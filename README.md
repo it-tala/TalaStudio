@@ -121,6 +121,35 @@ Collections and products are read from Supabase **at build time**. Add or publis
 
 Images load from a public storage bucket named `public-images` (set in `src/lib/supabase.ts`).
 
+## Update from the line sheet (tracker CMS)
+
+For now the collection items come from the Google Sheet **TS LINE SHEET**, not Supabase:
+
+- [WEBSITE TRACKER tab](https://docs.google.com/spreadsheets/d/1vvQfDAKrxLSTQlbQf5lxOjKVatwMCAKuMGqARdhVai0/edit?gid=2116328639#gid=2116328639): images, codes, names, sizes, descriptions and specifications.
+- [SPEC SHEET DATA tab](https://docs.google.com/spreadsheets/d/1vvQfDAKrxLSTQlbQf5lxOjKVatwMCAKuMGqARdhVai0/edit?gid=917000001#gid=917000001): the spec sheet text (finish, hardware, notes, swatches). Change the sheet, then run the update in one of two ways:
+
+- **Ask Claude:** type `update dari sheet`. Type `cek dulu update dari sheet` to only see what would change. Claude runs the update, checks the build in a scratch copy, and reports what changed. Nothing is pushed until you say `push`.
+- **Run it yourself:** double-click `C:\PROJECT\tala-render-studio\Studio_Furniture\UPDATE_SEMUA.cmd`. To only see what would change, run `UPDATE_SEMUA.cmd --coba` from a Command Prompt in that folder. Then push.
+
+The update only touches what changed since the last run. The record of the last run is `06_SPEC_SHEET\catatan_terakhir.json`. The update never writes to the sheet and never commits or pushes. The full guide is `06_SPEC_SHEET\CARA_UPDATE.md`.
+
+| Sheet column | On the site |
+|---|---|
+| LP 1 LINK (LP HERO 1) | The collection's main image: the landing page hero, the collection card and the collection page (`public/collections/<collection>/<room>/hero.jpg`) |
+| LP 2 LINK, LP 3 LINK | `lp-2.jpg`, `lp-3.jpg` in the same folder (kept for later, not shown) |
+| IT F LINK, IT P LINK, IT DET LINK | Item photos: front, 3/4, detail (`<item>/01.jpg`, `02.jpg`, …) |
+| RM 1 LINK, RM 2 LINK | The item in a room (`<item>/room.jpg`, `room-2.jpg`) |
+| STANDARD CODE, NAME, DIMENSION, WEBSITE DESCRIPTION, WEBSITE SPECIFICATION | `src/data/tracker-items.json` (code, name, size, text) |
+| SPEC SHEET DATA tab, with WEBSITE TRACKER as fallback | `<item>/spec.jpg`, the last slide in the item viewer, plus PNG files and zips in `06_SPEC_SHEET\hasil` and `export` |
+
+Each link uses the first photo in its Google Photos album.
+
+- **Empty album or broken (404) link:** the current image stays.
+- **No product photo link:** the row is skipped.
+- **Spec sheets:** every item with a code and photos gets one. Each field comes from SPEC SHEET DATA. Empty fields there are filled from WEBSITE TRACKER: size, and WEBSITE SPECIFICATION as the notes. An item with no SPEC row, or whose SPEC text belongs to another item (reported as `[ISI]`), uses the tracker data only. Empty photo slots and empty rows are left off the image.
+- **Clashes:** the run stops without writing anything if two rows would become the same item, or if a code or description names another collection.
+- **Item folders no longer in the sheet:** only reported. To delete them, run `python isi_item_website.py --hapus`.
+
 ## Deploy (Cloudflare Pages)
 
 - Build command: `npm run build`

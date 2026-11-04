@@ -8,7 +8,7 @@ import { edgeBackground } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
-// link: "View the collection" in the heading row. only: show just these items (by name); the rest stay on the collection page.
+// link: "View the collection" under the cards. only: show just these items (by name); the rest stay on the collection page.
 interface Props { collection: Collection; link?: boolean; only?: string[] }
 const { collection, link = true, only } = Astro.props;
 const woods = collection.woods ?? [];
@@ -46,7 +46,6 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
   <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name} data-bgs={JSON.stringify(squareBg)}>
     <div class="tiles-head">
       <p class="eyebrow" id={`${id}-title`} style="margin:0">{collection.name} collection</p>
-      {link && <a class="link" style="margin:0" href={`/collections/${collection.slug}`}>View the collection</a>}
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
@@ -74,6 +73,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
         </li>
       ))}
     </ul>
+    {link && <div class="cat-more"><a class="link" style="margin:0" href={`/collections/${collection.slug}`}>View the collection</a></div>}
   </section>
 )}
 
@@ -140,6 +140,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
   .sw:focus-visible { outline: 1px solid var(--text); }
   .cat-name { margin-top: 14px; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; line-height: 1.15; }
   .cat-size { margin-top: 4px; font-size: 11px; letter-spacing: .08em; color: var(--text-soft); }
+  .cat-more { margin-top: 64px; padding-inline: var(--cat-edge); text-align: center; }
   .cat-views { margin-top: 6px; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--text-soft); }
   @media (max-width: 1000px) { .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 600px) { .cat-grid { grid-template-columns: 1fr; } }

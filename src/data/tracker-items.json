@@ -1,15 +1,16 @@
 [
  {
-  "code": "DH-101",
+  "code": "DH-102",
   "collection": "Doheny",
   "room": "bedroom",
   "name": "Queen Bed",
   "folder": "doheny/bedroom/queen-bed",
-  "description": "Queen bed, timber bed box with upholstered headboard",
+  "description": "Doheny Queen Bed with an upholstered headboard and a timber bed box.",
   "specification": [
-   "Headboard: Mindy solid timber, FR foam, fabric",
-   "Bed box: solid timber, plywood, metal deck with steamed beechwood slats",
-   "Packing: to meet ISTA 1A"
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
   ],
   "size": [
    1600,
@@ -18,16 +19,17 @@
   ]
  },
  {
-  "code": "DH-102",
+  "code": "DH-101",
   "collection": "Doheny",
   "room": "bedroom",
   "name": "King Bed",
   "folder": "doheny/bedroom/king-bed",
-  "description": "King bed timber bed box with upholstered headboard",
+  "description": "Doheny King Bed with an upholstered headboard and a timber bed box.",
   "specification": [
-   "Headboard: Mindy solid timber, FR foam, fabric",
-   "Bed box: solid timber, plywood, metal deck with steamed beechwood slats",
-   "Packing: to meet ISTA 1A"
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
   ],
   "size": null
  },
@@ -37,12 +39,14 @@
   "room": "bedroom",
   "name": "Night Table",
   "folder": "doheny/bedroom/night-table",
-  "description": "Night table mindy solids and veneers brushed bronze pull",
+  "description": "Doheny Night Table in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
   "specification": [
-   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
-   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
-   "Pull: hand cast brass, teak and leather cord",
-   "Packing: to meet ISTA 1A standard"
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: aluminum, brushed bronze finish"
   ],
   "size": [
    450,
@@ -56,12 +60,14 @@
   "room": "bedroom",
   "name": "6 Drawer Dresser",
   "folder": "doheny/bedroom/6-drawer-dresser",
-  "description": "6 drawer dresser mindy solids and veneers brushed bronze pull",
+  "description": "Doheny 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
   "specification": [
-   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
-   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
-   "Pull: hand cast brass, teak and leather cord",
-   "Packing: to meet ISTA 1A standard"
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: aluminum, brushed bronze finish"
   ],
   "size": [
    1400,
@@ -75,12 +81,14 @@
   "room": "bedroom",
   "name": "Tall Boy",
   "folder": "doheny/bedroom/tall-boy",
-  "description": "Tall boy 4 drawer dresser mountain oak (mindy) solids and veneers brushed bronze pull",
+  "description": "Doheny Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
   "specification": [
-   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
-   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
-   "Pull: hand cast brass, teak and leather cord",
-   "Packing: to meet ISTA 1A standard"
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: aluminum, brushed bronze finish"
   ],
   "size": [
    950,
@@ -94,9 +102,12 @@
   "room": "bedroom",
   "name": "Mirror",
   "folder": "doheny/bedroom/mirror",
-  "description": "Mirror, timber frame",
+  "description": "Doheny Mirror with a solid mindi/mahogany frame.",
   "specification": [
-   "Solid timber frame, 5mm mirror glass with safety film backing, 6M plywood back, french cleats"
+   "Frame: solid mindi/mahogany",
+   "Glass: 5 mm mirror with safety film backing",
+   "Back: 6 mm plywood",
+   "Hanging: French cleat"
   ],
   "size": [
    1200,
@@ -105,19 +116,19 @@
   ]
  },
  {
-  "code": "DH-202",
+  "code": "DH-201",
   "collection": "Doheny",
   "room": "living",
   "name": "7 Foot Sofa",
   "folder": "doheny/living/7-foot-sofa",
-  "description": "Sofa, timber arms upholstered in boucle fabric",
+  "description": "Doheny Sofa with timber arms, upholstered in bouclé.",
   "specification": [
-   "Frame: plywood and hardwood",
-   "Foam: meets cal TB-117/en 1021",
-   "Fabric: see fabric options"
+   "Frame: plywood and hardwood, timber arms",
+   "Foam: HR foam meeting CAL TB-117 and EN 1021",
+   "Fabric: shown in bouclé, see fabric options"
   ],
   "size": [
-   1820,
+   2130,
    950,
    900
   ]
@@ -128,11 +139,11 @@
   "room": "living",
   "name": "Arm Chair",
   "folder": "doheny/living/arm-chair",
-  "description": "Arm chair, timber arms upholstered in boucle fabric",
+  "description": "Doheny Armchair with timber arms, upholstered in bouclé.",
   "specification": [
-   "Frame: plywood and hardwood",
-   "Foam: meets cal TB-117/en 1021",
-   "Fabric: see fabric options"
+   "Frame: plywood and hardwood, timber arms",
+   "Foam: HR foam meeting CAL TB-117 and EN 1021",
+   "Fabric: shown in bouclé, see fabric options"
   ],
   "size": [
    900,
@@ -146,11 +157,12 @@
   "room": "living",
   "name": "Side Table",
   "folder": "doheny/living/side-table",
-  "description": "Side table, solid mindy with textured tempered glass top",
+  "description": "Doheny Side Table in solid mindi/mahogany with a textured tempered glass top.",
   "specification": [
-   "Body: Mindy solids finished in PU sealer/hard NC topcoat",
-   "Packing: to meet ISTA 1A standard",
-   "Glass top: textured 9mm glass, tempered"
+   "Body: solid mindi/mahogany",
+   "Top: 9 mm textured tempered glass",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
   ],
   "size": [
    500,
@@ -164,11 +176,12 @@
   "room": "living",
   "name": "Coffee Table",
   "folder": "doheny/living/coffee-table",
-  "description": "Coffee table, solid mindy with textured tempered glass top",
+  "description": "Doheny Coffee Table in solid mindi/mahogany with a textured tempered glass top.",
   "specification": [
-   "Body: Mindy solids finished in PU sealer/hard NC topcoat",
-   "Packing: to meet ISTA 1A standard",
-   "Glass top: textured 9mm glass, tempered"
+   "Body: solid mindi/mahogany",
+   "Top: 9 mm textured tempered glass",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
   ],
   "size": [
    1250,
@@ -177,17 +190,57 @@
   ]
  },
  {
+  "code": "ZA-213",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "TV Console",
+  "folder": "doheny/living/tv-console",
+  "description": "Zuma TV Console, a low console in solid mindi/mahogany with a veneered top.",
+  "specification": [
+   "Body: solid mindi/mahogany",
+   "Top: veneer over panel",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
+  ],
+  "size": [
+   1250,
+   400,
+   400
+  ]
+ },
+ {
+  "code": "ZA-211",
+  "collection": "Doheny",
+  "room": "living",
+  "name": "Console Table",
+  "folder": "doheny/living/console-table-za-211",
+  "description": "Zuma Console Table in solid mindi/mahogany with a veneered top.",
+  "specification": [
+   "Body: solid mindi/mahogany",
+   "Top: veneer over panel",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
+  ],
+  "size": [
+   1250,
+   400,
+   800
+  ]
+ },
+ {
   "code": "DH-211",
   "collection": "Doheny",
   "room": "living",
   "name": "Console Table",
   "folder": "doheny/living/console-table",
-  "description": "Desk, solid mindy and veneers, bronze handle, 2 drawers",
+  "description": "Doheny Console Table, a two-drawer console desk in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
   "specification": [
-   "Body: Mindy solids and veneers. Panels MDF/LVL/plywood to meet E0/TSCA IV standards, finished in PU sealer/hard NC topcoat",
-   "Drawer boxes: sides in 12mm LVL/plywood, base in 6mm LVL/plywood, soft close ballbearing sidemount glides DTC GG10",
-   "Pull: hand cast brass, teak and leather cord",
-   "Packing: to meet ISTA 1A standard"
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: aluminum, brushed bronze finish"
   ],
   "size": [
    1400,
@@ -196,13 +249,19 @@
   ]
  },
  {
-  "code": "CA-101",
+  "code": "CA-102",
   "collection": "Calabasas",
   "room": "bedroom",
   "name": "Queen Bed",
   "folder": "calabasas/bedroom/queen-bed",
-  "description": "Queen bed, mindy solids and veneers, upholstered headboard, leather cord wrapped top rail",
-  "specification": null,
+  "description": "Calabasas Queen Bed in mindi/mahogany solids and veneers, with an upholstered headboard and a leather cord-wrapped top rail.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Top rail: wrapped in tan leather cord",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1965,
    2080,
@@ -210,13 +269,19 @@
   ]
  },
  {
-  "code": "CA-102",
+  "code": "CA-101",
   "collection": "Calabasas",
   "room": "bedroom",
   "name": "King Bed",
   "folder": "calabasas/bedroom/king-bed",
-  "description": "King bed, mindy solids and veneers, upholstered headboard, leather cord wrapped top rail",
-  "specification": null,
+  "description": "Calabasas King Bed in mindi/mahogany solids and veneers, with an upholstered headboard and a leather cord-wrapped top rail.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Top rail: wrapped in tan leather cord",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": null
  },
  {
@@ -225,8 +290,16 @@
   "room": "bedroom",
   "name": "Night Table",
   "folder": "calabasas/bedroom/night-table",
-  "description": "Night table, 2 drawer with hand cast brass, leather and teak handle",
-  "specification": null,
+  "description": "Calabasas Night Table in mindi/mahogany solids and veneers, with two drawers and hand-cast brass, teak and leather cord pulls.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers, 20 mm case panels with softly rounded edges",
+   "Top: recessed tray with raised side and back rails",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: 150 mm hand cast brass with tan leather cord wrap and teak end rings"
+  ],
   "size": [
    500,
    450,
@@ -239,8 +312,15 @@
   "room": "bedroom",
   "name": "6 Drawer Dresser",
   "folder": "calabasas/bedroom/6-drawer-dresser",
-  "description": "6 drawer dresser with hand cast brass, leather and teak handle",
-  "specification": null,
+  "description": "Calabasas 6-Drawer Dresser in mindi/mahogany solids and veneers, with hand-cast brass, teak and leather cord pulls.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: hand cast brass with tan leather cord wrap and teak end rings"
+  ],
   "size": [
    1190,
    560,
@@ -253,8 +333,15 @@
   "room": "bedroom",
   "name": "Tall Boy",
   "folder": "calabasas/bedroom/tall-boy",
-  "description": "Tall boy 6 drawer with hand cast brass, leather and teak handle",
-  "specification": null,
+  "description": "Calabasas Tall Boy, a chest of drawers in mindi/mahogany solids and veneers, with hand-cast brass, teak and leather cord pulls.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: hand cast brass with tan leather cord wrap and teak end rings"
+  ],
   "size": [
    600,
    500,
@@ -267,8 +354,13 @@
   "room": "bedroom",
   "name": "Mirror",
   "folder": "calabasas/bedroom/mirror",
-  "description": "Mirror, mindy solids with leather cord wrap detail",
-  "specification": null,
+  "description": "Calabasas Mirror with a solid mindi/mahogany frame and leather cord-wrapped detail.",
+  "specification": [
+   "Frame: solid mindi/mahogany with tan leather cord wrap",
+   "Glass: 5 mm mirror with safety film backing",
+   "Back: 6 mm plywood",
+   "Hanging: French cleat"
+  ],
   "size": [
    1000,
    50,
@@ -281,8 +373,12 @@
   "room": "living",
   "name": "Sofa",
   "folder": "calabasas/living/sofa",
-  "description": "7 foot sofa in boucle with timber base",
-  "specification": null,
+  "description": "Calabasas Sofa on a timber base, upholstered in bouclé.",
+  "specification": [
+   "Frame: plywood and hardwood, timber base",
+   "Foam: HR foam meeting CAL TB-117 and EN 1021",
+   "Fabric: shown in bouclé, see fabric options"
+  ],
   "size": [
    2000,
    800,
@@ -295,8 +391,12 @@
   "room": "living",
   "name": "Arm Chair",
   "folder": "calabasas/living/arm-chair",
-  "description": "Arm chair in boucle with timber base",
-  "specification": null,
+  "description": "Calabasas Armchair on a timber base, upholstered in bouclé.",
+  "specification": [
+   "Frame: plywood and hardwood, timber base",
+   "Foam: HR foam meeting CAL TB-117 and EN 1021",
+   "Fabric: shown in bouclé, see fabric options"
+  ],
   "size": [
    900,
    800,
@@ -309,8 +409,14 @@
   "room": "living",
   "name": "Side Table",
   "folder": "calabasas/living/side-table",
-  "description": "Side table, mindy solids and veneers with natural rattan webbing shelf",
-  "specification": null,
+  "description": "Calabasas Side Table in mindi/mahogany solids and veneers, with a woven natural rattan lower shelf.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Shelf: woven natural rattan",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": null
  },
  {
@@ -319,8 +425,14 @@
   "room": "living",
   "name": "Coffee Table",
   "folder": "calabasas/living/coffee-table",
-  "description": "Side table, mindy solids and veneers with natural rattan webbing shelf",
-  "specification": null,
+  "description": "Calabasas Coffee Table in mindi/mahogany solids and veneers, with a woven natural rattan lower shelf.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Shelf: woven natural rattan",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1300,
    600,
@@ -328,13 +440,18 @@
   ]
  },
  {
-  "code": "CA-211",
+  "code": "CA-213",
   "collection": "Calabasas",
   "room": "living",
   "name": "TV Console",
   "folder": "calabasas/living/tv-console",
-  "description": null,
-  "specification": null,
+  "description": "Calabasas TV Console in mindi/mahogany solids and veneers.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1400,
    460,
@@ -342,13 +459,18 @@
   ]
  },
  {
-  "code": null,
+  "code": "CA-215",
   "collection": "Calabasas",
   "room": "living",
   "name": "Open Cabinet",
   "folder": "calabasas/living/open-cabinet",
-  "description": null,
-  "specification": null,
+  "description": "Calabasas Open Cabinet, an open armoire in mindi/mahogany solids and veneers.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1215,
    460,
@@ -356,13 +478,18 @@
   ]
  },
  {
-  "code": "PA-101",
+  "code": "PA-102",
   "collection": "Palisades",
   "room": "bedroom",
   "name": "Queen Bed",
   "folder": "palisades/bedroom/queen-bed",
-  "description": null,
-  "specification": null,
+  "description": "Palisades Queen Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1710,
    2130,
@@ -370,13 +497,18 @@
   ]
  },
  {
-  "code": "PA-102",
+  "code": "PA-101",
   "collection": "Palisades",
   "room": "bedroom",
   "name": "King Bed",
   "folder": "palisades/bedroom/king-bed",
-  "description": null,
-  "specification": null,
+  "description": "Palisades King Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": null
  },
  {
@@ -385,8 +517,15 @@
   "room": "bedroom",
   "name": "Night Table",
   "folder": "palisades/bedroom/night-table",
-  "description": null,
-  "specification": null,
+  "description": "Palisades Night Table in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: aluminum, brushed bronze finish"
+  ],
   "size": [
    450,
    450,
@@ -399,8 +538,15 @@
   "room": "bedroom",
   "name": "6 Drawer Dresser",
   "folder": "palisades/bedroom/6-drawer-dresser",
-  "description": null,
-  "specification": null,
+  "description": "Palisades 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: aluminum, brushed bronze finish"
+  ],
   "size": [
    1485,
    470,
@@ -413,8 +559,15 @@
   "room": "bedroom",
   "name": "Tall Boy",
   "folder": "palisades/bedroom/tall-boy",
-  "description": null,
-  "specification": null,
+  "description": "Palisades Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: aluminum, brushed bronze finish"
+  ],
   "size": [
    495,
    450,
@@ -427,8 +580,13 @@
   "room": "bedroom",
   "name": "Mirror",
   "folder": "palisades/bedroom/mirror",
-  "description": null,
-  "specification": null,
+  "description": "Palisades Mirror with a solid mindi/mahogany frame.",
+  "specification": [
+   "Frame: solid mindi/mahogany",
+   "Glass: 5 mm mirror with safety film backing",
+   "Back: 6 mm plywood",
+   "Hanging: French cleat"
+  ],
   "size": [
    1000,
    25,
@@ -436,13 +594,18 @@
   ]
  },
  {
-  "code": "BW-101",
+  "code": "BW-102",
   "collection": "Beechwood",
   "room": "bedroom",
   "name": "Queen Bed",
   "folder": "beechwood/bedroom/queen-bed",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Queen Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1740,
    2090,
@@ -450,13 +613,18 @@
   ]
  },
  {
-  "code": "BW-102",
+  "code": "BW-101",
   "collection": "Beechwood",
   "room": "bedroom",
   "name": "King Bed",
   "folder": "beechwood/bedroom/king-bed",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood King Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": null
  },
  {
@@ -465,8 +633,15 @@
   "room": "bedroom",
   "name": "Night Table",
   "folder": "beechwood/bedroom/night-table",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Night Table in mindi/mahogany solids and veneers, with a milled drawer pull and johar wood accent.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: milled handle with johar wood accent"
+  ],
   "size": [
    550,
    500,
@@ -479,8 +654,15 @@
   "room": "bedroom",
   "name": "6 Drawer Dresser",
   "folder": "beechwood/bedroom/6-drawer-dresser",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood 6-Drawer Dresser in mindi/mahogany solids and veneers, with milled pulls and johar wood accents.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: milled handles with johar wood accent"
+  ],
   "size": [
    1185,
    600,
@@ -493,8 +675,15 @@
   "room": "bedroom",
   "name": "Tall Boy",
   "folder": "beechwood/bedroom/tall-boy",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, with milled pulls and johar wood accents.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: milled handles with johar wood accent"
+  ],
   "size": [
    600,
    500,
@@ -507,8 +696,13 @@
   "room": "bedroom",
   "name": "Mirror",
   "folder": "beechwood/bedroom/mirror",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Mirror with a solid mindi/mahogany frame.",
+  "specification": [
+   "Frame: solid mindi/mahogany",
+   "Glass: 5 mm mirror with safety film backing",
+   "Back: 6 mm plywood",
+   "Hanging: French cleat"
+  ],
   "size": [
    900,
    80,
@@ -521,8 +715,14 @@
   "room": "dining",
   "name": "Dining Table",
   "folder": "beechwood/dining/dining-table",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Dining Table, a rectangular table in mindi/mahogany solids and veneers.",
+  "specification": [
+   "Top: mindi/mahogany solids and veneers",
+   "Base: solid mindi/mahogany",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    2100,
    800,
@@ -530,13 +730,19 @@
   ]
  },
  {
-  "code": "BW-310",
+  "code": "BW-319",
   "collection": "Beechwood",
   "room": "dining",
   "name": "Buffet",
   "folder": "beechwood/dining/buffet",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Buffet in mindi/mahogany solids and veneers, with four doors inset with rattan webbing.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Doors: solid timber with rattan webbing inserts, soft close concealed hinges",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1800,
    600,
@@ -544,13 +750,18 @@
   ]
  },
  {
-  "code": null,
+  "code": "BW-901",
   "collection": "Beechwood",
   "room": "dining",
   "name": "Mirror",
   "folder": "beechwood/dining/mirror",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Dining Mirror with a solid mindi/mahogany frame.",
+  "specification": [
+   "Frame: solid mindi/mahogany",
+   "Glass: 5 mm mirror with safety film backing",
+   "Back: 6 mm plywood",
+   "Hanging: French cleat"
+  ],
   "size": [
    1200,
    50,
@@ -563,8 +774,11 @@
   "room": "dining",
   "name": "Dining Chair",
   "folder": "beechwood/dining/dining-chair",
-  "description": null,
-  "specification": null,
+  "description": "Beechwood Dining Chair, a low-arm chair in solid mindi/mahogany with a woven loom seat.",
+  "specification": [
+   "Frame: solid mindi/mahogany, low arms",
+   "Seat: woven loom"
+  ],
   "size": [
    550,
    620,
@@ -582,13 +796,18 @@
   "size": null
  },
  {
-  "code": "ZA-101",
+  "code": "ZA-102",
   "collection": "Zuma",
   "room": "bedroom",
   "name": "Queen Bed",
   "folder": "zuma/bedroom/queen-bed",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Queen Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": [
    1700,
    2115,
@@ -596,13 +815,18 @@
   ]
  },
  {
-  "code": "ZA-102",
+  "code": "ZA-101",
   "collection": "Zuma",
   "room": "bedroom",
   "name": "King Bed",
   "folder": "zuma/bedroom/king-bed",
-  "description": null,
-  "specification": null,
+  "description": "Zuma King Bed with an upholstered headboard and a timber bed box.",
+  "specification": [
+   "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+   "Bed box: solid timber and plywood",
+   "Deck: metal with steamed beech slats",
+   "Packing: to ISTA 1A standard"
+  ],
   "size": null
  },
  {
@@ -611,8 +835,15 @@
   "room": "bedroom",
   "name": "Night Table",
   "folder": "zuma/bedroom/night-table",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Night Table in mindi/mahogany solids and veneers, finished with a hand-cast brass pull in antique brass.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pull: hand cast brass, antique brass finish"
+  ],
   "size": [
    650,
    450,
@@ -625,8 +856,15 @@
   "room": "bedroom",
   "name": "6 Drawer Dresser",
   "folder": "zuma/bedroom/6-drawer-dresser",
-  "description": null,
-  "specification": null,
+  "description": "Zuma 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with hand-cast brass pulls in antique brass.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: hand cast brass, antique brass finish"
+  ],
   "size": [
    1505,
    550,
@@ -639,8 +877,15 @@
   "room": "bedroom",
   "name": "Tall Boy",
   "folder": "zuma/bedroom/tall-boy",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Tall Boy, a five-drawer chest in mindi/mahogany solids and veneers, finished with hand-cast brass pulls in antique brass.",
+  "specification": [
+   "Body: mindi/mahogany solids and veneers",
+   "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+   "Finish: PU sealer with hard NC topcoat",
+   "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+   "Packing: to ISTA 1A standard",
+   "Pulls: hand cast brass, antique brass finish"
+  ],
   "size": [
    800,
    500,
@@ -653,8 +898,11 @@
   "room": "bedroom",
   "name": "Mirror",
   "folder": "zuma/bedroom/mirror",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Mirror in Venetian antique mirror glass.",
+  "specification": [
+   "Glass: Venetian antique mirror",
+   "Back: plywood"
+  ],
   "size": [
    1000,
    35,
@@ -728,35 +976,7 @@
   "size": null
  },
  {
-  "code": "ZA-213",
-  "collection": "Zuma",
-  "room": "living",
-  "name": "TV Unit",
-  "folder": "zuma/living/tv-unit",
-  "description": null,
-  "specification": null,
-  "size": [
-   1250,
-   400,
-   400
-  ]
- },
- {
-  "code": "ZA-211",
-  "collection": "Zuma",
-  "room": "living",
-  "name": "Console Table",
-  "folder": "zuma/living/console-table",
-  "description": null,
-  "specification": null,
-  "size": [
-   1250,
-   400,
-   800
-  ]
- },
- {
-  "code": "ZA-311",
+  "code": "ZA-301",
   "collection": "Zuma",
   "room": "dining",
   "name": "Dining Table",
@@ -770,7 +990,7 @@
   ]
  },
  {
-  "code": "ZA-310",
+  "code": "ZA-319",
   "collection": "Zuma",
   "room": "dining",
   "name": "Buffet",
@@ -784,13 +1004,16 @@
   ]
  },
  {
-  "code": "ZA-106",
+  "code": "ZA-901",
   "collection": "Zuma",
   "room": "dining",
   "name": "Mirror",
   "folder": "zuma/dining/mirror",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Dining Mirror in Venetian antique mirror glass.",
+  "specification": [
+   "Glass: Venetian antique mirror",
+   "Back: plywood"
+  ],
   "size": [
    1000,
    35,
@@ -798,13 +1021,19 @@
   ]
  },
  {
-  "code": "ZA-315",
+  "code": "ZA-316",
   "collection": "Zuma",
   "room": "dining",
   "name": "Dining Chair",
   "folder": "zuma/dining/dining-chair",
-  "description": null,
-  "specification": null,
+  "description": "Zuma Dining Chair, a low-arm chair in solid mindi/mahogany with an upholstered seat and a woven loom back.",
+  "specification": [
+   "Frame: solid mindi/mahogany, low arms",
+   "Seat: upholstered",
+   "Back: woven loom",
+   "Foam: meets CAL TB-117 and EN 1021",
+   "Fabric: see fabric options"
+  ],
   "size": [
    525,
    580,

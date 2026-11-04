@@ -1,14 +1,19 @@
 ---
-interface Props { title?: string; text?: string }
-const { title = 'See the full range.', text = 'Tell us who you are and we will send the catalog.' } = Astro.props;
+interface Props { title?: string; text?: string; href?: string; label?: string }
+const {
+  title = 'Let’s build your next range.',
+  text = 'Tell us what you sell and where. We will come back with the pieces, finishes and a container plan that fit.',
+  href = '/contact',
+  label = 'Start a conversation',
+} = Astro.props;
 import { pageOn } from '../data/sections';
 ---
-{pageOn('/request-catalog') && (
+{pageOn(href) && (
 <section class="section alt">
   <div class="wrap" style="text-align:center">
     <h2>{title}</h2>
     <p class="lede" style="margin-inline:auto">{text}</p>
-    <a class="btn" href="/request-catalog" style="margin-top:2rem">Request catalog</a>
+    <a class="btn" href={href} style="margin-top:2rem">{label}</a>
   </div>
 </section>
 )}

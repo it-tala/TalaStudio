@@ -186,15 +186,15 @@
 
 
 
-/* Collections page: one slide per collection, cover as background, dark gradient from the text side, minimal arrows */
+/* Collections page: one slide per collection, cover as background, text in the bottom-right corner over a light shade, minimal arrows */
 .room-head { margin-bottom: 20px; }
 .cslider { position: relative; }
 .cs-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .cs-track::-webkit-scrollbar { display: none; }
-.cs-slide { position: relative; flex: 0 0 100%; scroll-snap-align: start; min-height: clamp(460px, 78svh, 760px); display: flex; justify-content: flex-end; align-items: stretch; text-decoration: none; color: var(--on-dark); background: var(--bg-dark); overflow: hidden; --text-soft: color-mix(in srgb, var(--on-dark) 70%, transparent); --line: rgba(236, 229, 217, .2); }
+.cs-slide { position: relative; flex: 0 0 100%; scroll-snap-align: start; min-height: clamp(460px, 78svh, 760px); display: flex; justify-content: flex-end; align-items: flex-end; text-decoration: none; color: var(--on-dark); background: var(--bg-dark); overflow: hidden; --text-soft: color-mix(in srgb, var(--on-dark) 70%, transparent); --line: rgba(236, 229, 217, .2); }
 .cs-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; user-select: none; }
-.cs-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, var(--bg-dark) 0%, rgba(38, 34, 30, .92) 30%, rgba(38, 34, 30, .5) 52%, transparent 75%); pointer-events: none; }
-.cs-body { position: relative; z-index: 1; width: min(46%, 640px); padding: clamp(32px, 5vw, 80px) clamp(56px, 7vw, 120px) clamp(32px, 5vw, 80px) 0; display: flex; flex-direction: column; justify-content: center; }
+.cs-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to left, rgba(38, 34, 30, .88) 0%, rgba(38, 34, 30, .68) 25%, rgba(38, 34, 30, .3) 44%, transparent 62%); pointer-events: none; }
+.cs-body { position: relative; z-index: 1; width: min(40%, 560px); padding: 0 clamp(56px, 6vw, 96px) clamp(32px, 4vw, 56px) 0; display: flex; flex-direction: column; justify-content: flex-end; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
 .cs-body small { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--text-soft); }
 .cs-body h3 { font-size: clamp(28px, 3vw, 44px); margin: 8px 0 12px; }
 .cs-body p { color: var(--text-soft); font-size: 16px; line-height: 1.65; max-width: 46ch; }
@@ -219,8 +219,10 @@
 .cat-track::-webkit-scrollbar { display: none; }
 .cat-track:focus-visible { outline: 1px solid rgba(243, 236, 226, .4); outline-offset: -1px; }
 .cat-slide { flex: 0 0 100%; display: grid; place-items: center; min-height: 0; padding: 24px 88px 0; scroll-snap-align: start; container-type: size; }
-/* Each photo sits whole in a 1:1 square, as large as the slide allows */
-.cat-sq { width: min(100cqw, 100cqh); aspect-ratio: 1; display: grid; place-items: center; overflow: hidden; background: var(--bg-alt); }
+/* Each photo sits whole in a 16:9 frame, as large as the slide allows */
+.cat-sq { width: min(100cqw, 100cqh * 16 / 9); aspect-ratio: 16 / 9; display: grid; place-items: center; overflow: hidden; background: var(--bg-alt); }
+/* The spec sheet is a 1:1 page, so its frame is square */
+.cat-sq.cat-spec { width: min(100cqw, 100cqh); aspect-ratio: 1; }
 /* Pinned to the square: a plain height: 100% does not hold in the grid, and a tall photo would spill out and be cut */
 .cat-sq img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; user-select: none; }
 .cat-cap { display: flex; justify-content: center; align-items: baseline; gap: 14px; padding: 16px 20px 12px; }

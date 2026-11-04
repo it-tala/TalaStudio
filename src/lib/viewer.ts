@@ -98,7 +98,8 @@ export function openViewer(opts: ViewerOptions) {
 
   track.replaceChildren(...opts.slides.map((s) => {
     const slide = el('div', { className: 'cat-slide' });
-    const square = el('div', { className: 'cat-sq' });
+    // The spec sheet (spec.jpg, see collections.ts) is a 1:1 page: it gets a square frame, not the 16:9 photo frame
+    const square = el('div', { className: /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
     if (s.bg) square.style.background = s.bg;
     square.append(el('img', { src: s.src, alt: s.alt }));
     const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back' });
