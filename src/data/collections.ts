@@ -6,8 +6,9 @@
 //                                                                    card when none of the room's items has a room shot
 //   public/collections/<collection>/<room>/<item>/01.jpg, 02.jpg …  the item's photos in order; 01 is the front view
 //                                                                    (the catalog card), the rest follow in the viewer
-//   public/collections/<collection>/<room>/<item>/room.jpg          the item in a room (card slider on the landing page,
-//                                                                    left out of the catalog); room-2.jpg for a second one
+//   public/collections/<collection>/<room>/<item>/room.jpg          ROOM HERO 1 in the tracker: the item in a room, its
+//                                                                    picture in the landing page card slider (left out of
+//                                                                    the catalog); room-2.jpg = ROOM HERO 2 (not shown)
 //   public/collections/<collection>/<room>/<item>/spec.jpg          the spec sheet, always the last picture in the viewer
 // <collection> = the collection name in lower case with dashes (silver-lake), <room> = bedroom | living | dining (| other),
 // <item> = the item name the same way (night-table, 6-drawer-dresser, tv-unit). Any of .jpg / .jpeg / .png / .webp / .svg.

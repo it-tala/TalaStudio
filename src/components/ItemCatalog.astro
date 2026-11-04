@@ -4,7 +4,7 @@
 // Pictures without a caption are left out.
 // Wood (and, for upholstered items, fabric) swatches under the picture switch the item to the photos of that finish.
 import type { Collection } from '../lib/supabase';
-import { edgeBackground, cardFit } from '../lib/edge';
+import { edgeBackground, cardFit, photoRatio } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
@@ -16,6 +16,15 @@ const woods = collection.woods ?? [];
 const shownOf = (list: string[]) => list.find((x) => collection.shown?.includes(x)) ?? list[0];
 const shownWood = shownOf(woods);
 // An item with nothing but its spec sheet (no photo yet) stays off the catalog: the spec sheet is never the card picture
+// How much of the 4:3 card each empty band takes (in %), once the photo is shown whole (and zoomed by cardFit)
+const bandOf = (ratio: number, scale = 1) => {
+  if (!ratio) return { wide: false, tall: false, size: 0 };
+  const h = (4 / 3 / ratio) * scale; // photo height as a share of the card's
+  const w = ratio / (4 / 3); // photo width as a share of the card's
+  if (h < 0.99) return { wide: true, tall: false, size: +((1 - h) * 50).toFixed(2) };
+  if (w < 0.99) return { wide: false, tall: true, size: +((1 - w) * 50).toFixed(2) };
+  return { wide: false, tall: false, size: 0 };
+};
 const items = await Promise.all(groupItems(collection).filter((it) => (!only || only.includes(it.name)) && it.pics.some((p) => !p.spec)).map(async ({ name, folder, pics: grouped }) => {
   // Room shots (covers) belong to the card slider, not here, unless an item has nothing else. The card and viewer open on the front view.
   const all = grouped.some((p) => !p.cover) ? grouped.filter((p) => !p.cover) : grouped;
@@ -32,7 +41,7 @@ const items = await Promise.all(groupItems(collection).filter((it) => (!only || 
     const found = w === shownWood && f === shownFabric ? srcs : pics.flatMap((p) => p.finishes?.[key] ?? (f === shownFabric ? p.finishes?.[wk] : undefined) ?? []);
     if (found.length) photos[key] = found;
   }));
-  return { name, folder, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]), fit: await cardFit(srcs[0]) };
+  return { name, folder, srcs, fabrics, shownFabric, photos, bg: await edgeBackground(srcs[0]), fit: await cardFit(srcs[0]), band: bandOf(await photoRatio(srcs[0]), (await cardFit(srcs[0]))?.scale) };
 }));
 // The viewer shows every photo whole in a square (1:1); the space around it takes the photo's own edge colour
 const viewerSrcs = [...new Set(items.flatMap((it) => Object.values(it.photos).flat().concat(it.srcs)))];
@@ -46,14 +55,14 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
 {items.length > 0 && (
   <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name} data-bgs={JSON.stringify(squareBg)}>
     <div class="tiles-head">
-      <p class="eyebrow" id={`${id}-title`} style="margin:0">{collection.name} collection</p>
+      <p class="eyebrow" id={`${id}-title`} style="margin:0">{collection.name}{collection.room !== 'other' && ` ${collection.room[0].toUpperCase()}${collection.room.slice(1)}`} collection</p>
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
         <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
           <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
-            <span class="frame" style={it.bg ? `background:${it.bg}` : undefined}>
-              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% 0` : undefined} />
+            <span class:list={['frame', 'edge-fill', { 'fill-wide': it.band.wide, 'fill-tall': it.band.tall }]} style={[it.bg && `background:${it.bg}`, `--fill:url(${it.srcs[0]})`, `--band:${it.band.size}%`, it.fit && `--fs:${it.fit.scale};--fx:${it.fit.shift}`].filter(Boolean).join(';')}>
+              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% ${it.fit.shiftY}%` : undefined} />
             </span>
           </button>
           {woods.length > 0 && (
@@ -98,6 +107,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
         sw.parentElement!.querySelectorAll('.sw').forEach((o) => o.setAttribute('aria-pressed', String(o === sw)));
         const f = finish(li);
         img.src = f.srcs[0];
+        img.parentElement!.style.setProperty('--fill', `url(${f.srcs[0]})`);
         img.alt = `${sec.dataset.collection} ${li.dataset.name}, ${f.labels.join(', ')}`;
         views.textContent = [...f.labels, f.soon ? 'photo soon' : li.dataset.code].filter(Boolean).join(' · ');
       }));

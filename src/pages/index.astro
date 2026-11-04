@@ -49,8 +49,8 @@ const collections = [...new Set(all.map((c) => c.name))]
 const siblings = (c: (typeof all)[number]) => collections.filter((x) => x.name === c.name);
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath. The frame is 16:9 like
 // the room shots; a taller shot (the mirror's) is shown whole, on its own edge colour, instead of being cut.
-// No picture twice in one room: pieces often share a room shot (one album link in the tracker), so each piece takes its
-// first picture (room shots, then its own photos) whose file is not already on the card; the spec sheet never.
+// Each piece's picture is its ROOM HERO 1 shot from the tracker (room.jpg; ROOM HERO 2 is room-2.jpg and stays off).
+// No picture twice in one room: pieces often share a room shot (one album link), so a shot already on the card is skipped.
 const fileHash = (src: string) => {
   try { return createHash('sha1').update(readFileSync(join(process.cwd(), 'public', src))).digest('hex'); } catch { return src; }
 };
@@ -67,16 +67,17 @@ const offCard = new Set([
 const pickCovers = (c: (typeof all)[number]) => {
   const used = new Set<string>(offCard);
   const items = groupItems(c);
-  const whole = items.some((it) => it.pics.some((p) => p.cover)) ? []
+  const roomHero1 = (p: { src: string }) => /\/room\.(jpe?g|png|webp)$/i.test(p.src);
+  const whole = items.some((it) => it.pics.some((p) => roomHero1(p) && !offCard.has(fileHash(p.src)))) ? []
     : [imageUrl(c.hero_image_path), ...(c.room_shots ?? [])]
         .filter((s): s is string => !!s && /\/(hero|room)(-\w+)?\.(jpe?g|png|webp)$/.test(s) && !used.has(fileHash(s)));
   whole.forEach((s) => used.add(fileHash(s)));
   const label = c.room === 'other' ? 'Collection' : `${c.room[0].toUpperCase()}${c.room.slice(1)}`;
   return [
     ...whole.map((src) => ({ name: label, src })),
+    // Each piece shows its ROOM HERO 1 shot (room.jpg) only; a piece without one, or whose shot is already on the card, is left out
     ...items.flatMap((it) => {
-      const pics = it.pics.filter((p) => !p.spec && !offCard.has(fileHash(p.src)));
-      const pick = pics.find((p) => !used.has(fileHash(p.src))) ?? pics[0];
+      const pick = it.pics.find((p) => roomHero1(p) && !used.has(fileHash(p.src)));
       if (!pick) return [];
       used.add(fileHash(pick.src));
       return [{ name: it.name, src: pick.src }];
@@ -200,16 +201,15 @@ const materials = [
               <a class="feat-more" href={`#cat-${c.slug}-title`}>Explore the collection</a>
             </div>
           </div>
-          {siblings(c).length > 1 && (
-            <nav class="room-nav" aria-label={`${c.name} rooms`}>
-              <button type="button" class="room-arrow prev" aria-label="Previous room">‹</button>
-              <span class="room-now">{c.name} · {roomLabel(c.room).replace(/ collection$/, '')}<small>{siblings(c).indexOf(c) + 1} / {siblings(c).length}</small></span>
-              <span class="room-go">
-                <button type="button" class="room-arrow next" aria-label="Next room">›</button>
-                <button type="button" class="room-cta next" tabindex="-1" aria-hidden="true">See next room</button>
-              </span>
-            </nav>
-          )}
+          <nav class="room-nav" aria-label={`${c.name} rooms`}>
+            {siblings(c).length > 1 && <button type="button" class="room-arrow prev" aria-label="Previous room">‹</button>}
+            <span class="room-now">{c.name} · {roomLabel(c.room).replace(/ collection$/, '')}{siblings(c).length > 1 && <small>{siblings(c).indexOf(c) + 1} / {siblings(c).length}</small>}</span>
+            {siblings(c).length > 1 && <button type="button" class="room-arrow next" aria-label="Next room">›</button>}
+            {new Set(collections.map((x) => x.name)).size > 1 && <>
+              <button type="button" class="coll-jump prev">Previous collection</button>
+              <button type="button" class="coll-jump next">Next collection</button>
+            </>}
+          </nav>
           <ItemCatalog collection={c} only={homeItems[c.slug]} link={false} />
           </div>
         ))}
@@ -310,7 +310,18 @@ const materials = [
     };
     // Each panel has its own pair; the next panel's arrows land where the clicked ones were, so the page needs no scroll
     box.querySelectorAll('.room-arrow.prev').forEach((b) => b.addEventListener('click', () => step(-1)));
-    box.querySelectorAll('.room-arrow.next, .room-cta.next').forEach((b) => b.addEventListener('click', () => step(1)));
+    box.querySelectorAll('.room-arrow.next').forEach((b) => b.addEventListener('click', () => step(1)));
+    // "Next collection" (right corner of the room row) and "Previous collection" (left corner) open the
+    // next or previous collection's first room, in page order, round at either end
+    const starts = panels.flatMap((p, i) => (i === 0 || p.dataset.name !== panels[i - 1].dataset.name ? [i] : []));
+    const jump = (by: number) => {
+      const g = starts.findLastIndex((i) => i <= cur);
+      show(starts[(g + by + starts.length) % starts.length]);
+      // back up to the new collection's room card, so the visitor starts it from the top (the card clears the sticky header)
+      panels[cur].querySelector('.feat-card')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    };
+    box.querySelectorAll('.coll-jump.prev').forEach((b) => b.addEventListener('click', () => jump(-1)));
+    box.querySelectorAll('.coll-jump.next').forEach((b) => b.addEventListener('click', () => jump(1)));
     // #coll-<slug> scrolls to the room's card, #cat-<slug>-title ("Explore the collection") to its items
     const fromHash = () => {
       const sel = location.hash.replace(/[^#\w-]/g, '');

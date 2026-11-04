@@ -33,32 +33,67 @@ export async function edgeBackground(src: string, frameRatio = 4 / 3): Promise<s
 }
 
 // A photo wider than its 4:3 card is shown whole, with bands above and below. This zooms it in as far as the piece
-// allows: the piece's left and right edges are found from the columns with many sharp steps (wood edges, handles),
-// a soft shadow or plain wall has none. The guess errs wide, so the piece is never cut; it is centred in the card.
-const fits = new Map<string, { scale: number; shift: number } | null>();
-export async function cardFit(src: string, frameRatio = 4 / 3): Promise<{ scale: number; shift: number } | null> {
+// allows and centres the piece. The piece's outline is found from the coloured pixels (wood, fabric with some colour):
+// the grey studio wall and floor, and the light and shadow falling on them, have little colour. Photos with no coloured
+// piece fall back to the sharp steps (edges, handles). When a piece sits off to one side, the card zooms in a little
+// further (cutting some wall or floor, never the piece) so it can still be centred. The guess errs wide.
+// shift / shiftY: the photo's sideways / up-down move, in % of the card's width / height.
+const fits = new Map<string, { scale: number; shift: number; shiftY: number } | null>();
+export async function cardFit(src: string, frameRatio = 4 / 3): Promise<{ scale: number; shift: number; shiftY: number } | null> {
   if (fits.has(src)) return fits.get(src)!;
-  let out: { scale: number; shift: number } | null = null;
+  let out: { scale: number; shift: number; shiftY: number } | null = null;
   try {
     const file = join(process.cwd(), 'public', src);
     const meta = src.startsWith('/') && existsSync(file) ? await sharp(file).metadata() : null;
     const ratio = meta ? (meta.width ?? 1) / (meta.height ?? 1) : 0;
     if (ratio > frameRatio * 1.02) {
       const W = 240;
-      const { data, info } = await sharp(file).greyscale().resize(W).blur(0.8).raw().toBuffer({ resolveWithObject: true });
-      const steps = new Array(W).fill(0);
-      for (let y = 0; y < info.height; y++) for (let x = 1; x < W; x++) if (Math.abs(data[y * W + x] - data[y * W + x - 1]) > 14) steps[x]++;
-      const busy = (n: number) => n > Math.max(2, info.height * 0.03);
-      const l = steps.findIndex(busy) / W;
-      const r = (W - 1 - [...steps].reverse().findIndex(busy)) / W;
-      const margin = 0.04;
-      const scale = Math.max(1, Math.min(ratio / frameRatio, 1 / (r - l + 2 * margin)));
-      // As near the photo's middle as the piece allows (a shadow can stretch the guess to one side), never past its edges
-      const half = 1 / (2 * scale);
-      const centre = Math.min(1 - half, Math.max(half, Math.min(l - margin + half, Math.max(r + margin - half, 0.5))));
-      if (l >= 0 && r > l && scale > 1.01) out = { scale: +scale.toFixed(3), shift: +((0.5 - centre) * scale * 100).toFixed(2) };
+      const { data, info } = await sharp(file).removeAlpha().resize(W).blur(0.8).raw().toBuffer({ resolveWithObject: true });
+      const H = info.height;
+      const span = (counts: number[], len: number, other: number) => {
+        const enough = (n: number) => n > Math.max(2, other * 0.04);
+        const a = counts.findIndex(enough);
+        return a < 0 ? null : [a / len, (len - 1 - [...counts].reverse().findIndex(enough)) / len];
+      };
+      const colX = new Array(W).fill(0), colY = new Array(H).fill(0), stepX = new Array(W).fill(0), stepY = new Array(H).fill(0);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 3;
+        const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+        if (Math.max(r, g, b) - Math.min(r, g, b) > 45) { colX[x]++; colY[y]++; }
+        if (x > 0) { const j = i - 3; if (Math.abs(r + g + b - data[j] - data[j + 1] - data[j + 2]) > 42) { stepX[x]++; stepY[y]++; } }
+      }
+      const coloured = span(colX, W, H);
+      const xs = coloured ?? span(stepX, W, H);
+      const ys = (coloured ? span(colY, H, W) : span(stepY, H, W)) ?? [0, 1];
+      if (xs) {
+        const [l, r] = xs, [t, b] = ys;
+        const m = 0.05;
+        const cx = (l + r) / 2, cy = (t + b) / 2;
+        // Visible share of the photo at zoom s: 1/s of its width, 0.75 * ratio / s of its height (4:3 card)
+        const fill = ratio / frameRatio; // zoom at which the photo just fills the card's height
+        const fitPiece = Math.min(1 / (r - l + 2 * m), (ratio / frameRatio) / Math.min(1, b - t + 2 * m));
+        const toCentre = 1 / (2 * Math.max(0.01, Math.min(cx, 1 - cx)));
+        const scale = Math.max(1, Math.min(fitPiece, Math.max(Math.min(fill, fitPiece), toCentre)));
+        const half = 1 / (2 * scale);
+        const centre = Math.min(1 - half, Math.max(half, cx));
+        const v = fill / scale; // visible share of the photo's height
+        const centreY = v < 1 ? Math.min(1 - v / 2, Math.max(v / 2, cy)) : 0.5;
+        const shift = (0.5 - centre) * scale * 100;
+        const shiftY = (0.5 - centreY) / v * 100;
+        if (scale > 1.01 || Math.abs(shift) > 0.5) out = { scale: +scale.toFixed(3), shift: +shift.toFixed(2), shiftY: +shiftY.toFixed(2) };
+      }
     }
   } catch { out = null; }
   fits.set(src, out);
   return out;
+}
+
+// Width / height of a photo in public/ (0 if it cannot be read), for picking how its frame fills the space around it
+export async function photoRatio(src: string): Promise<number> {
+  try {
+    const file = join(process.cwd(), 'public', src);
+    if (!src.startsWith('/') || !existsSync(file)) return 0;
+    const m = await sharp(file).metadata();
+    return (m.width ?? 0) / (m.height || 1);
+  } catch { return 0; }
 }

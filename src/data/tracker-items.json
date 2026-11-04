@@ -260,7 +260,7 @@
   "room": "living",
   "name": "TV Console",
   "folder": "doheny/living/tv-console",
-  "description": "Zuma TV Console, a low console in solid mindi/mahogany with a veneered top.",
+  "description": "Doheny TV Console, a low console in solid mindi/mahogany with a veneered top.",
   "specification": [
    "Body: solid mindi/mahogany",
    "Top: veneer over panel",
@@ -286,7 +286,7 @@
   "room": "living",
   "name": "Console Table",
   "folder": "doheny/living/console-table",
-  "description": "Zuma Console Table in solid mindi/mahogany with a veneered top.",
+  "description": "Doheny Console Table in solid mindi/mahogany with a veneered top.",
   "specification": [
    "Body: solid mindi/mahogany",
    "Top: veneer over panel",
@@ -307,12 +307,12 @@
   "handle": null
  },
  {
-  "code": "DH-211",
+  "code": "DH-107",
   "collection": "Doheny",
   "room": "living",
-  "name": "Console Table",
-  "folder": "doheny/living/console-table-dh-211",
-  "description": "Doheny Console Table, a two-drawer console desk in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
+  "name": "Desk Table 2 Drawers",
+  "folder": "doheny/living/desk-table-2-drawers",
+  "description": "Doheny Desk Table, a two-drawer console desk in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
   "specification": [
    "Body: mindi/mahogany solids and veneers",
    "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",

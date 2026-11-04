@@ -179,13 +179,16 @@
 .room-arrow { display: grid; place-items: center; width: 68px; height: 68px; padding: 0 0 5px; border: 1.5px solid var(--text-soft); border-radius: 50%; background: transparent; color: var(--text); font-size: 44px; line-height: 1; cursor: pointer; transition: background .2s, border-color .2s; }
 .room-arrow:hover { border-color: var(--text); }
 .room-arrow:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
-/* "See next room" beside the next arrow; it hangs outside the row so the room name stays centred */
-.room-go { position: relative; display: flex; }
-.room-cta { position: absolute; left: calc(100% + 18px); top: 50%; transform: translateY(-50%); padding: 0; border: 0; background: none; color: var(--text); font: inherit; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; text-decoration: underline; text-underline-offset: 5px; cursor: pointer; }
-.room-cta:hover { color: var(--text-soft); }
+/* "Previous collection" / "Next collection" sit in the row's left and right corners, out of the flow so the room name stays centred */
+.room-nav { position: relative; }
+.coll-jump { position: absolute; bottom: calc(clamp(24px, 3vw, 40px) + 24px); padding: 0; border: 0; background: none; color: var(--text); font: inherit; font-size: 14px; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; text-decoration: underline; text-underline-offset: 5px; cursor: pointer; }
+.coll-jump.prev { left: clamp(20px, 3.4vw, 64px); }
+.coll-jump.next { right: clamp(20px, 3.4vw, 64px); }
+.coll-jump:hover { color: var(--text-soft); }
+.coll-jump:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
 @media (max-width: 700px) {
-  .room-cta { left: auto; right: 0; top: calc(100% + 10px); transform: none; font-size: 12px; } /* flush with the arrow's right edge, so it stays on screen */
-  .room-nav { gap: 16px; padding-top: 48px; padding-bottom: 48px; } /* room below for "See next room" under the arrow */
+  .coll-jump { bottom: 16px; font-size: 12px; }
+  .room-nav { gap: 16px; padding-top: 48px; padding-bottom: 64px; } /* room below the arrows for the collection links */
   .room-now { min-width: 0; font-size: 17px; }
   .room-now small { font-size: 16px; }
   .room-arrow { flex: none; width: 56px; height: 56px; font-size: 38px; }
@@ -295,6 +298,21 @@
 @media (prefers-reduced-motion: reduce) { .cat-thumbs button { transition: none; } }
 /* The whole picture area is the button: left half of the screen back, right half forward (the pointer shows which way) */
 .cat-sq { position: relative; }
+/* A photo shown whole in a frame of another shape: the empty bands take the photo's own outer rows (wide photo) or columns
+   (tall photo), stretched and softened, so the wall and floor run on to the frame's edge. --fill is the photo, --band the
+   width of each empty band (share of the frame); --fs and --fx repeat the card's zoom and sideways shift (cardFit) so the
+   stretched rows line up with the photo (the bands are 1.4 times the frame's width, hence the /1.4). Each band reaches
+   60px past the frame, so the light rows some photos carry at their very edge stay out of sight, and 4px over the
+   photo, fading out, so no seam shows where the two meet. */
+.edge-fill img { z-index: 1; }
+.edge-fill.fill-wide::before, .edge-fill.fill-wide::after, .edge-fill.fill-tall::before, .edge-fill.fill-tall::after { content: ''; position: absolute; z-index: 2; background: var(--fill) no-repeat; filter: blur(10px); pointer-events: none; }
+.edge-fill.fill-wide::before, .edge-fill.fill-wide::after { left: -20%; right: -20%; height: calc(var(--band) + 64px); background-size: calc(var(--fs, 1) * 100% / 1.4) 4000%; background-position-x: center; translate: calc(var(--fx, 0) * 1% / 1.4) 0; }
+.edge-fill.fill-wide::before { top: -60px; background-position-y: top; -webkit-mask: linear-gradient(#000 calc(100% - 8px), transparent); mask: linear-gradient(#000 calc(100% - 8px), transparent); }
+.edge-fill.fill-wide::after { bottom: -60px; background-position-y: bottom; -webkit-mask: linear-gradient(transparent, #000 8px); mask: linear-gradient(transparent, #000 8px); }
+.edge-fill.fill-tall::before, .edge-fill.fill-tall::after { top: 0; bottom: 0; width: calc(var(--band) + 64px); background-size: 4000% 100%; }
+.edge-fill.fill-tall::before { left: -60px; background-position-x: left; -webkit-mask: linear-gradient(90deg, #000 calc(100% - 8px), transparent); mask: linear-gradient(90deg, #000 calc(100% - 8px), transparent); }
+.edge-fill.fill-tall::after { right: -60px; background-position-x: right; -webkit-mask: linear-gradient(90deg, transparent, #000 8px); mask: linear-gradient(90deg, transparent, #000 8px); }
+.edge-fill .cat-back { z-index: 3; }
 .cat-track.to-prev { cursor: w-resize; }
 .cat-track.to-next { cursor: e-resize; }
 /* Back, on the picture's top-right corner, close to where the eye is */

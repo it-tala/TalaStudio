@@ -101,7 +101,22 @@ export function openViewer(opts: ViewerOptions) {
     // The spec sheet (spec.jpg, see collections.ts) is a 1:1 page: it gets a square frame, not the 16:9 photo frame
     const square = el('div', { className: /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
     if (s.bg) square.style.background = s.bg;
-    square.append(el('img', { src: s.src, alt: s.alt }));
+    const img = el('img', { src: s.src, alt: s.alt });
+    // A photo that is not 16:9 leaves space at its sides or top and bottom; its own edges are stretched into it (edge-fill)
+    if (!square.classList.contains('cat-spec')) {
+      square.classList.add('edge-fill');
+      square.style.setProperty('--fill', `url(${s.src})`);
+      img.addEventListener('load', () => {
+        const r = img.naturalWidth / img.naturalHeight;
+        const wide = r > 16 / 9 * 1.01;
+        const tall = r < 16 / 9 * 0.99;
+        square.classList.toggle('fill-wide', wide);
+        square.classList.toggle('fill-tall', tall);
+        // Each empty band's share of the frame (see .edge-fill)
+        if (wide || tall) square.style.setProperty('--band', `${(1 - (wide ? 16 / 9 / r : r / (16 / 9))) * 50}%`);
+      }, { once: true });
+    }
+    square.append(img);
     const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back' });
     back.innerHTML = '<span aria-hidden="true">×</span>';
     square.append(back);
