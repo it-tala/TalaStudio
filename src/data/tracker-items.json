@@ -38,8 +38,17 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null,
-  "finishes": null,
+  "size": [
+   2010,
+   2130,
+   1050
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -353,7 +362,12 @@
    2080,
    1030
   ],
-  "finishes": null,
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -370,8 +384,17 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null,
-  "finishes": null,
+  "size": [
+   2010,
+   2130,
+   1050
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -645,7 +668,12 @@
    2130,
    1120
   ],
-  "finishes": null,
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -661,8 +689,17 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null,
-  "finishes": null,
+  "size": [
+   2010,
+   2130,
+   1050
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -814,8 +851,17 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null,
-  "finishes": null,
+  "size": [
+   2010,
+   2130,
+   1050
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -1083,8 +1129,17 @@
    "Deck: metal with steamed beech slats",
    "Packing: to ISTA 1A standard"
   ],
-  "size": null,
-  "finishes": null,
+  "size": [
+   2010,
+   2130,
+   1050
+  ],
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -1203,7 +1258,12 @@
    850,
    840
   ],
-  "finishes": null,
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
@@ -1219,7 +1279,12 @@
    850,
    840
   ],
-  "finishes": null,
+  "finishes": [
+   "Pasific Sand",
+   "Driftwood",
+   "Smoked Oak",
+   "Ember"
+  ],
   "handle": null
  },
  {
