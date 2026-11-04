@@ -3,7 +3,8 @@
 // The first cover loads with the page; the rest load once it is up. A click on the right half of a cover moves to the
 // next one, on the left half to the previous one, like the picture viewer (without script the cover is a plain link
 // to its collection page). The pictures only change with clicks, arrows and dots, never by themselves. Each change sends a
-// hero-slide event (detail.href = the collection page) that the home collections section follows.
+// hero-slide event (detail.href = the collection page) that the home collections section follows, and a coll-room event
+// from that section (a room picked there) switches the picture here.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 // That name is a link down to the collections section, which already shows that collection's room.
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
@@ -21,6 +22,7 @@ const { slides } = Astro.props;
     data-bg={i === 0 ? undefined : s.src}
     data-src={s.src}
     data-room={s.room}
+    data-name={s.name.replace(/ collection$/, '')}
     data-edge={s.edge ?? undefined}
   ></a>
 ))}
@@ -61,7 +63,8 @@ const { slides } = Astro.props;
 
     let cur = 0;
     let want = 0;
-    const show = async (i: number) => {
+    // quiet: the collections section asked for this picture, so it is not told back
+    const show = async (i: number, quiet = false) => {
       const next = (i + slides.length) % slides.length;
       want = next;
       await load(slides[next]);
@@ -80,8 +83,16 @@ const { slides } = Astro.props;
       // The page copy sits on the first picture only; the others carry just the name
       hero.classList.toggle('copy-off', cur !== 0);
       // The collections section further down follows: it shows the room of the collection on this picture
-      hero.dispatchEvent(new CustomEvent('hero-slide', { bubbles: true, detail: { href: slides[cur].getAttribute('href') } }));
+      if (!quiet) hero.dispatchEvent(new CustomEvent('hero-slide', { bubbles: true, detail: { href: slides[cur].getAttribute('href') } }));
     };
+    // The other way round: a room picked in the collections section shows its picture here. A room with no picture of
+    // its own (Doheny living) shows its collection's picture.
+    document.addEventListener('coll-room', (e) => {
+      const { slug, name } = (e as CustomEvent<{ slug?: string; name?: string }>).detail;
+      let j = slides.findIndex((s) => slug && s.getAttribute('href') === `#coll-${slug}`);
+      if (j < 0) j = slides.findIndex((s) => name && s.dataset.name === name);
+      if (j >= 0) show(j, true);
+    });
     dots.forEach((d, j) => d.addEventListener('click', () => show(j)));
     hero.querySelector('.hero-arrow.prev')?.addEventListener('click', () => show(cur - 1));
     hero.querySelector('.hero-arrow.next')?.addEventListener('click', () => show(cur + 1));

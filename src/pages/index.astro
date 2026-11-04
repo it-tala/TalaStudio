@@ -288,17 +288,21 @@ const materials = [
 </Base>
 
 <script>
-  // Collection rooms: one panel (room shot card + its items) at a time. The hero picks the collection; the arrows between
+  // Collection rooms: one panel (room shot card + its items) at a time. The hero and this section follow each other: a
+  // hero picture shows its collection room here, and a room picked here shows its picture in the hero. The arrows between
   // the card and its items step through that collection's rooms only (Doheny bedroom ↔ Doheny living), round from the
   // last to the first. A link to #coll-<slug> opens that room's panel.
   document.querySelectorAll<HTMLElement>('.room-panels').forEach((box) => {
     const panels = [...box.querySelectorAll<HTMLElement>('.room-panel')];
     if (panels.length < 2) return;
     let cur = 0;
-    const show = (i: number, scroll = false) => {
+    // tell: the hero follows (a coll-room event); off when the hero itself asked for this room
+    const show = (i: number, scroll = false, tell = true) => {
       cur = i;
       panels.forEach((p, j) => { p.hidden = j !== cur; });
       if (scroll) panels[cur].scrollIntoView({ block: 'start' });
+      const slug = panels[cur].querySelector('.feat-card')?.id.replace(/^coll-/, '');
+      if (tell) document.dispatchEvent(new CustomEvent('coll-room', { detail: { slug, name: panels[cur].dataset.name } }));
     };
     const step = (by: number) => {
       const same = panels.filter((p) => p.dataset.name === panels[cur].dataset.name);
@@ -333,7 +337,7 @@ const materials = [
     document.addEventListener('hero-slide', (e) => {
       const slug = ((e as CustomEvent<{ href: string | null }>).detail.href ?? '').replace(/^.*(#coll-|\/)/, '');
       const i = panels.findIndex((p) => slug && p.querySelector(`#coll-${CSS.escape(slug)}`));
-      if (i >= 0) show(i);
+      if (i >= 0) show(i, false, false);
     });
   });
 

@@ -63,12 +63,18 @@ export async function cardFit(src: string, frameRatio = 4 / 3): Promise<{ scale:
         if (x > 0) { const j = i - 3; if (Math.abs(r + g + b - data[j] - data[j + 1] - data[j + 2]) > 42) { stepX[x]++; stepY[y]++; } }
       }
       const coloured = span(colX, W, H);
-      const xs = coloured ?? span(stepX, W, H);
+      const steps = span(stepX, W, H);
+      const xs = coloured ?? steps;
+      // A sunlit warm wall reads as coloured too (Calabasas tall boy: colour 38–100%, edges 38–62%), so the piece is
+      // centred on the part both guesses agree on. The zoom still allows for the wider guess, so a piece with soft ends
+      // (Calabasas TV console) is not cut.
+      const both = coloured && steps && Math.max(coloured[0], steps[0]) < Math.min(coloured[1], steps[1])
+        ? [Math.max(coloured[0], steps[0]), Math.min(coloured[1], steps[1])] : null;
       const ys = (coloured ? span(colY, H, W) : span(stepY, H, W)) ?? [0, 1];
       if (xs) {
         const [l, r] = xs, [t, b] = ys;
         const m = 0.05;
-        const cx = (l + r) / 2, cy = (t + b) / 2;
+        const cx = both ? (both[0] + both[1]) / 2 : (l + r) / 2, cy = (t + b) / 2;
         // Visible share of the photo at zoom s: 1/s of its width, 0.75 * ratio / s of its height (4:3 card)
         const fill = ratio / frameRatio; // zoom at which the photo just fills the card's height
         const fitPiece = Math.min(1 / (r - l + 2 * m), (ratio / frameRatio) / Math.min(1, b - t + 2 * m));
