@@ -105,11 +105,15 @@ function galleryItems(base: string, url: string, names: Record<string, string> =
     const name = names[folder] ?? trackerName(`${url.replace('/collections/', '')}/${folder}`) ?? itemName(folder);
     const finishes = finishPhotos(dir, at);
     // The sheet update saves a photo as specb.jpg / 02b.jpg / roomb.jpg when Windows still holds the old file open; the
-    // old one then stays behind. Only the newer b copy is shown (Beechwood dining chair had two spec sheets, 5 Nov 2026)
+    // old one then stays behind (and on a later run the b copy can be the old one). Of such a pair only the newer file is
+    // shown (Beechwood dining chair had two spec sheets, 5 Nov 2026)
     const all = images(dir);
+    const age = (f: string) => statSync(join(dir, f)).mtimeMs;
     const files = all.filter((f) => {
-      const m = f.match(/^(spec|room|\d+)\.(jpe?g|png|webp)$/i);
-      return !m || !all.some((g) => g.toLowerCase() === `${m[1]}b.${m[2]}`.toLowerCase());
+      const m = f.match(/^(spec|room|\d+)(b?)\.(jpe?g|png|webp)$/i);
+      if (!m) return true;
+      const other = all.find((g) => g.toLowerCase() === `${m[1]}${m[2] ? '' : 'b'}.${m[3]}`.toLowerCase());
+      return !other || age(f) >= age(other);
     });
     const rooms = files.filter((f) => /^room/i.test(f));
     const specs = files.filter((f) => /^spec/i.test(f));

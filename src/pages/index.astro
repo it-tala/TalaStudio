@@ -65,10 +65,13 @@ const offCard = new Set([
 ].map(fileHash));
 // Only ROOM HERO 1 shots (user, 5 Nov 2026): no hero or other room shot stands in, and a piece without one is skipped.
 // roomb.jpg is a newer RM 1 saved beside a room.jpg that Windows held open (see galleryItems in collections.ts).
+// A "room shot" that is the same file as a product photo is a product shot (the Calabasas sofa's RM 1 link pointed at
+// its product album, 5 Nov 2026): it is left off too.
 const pickCovers = (c: (typeof all)[number]) => {
-  const used = new Set<string>(offCard);
+  const items = groupItems(c);
+  const used = new Set<string>([...offCard, ...items.flatMap((it) => it.pics.filter((p) => !p.cover && !p.spec).map((p) => fileHash(p.src)))]);
   const roomHero1 = (p: { src: string }) => /\/roomb?\.(jpe?g|png|webp)$/i.test(p.src);
-  return groupItems(c).flatMap((it) => {
+  return items.flatMap((it) => {
     const pick = it.pics.find((p) => roomHero1(p) && !used.has(fileHash(p.src)));
     if (!pick) return [];
     used.add(fileHash(pick.src));
