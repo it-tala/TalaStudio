@@ -3,7 +3,13 @@
 import type { ContactBlock } from '../../data/pages';
 
 interface Props { block: ContactBlock }
-const { eyebrow, title, lede, people, cards = [] } = Astro.props.block;
+const { eyebrow, title, lede, people, cards = [], socials = [] } = Astro.props.block;
+// Line icons in the text colour, drawn on a 24px grid
+const icons: Record<string, { name: string; svg: string }> = {
+  linkedin: { name: 'LinkedIn', svg: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10.5V16M8 7.5v.01M12 16v-5.5M12 13a2.5 2.5 0 0 1 5 0v3"/>' },
+  instagram: { name: 'Instagram', svg: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/>' },
+  pinterest: { name: 'Pinterest', svg: '<circle cx="12" cy="12" r="9"/><path d="M10.5 20.5l1.6-7M12.1 13.5c.5 1 1.5 1.5 2.5 1.3 2-.4 3-2.6 2.5-4.6-.6-2.4-3-3.7-5.4-3.2-2.6.6-4 3-3.4 5.3.2.7.5 1.2 1 1.6"/>' },
+};
 const digits = (p: string) => p.replace(/\D/g, '');
 ---
 <section class="section">
@@ -12,6 +18,16 @@ const digits = (p: string) => p.replace(/\D/g, '');
       <p class="eyebrow">{eyebrow}</p>
       <h1>{title}</h1>
       <p class="lede">{lede}</p>
+      {socials.length > 0 && (
+        <ul class="socials">
+          {socials.map((x) => (
+            <li><a href={x.href} target="_blank" rel="noopener">
+              <span class="ico"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={icons[x.kind].svg} /></span>
+              {icons[x.kind].name}
+            </a></li>
+          ))}
+        </ul>
+      )}
     </div>
     <div class="cards">
       {people.map((p) => (
@@ -36,5 +52,11 @@ const digits = (p: string) => p.replace(/\D/g, '');
   .cards { display: grid; gap: 2rem; }
   .cards > div { border-top: 1px solid var(--line); padding-top: 1.5rem; }
   .cards p { color: var(--text-soft); margin-top: .4rem; }
+  /* One per line, the network's name beside its icon: buyers in their 40s and 50s read the name, not the logo (user, 5 Nov 2026) */
+  .socials { list-style: none; display: grid; gap: .8rem; margin: 2rem 0 0; padding: 0; }
+  .socials a { display: inline-flex; align-items: center; gap: .9rem; color: var(--text); font-size: 1.05rem; text-decoration: none; }
+  .socials .ico { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; transition: border-color .2s, background .2s; }
+  .socials a:hover .ico, .socials a:focus-visible .ico { border-color: var(--text); background: var(--bg-alt); }
+  .socials a:hover { text-decoration: underline; text-underline-offset: 4px; }
   .cards .role { margin: 0 0 .3rem; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
 </style>

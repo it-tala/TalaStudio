@@ -6,7 +6,7 @@ import type { StoryFigure } from '../../data/pages';
 interface Props { figure: StoryFigure; class?: string }
 const { figure, class: cls } = Astro.props;
 ---
-<figure class:list={[cls, { stack: figure.shots.length > 1 }]}>
+<figure class:list={[cls, { stack: figure.shots.length === 2, trio: figure.shots.length === 3 }]}>
   {figure.shots.map((s) => <Shot {...s} />)}
   {figure.caption && <figcaption>{figure.caption}</figcaption>}
 </figure>
@@ -22,4 +22,12 @@ const { figure, class: cls } = Astro.props;
   .stack :global(.front) { position: absolute; left: 0; bottom: 2.2rem; width: 52%; box-shadow: 0 18px 40px rgba(0, 0, 0, .18); }
   .stack figcaption { text-align: right; }
   .small { max-width: 22rem; margin-top: 2rem; }
+
+  /* Three photos stepping down from right to left and back, as the user's mock-up: no shadows, and the middle one lies
+     over the edges of the other two (Quality control) */
+  .trio { display: flex; flex-direction: column; }
+  .trio :global(.shot) { position: relative; }
+  .trio :global(.q1) { width: 65%; margin-left: auto; }
+  .trio :global(.q2) { width: 52%; margin-top: -3%; z-index: 1; }
+  .trio :global(.q3) { width: 84%; margin-left: auto; margin-top: -5%; }
 </style>

@@ -35,9 +35,11 @@ export type StoryBlock = {
 // Labelled rows of text, then people with a photo
 export type Person = { name: string; role: string; photo: string; text: string };
 export type RowsBlock = { type: 'rows'; eyebrow: string; title: string; rows: [string, string[]][]; peopleLabel?: string; people?: Person[]; outro?: string };
-// Contact people (leave phone empty to hide it), then plain cards whose text may hold links
+// Contact people (leave phone empty to hide it), then plain cards whose text may hold links.
+// socials: icons under the lede, in the order given (an icon for each kind is in ContactCards.astro)
 export type ContactBlock = {
   type: 'contact'; eyebrow: string; title: string; lede: string;
+  socials?: { kind: 'linkedin' | 'instagram' | 'pinterest'; href: string }[];
   people: { role: string; name: string; email: string; phone?: string }[];
   cards?: { title: string; html: string }[];
 };
@@ -54,9 +56,6 @@ export type Block = HeroBlock | CtaBlock | StepsHeroBlock | StoryBlock | RowsBlo
 export type Page = { path: string; title: string; description: string; blocks: Block[] };
 
 // ---------- Pages ----------
-
-// The QC inspection photo on How We Work is off for now: drop it in as qc.jpg and set this to true
-const showQcPhoto = false;
 
 export const pages: Page[] = [
   {
@@ -156,7 +155,12 @@ export const pages: Page[] = [
           { trace: ['Item barcoded', 'Carton marked', 'Container loaded', 'On the water'] },
           "We're building a dashboard that puts production status, order status, shipping status and every document online, in real time.",
         ],
-        figure: showQcPhoto ? { shots: [{ name: 'qc', label: 'Photo needed · QC inspection', hint: 'Inspector checking a piece, barcode label visible', ratio: '4 / 5' }] } : undefined,
+        // Three photos stepping down and overlapping, as the user's mock-up (5 Nov 2026); see .trio in StoryFigure.astro
+        figure: { shots: [
+          { name: 'qc-machine', label: 'Drilling line', hint: 'Operator at the CNC drilling line, parts stacked beside it', ratio: '770 / 415', class: 'q1' },
+          { name: 'qc-warehouse', label: 'Packing hall', hint: 'Packing hall with cartons and a stacker', ratio: '621 / 404', class: 'q2' },
+          { name: 'qc-floor', label: 'Assembly floor', hint: 'Assembly floor with carts of parts ready for checking', ratio: '1000 / 483', class: 'q3' },
+        ] },
       },
       {
         type: 'story', tone: 'goal', num: 'Our goal is simple',
@@ -211,6 +215,11 @@ export const pages: Page[] = [
         eyebrow: 'Contact',
         title: 'Talk to us.',
         lede: "For information, don't hesitate to reach out! Need a product, or have an idea? Give us a few days and we will create it.",
+        // LinkedIn goes first once we have its link: { kind: 'linkedin', href: '…' }
+        socials: [
+          { kind: 'instagram', href: 'https://www.instagram.com/talastudioofficial/' },
+          { kind: 'pinterest', href: 'https://id.pinterest.com/talastudioofficial/' },
+        ],
         people: [
           { role: 'Director of Sales', name: 'David Wormald', email: 'david@talastudio.net', phone: '+61-448-440-418' },
           { role: 'Director of Operations', name: 'Evin Oshima', email: 'evin@talastudio.net', phone: '+62-812-3661-7795' },
@@ -253,8 +262,11 @@ export const pages: Page[] = [
             'Arrange freight and customs for your market.',
           ] },
           { p: 'See <a href="/how-a-container-works">how a container works</a> with us.', when: '/how-a-container-works' },
-          { h: 'How TalaStudio works with makers' },
+          { h: 'Designed and developed in our studio' },
           { p: 'We design and engineer every collection in our Jepara studio. Partner factories in the region build to our drawings. We inspect every piece before it ships, and you can see the QC photos online.' },
+          { h: 'How to buy' },
+          { p: 'TalaStudio sells by the container. The minimum is one collection per container, with a limit on the number of SKUs in each container. Both vary by collection and by item.' },
+          { p: 'We look for buyers who can purchase on programs. For customers who commit to regular volume, we offer geographic exclusivity, adjusted pricing, and custom designs, sizes and prices.' },
         ],
       },
       { type: 'cta', title: 'Talk to us.', text: 'Ask us about your range and your market.' },
