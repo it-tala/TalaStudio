@@ -150,16 +150,29 @@ const specData = (it: { name: string; folder: string }) => {
     const rows = [
       ['Product', `${s.collection} ${s.name}`], ['Code', s.code], ['Category', s.category],
       ['Finish', s.finishes.map((f) => f.name).join(', ')], ['Hardware', s.handle?.name],
-      ['Size (mm)', s.size?.replace(/ mm$/, '')], ['Size (in)', s.sizeIn?.replace(/ in$/, '')],
     ].filter(([, v]) => v);
+    const dims = [['(IN)', s.sizeIn?.replace(/ in$/, '').replace(/ × /g, '  ')], ['(MM)', s.size]].filter(([, v]) => v);
     const swatches = [...s.finishes, ...(s.handle ? [s.handle] : [])].filter((f) => f.swatch);
+    // The collection name runs up the left edge, as large as its length allows
+    const collSize = Math.min(12, 66 / (s.collection.length * 0.72));
     return `<div class="spec-page">
-      <p class="spec-coll">${esc(s.collection)}</p><h4>${esc(s.name)}</h4>
-      ${photos.length ? `<div class="spec-photos n${Math.min(photos.length, 3)}">${photos.slice(0, 3).map((p, i) => `<img src="${esc(p)}" alt="${esc(`${s.collection} ${s.name}, view ${i + 1}`)}">`).join('')}</div>` : ''}
-      <p class="spec-head">Specification</p>
-      <dl>${rows.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>
-      ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(f.swatch!)})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}
-      ${s.notes.length ? `<p class="spec-head">Notes</p><ul class="spec-notes">${s.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+      <p class="spec-coll" style="--coll-fs:${collSize.toFixed(2)}cqw">${esc(s.collection)}</p>
+      <div class="spec-main">
+        <h4>${esc(s.name)}</h4>
+        ${photos.length ? `<div class="spec-photos n${Math.min(photos.length, 3)}">${photos.slice(0, 3).map((p, i) => `<img src="${esc(p)}" alt="${esc(`${s.collection} ${s.name}, view ${i + 1}`)}">`).join('')}</div>` : ''}
+        <div class="spec-cols">
+          <div>
+            <p class="spec-head">Specification</p>
+            <dl>${rows.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>
+            ${dims.length ? `<p class="spec-dim-head">Dimensions</p><dl class="spec-dims">${dims.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>` : ''}
+          </div>
+          <div>
+            ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(f.swatch!)})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}
+            ${s.notes.length ? `<p class="spec-notes-head">Notes</p><ul class="spec-notes">${s.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+          </div>
+        </div>
+      </div>
+      <p class="spec-foot">TalaStudio · ${esc(s.collection)} Collection</p>
     </div>`;
   }
 </script>
