@@ -12,6 +12,7 @@ const BUCKET = 'public-images';
 export function imageUrl(path: string | null | undefined): string | null {
   if (!path) return null;
   if (path.startsWith('/')) return path; // static file in /public (v1)
+  if (/^https?:\/\//.test(path)) return path; // a full address (v1: the content pipeline's pictures in R2)
   if (!url) return null;
   return `${url}/storage/v1/object/public/${BUCKET}/${path}`;
 }
