@@ -127,7 +127,7 @@ const specData = (it: { name: string; folder: string }) => {
       const li = b.closest<HTMLElement>('.cat-item')!;
       const name = li.dataset.name ?? '';
       const f = finish(li);
-      const spec = li.dataset.spec ? specPage(JSON.parse(li.dataset.spec)) : null;
+      const spec = li.dataset.spec ? specPage(JSON.parse(li.dataset.spec), f.srcs) : null;
       openViewer({
         title: name,
         info: f.soon ? '' : f.labels.join(' · '),
@@ -135,17 +135,18 @@ const specData = (it: { name: string; folder: string }) => {
         opener: b,
         slides: [
           ...f.srcs.map((src, i) => ({ src, bg: bgs[src], alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${f.srcs.length}` })),
-          ...(spec ? [{ src: '', html: spec, alt: `${sec.dataset.collection} ${name}, specification`, info: 'Specification' }] : []),
+          ...(spec ? [{ src: f.srcs[0], html: spec, alt: `${sec.dataset.collection} ${name}, specification`, info: 'Specification' }] : []),
         ],
       });
     }));
   });
 
-  // The spec page, the viewer's last slide: the item's code, category, finishes, hardware, size and notes from the sheet
+  // The spec page, the viewer's last slide, laid out like the printed spec sheet: the item's photos (front large,
+  // perspective and detail beside it, in the finish picked), then its code, category, finishes, hardware, size and notes
   type Swatch = { name: string; swatch: string | null };
   type Spec = { collection: string; name: string; code: string | null; category: string; size: string | null; sizeIn: string | null; notes: string[]; finishes: Swatch[]; handle: Swatch | null };
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
-  function specPage(s: Spec) {
+  function specPage(s: Spec, photos: string[]) {
     const rows = [
       ['Product', `${s.collection} ${s.name}`], ['Code', s.code], ['Category', s.category],
       ['Finish', s.finishes.map((f) => f.name).join(', ')], ['Hardware', s.handle?.name],
@@ -154,6 +155,7 @@ const specData = (it: { name: string; folder: string }) => {
     const swatches = [...s.finishes, ...(s.handle ? [s.handle] : [])].filter((f) => f.swatch);
     return `<div class="spec-page">
       <p class="spec-coll">${esc(s.collection)}</p><h4>${esc(s.name)}</h4>
+      ${photos.length ? `<div class="spec-photos n${Math.min(photos.length, 3)}">${photos.slice(0, 3).map((p, i) => `<img src="${esc(p)}" alt="${esc(`${s.collection} ${s.name}, view ${i + 1}`)}">`).join('')}</div>` : ''}
       <p class="spec-head">Specification</p>
       <dl>${rows.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>
       ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(f.swatch!)})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}

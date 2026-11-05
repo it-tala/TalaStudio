@@ -141,7 +141,9 @@ export function openViewer(opts: ViewerOptions) {
   }));
   thumbs.replaceChildren(...opts.slides.map((s, i) => {
     const t = el('button', { type: 'button', ariaLabel: `Show ${s.name ?? (s.html ? 'specification' : `picture ${i + 1}`)}` });
-    t.append(s.html ? el('span', { className: 'cat-thumb-spec', textContent: 'Spec' }) : el('img', { src: s.src, alt: '' }));
+    // The spec page's thumbnail: its front photo, labelled
+    if (s.src) t.append(el('img', { src: s.src, alt: '' }));
+    if (s.html) { t.classList.add('cat-thumb-spec'); t.append(el('span', { textContent: 'Spec' })); }
     t.addEventListener('click', () => go(i));
     return t;
   }));
