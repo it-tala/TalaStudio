@@ -63,26 +63,17 @@ const offCard = new Set([
   '/collections/calabasas/living/coffee-table/01.jpg',
   '/collections/zuma/living/sofa/room-2.jpg', // two armchairs facing the sofa, orange cushions (also Zuma living hero.jpg)
 ].map(fileHash));
-// A room whose pieces have no room shot of their own leads with the shots of the whole room (hero, room.jpg …)
+// Only ROOM HERO 1 shots (user, 5 Nov 2026): no hero or other room shot stands in, and a piece without one is skipped.
+// roomb.jpg is a newer RM 1 saved beside a room.jpg that Windows held open (see galleryItems in collections.ts).
 const pickCovers = (c: (typeof all)[number]) => {
   const used = new Set<string>(offCard);
-  const items = groupItems(c);
-  const roomHero1 = (p: { src: string }) => /\/room\.(jpe?g|png|webp)$/i.test(p.src);
-  const whole = items.some((it) => it.pics.some((p) => roomHero1(p) && !offCard.has(fileHash(p.src)))) ? []
-    : [imageUrl(c.hero_image_path), ...(c.room_shots ?? [])]
-        .filter((s): s is string => !!s && /\/(hero|room)(-\w+)?\.(jpe?g|png|webp)$/.test(s) && !used.has(fileHash(s)));
-  whole.forEach((s) => used.add(fileHash(s)));
-  const label = c.room === 'other' ? 'Collection' : `${c.room[0].toUpperCase()}${c.room.slice(1)}`;
-  return [
-    ...whole.map((src) => ({ name: label, src })),
-    // Each piece shows its ROOM HERO 1 shot (room.jpg) only; a piece without one, or whose shot is already on the card, is left out
-    ...items.flatMap((it) => {
-      const pick = it.pics.find((p) => roomHero1(p) && !used.has(fileHash(p.src)));
-      if (!pick) return [];
-      used.add(fileHash(pick.src));
-      return [{ name: it.name, src: pick.src }];
-    }),
-  ];
+  const roomHero1 = (p: { src: string }) => /\/roomb?\.(jpe?g|png|webp)$/i.test(p.src);
+  return groupItems(c).flatMap((it) => {
+    const pick = it.pics.find((p) => roomHero1(p) && !used.has(fileHash(p.src)));
+    if (!pick) return [];
+    used.add(fileHash(pick.src));
+    return [{ name: it.name, src: pick.src }];
+  });
 };
 const coverList = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, await Promise.all(pickCovers(c).map(async (it) => {
   const src = it.src;
@@ -171,7 +162,7 @@ const materials = [
         {collections.map((c, n) => (
           <div class="room-panel" data-name={c.name} hidden={n > 0 ? true : undefined}>
           <div class="feat-card" id={`coll-${c.slug}`}>
-            {covers(c).length > 1 ? (
+            {covers(c).length > 0 ? (
               <div class="frame feat-slides" role="group" aria-roledescription="carousel" aria-label={`${c.name} pieces`}>
                 <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
                   {covers(c).map((p, i) => (
@@ -181,8 +172,10 @@ const materials = [
                     </figure>
                   ))}
                 </div>
-                <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
-                <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
+                {covers(c).length > 1 && <>
+                  <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
+                  <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
+                </>}
               </div>
             ) : imageUrl(c.hero_image_path)
               ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
@@ -346,9 +339,10 @@ const materials = [
   // while the mouse is elsewhere. With reduced motion it only moves when asked.
   document.querySelectorAll<HTMLElement>('.feat-slides').forEach((box) => {
     const track = box.querySelector<HTMLElement>('.fs-track')!;
-    const prev = box.querySelector<HTMLButtonElement>('.prev')!;
-    const next = box.querySelector<HTMLButtonElement>('.next')!;
+    const prev = box.querySelector<HTMLButtonElement>('.prev');
+    const next = box.querySelector<HTMLButtonElement>('.next');
     const n = track.children.length;
+    if (n < 2 || !prev || !next) return; // one room shot: nothing to slide
     const still = matchMedia('(prefers-reduced-motion: reduce)');
     const at = () => Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
     // Past either end it wraps round (first <-> last) in one step, without sliding back over every picture between

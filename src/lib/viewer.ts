@@ -125,8 +125,8 @@ export function openViewer(opts: ViewerOptions) {
       }, { once: true });
     }
     square.append(img);
-    const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back to collections' });
-    back.innerHTML = '<span aria-hidden="true">×</span>';
+    const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back to main page' });
+    back.innerHTML = '<span class="cat-back-label" aria-hidden="true">Back to main page</span><span aria-hidden="true">×</span>';
     square.append(back);
     slide.append(square);
     return slide;

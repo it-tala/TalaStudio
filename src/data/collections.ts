@@ -104,7 +104,13 @@ function galleryItems(base: string, url: string, names: Record<string, string> =
     // Two tracker items with the same name get a code suffix on the folder (console-table-za-211): the tracker gives the name
     const name = names[folder] ?? trackerName(`${url.replace('/collections/', '')}/${folder}`) ?? itemName(folder);
     const finishes = finishPhotos(dir, at);
-    const files = images(dir);
+    // The sheet update saves a photo as specb.jpg / 02b.jpg / roomb.jpg when Windows still holds the old file open; the
+    // old one then stays behind. Only the newer b copy is shown (Beechwood dining chair had two spec sheets, 5 Nov 2026)
+    const all = images(dir);
+    const files = all.filter((f) => {
+      const m = f.match(/^(spec|room|\d+)\.(jpe?g|png|webp)$/i);
+      return !m || !all.some((g) => g.toLowerCase() === `${m[1]}b.${m[2]}`.toLowerCase());
+    });
     const rooms = files.filter((f) => /^room/i.test(f));
     const specs = files.filter((f) => /^spec/i.test(f));
     const photos = files.filter((f) => !rooms.includes(f) && !specs.includes(f));

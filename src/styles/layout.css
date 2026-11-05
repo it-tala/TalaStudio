@@ -323,6 +323,9 @@
 /* Back, on the picture's top-right corner, close to where the eye is */
 .cat-back { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: rgba(20, 17, 14, .55); color: #f3ece2; font-size: 26px; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: background .2s; }
 .cat-back:hover { background: rgba(20, 17, 14, .8); }
+/* "Back to main page" beside the × (user, 5 Nov 2026): part of the button, so a click on it goes back too */
+.cat-back-label { position: absolute; right: calc(100% + 10px); top: 50%; translate: 0 -50%; padding: 7px 12px; border-radius: 8px; background: rgba(255, 255, 255, .94); color: #2a2520; font-size: 15px; letter-spacing: .01em; white-space: nowrap; box-shadow: 0 2px 10px rgba(0, 0, 0, .18); }
+@media (max-width: 600px) { .cat-back-label { display: none; } }
 .cat-back:focus-visible { outline: 2px solid #f3ece2; outline-offset: 2px; }
 .cat-link { margin-left: 10px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
 .cat-link[hidden] { display: none; }
