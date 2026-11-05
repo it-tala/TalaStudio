@@ -45,6 +45,7 @@ Copy `.env.example` to `.env`. Never commit `.env`.
 | `PUBLIC_CF_ANALYTICS_TOKEN` | all pages | Cloudflare Web Analytics token |
 | `PUBLIC_USE_SAMPLE_DATA` | local preview only | `true` shows the sample catalog when Supabase is not configured |
 | `TURNSTILE_SECRET_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `DAVID_EMAIL` (+ Cloudflare `EMAIL` send binding) | `functions/api/catalog.ts` | Set as Cloudflare Pages secrets |
+| `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `ASSET_BASE_URL` | `scripts/sync-content.mjs` | Where the collection pictures go. See Content pipeline |
 
 ### Sample data
 
@@ -121,35 +122,44 @@ Collections and products are read from Supabase **at build time**. Add or publis
 
 Images load from a public storage bucket named `public-images` (set in `src/lib/supabase.ts`).
 
-## Update from the line sheet (tracker CMS)
+## Content pipeline (the line sheet is the CMS)
 
-For now the collection items come from the Google Sheet **TS LINE SHEET**, not Supabase:
+The collection items and their pictures come from the [WEBSITE TRACKER tab](https://docs.google.com/spreadsheets/d/1vvQfDAKrxLSTQlbQf5lxOjKVatwMCAKuMGqARdhVai0/edit?gid=2116328639#gid=2116328639) of the Google Sheet **TS LINE SHEET**. Git keeps only the website: no collection picture and no copy of the sheet's data is committed.
 
-- [WEBSITE TRACKER tab](https://docs.google.com/spreadsheets/d/1vvQfDAKrxLSTQlbQf5lxOjKVatwMCAKuMGqARdhVai0/edit?gid=2116328639#gid=2116328639): images, codes, names, sizes, descriptions and specifications.
-- [SPEC SHEET DATA tab](https://docs.google.com/spreadsheets/d/1vvQfDAKrxLSTQlbQf5lxOjKVatwMCAKuMGqARdhVai0/edit?gid=917000001#gid=917000001): the spec sheet text (finish, hardware, notes, swatches). Change the sheet, then run the update in one of two ways:
+`scripts/sync-content.mjs` runs before every build (`npm run build`), so every commit Cloudflare Pages builds reads the sheet again:
 
-- **Ask Claude:** type `update dari sheet`. Type `cek dulu update dari sheet` to only see what would change. Claude runs the update, checks the build in a scratch copy, and reports what changed. Nothing is pushed until you say `push`.
-- **Run it yourself:** double-click `C:\PROJECT\tala-render-studio\Studio_Furniture\UPDATE_SEMUA.cmd`. To only see what would change, run `UPDATE_SEMUA.cmd --coba` from a Command Prompt in that folder. Then push.
+1. It reads the tab as CSV. The sheet must stay shared as "anyone with the link can view".
+2. It opens each Google Photos album link the site uses and takes the album's first photo. A photo already uploaded (same album, same first photo) is not downloaded again.
+3. A new or changed photo is converted to WebP at 480, 960, 1600 and 2400 px wide (never enlarged), analysed once (edge colours, card fit), and uploaded to Cloudflare R2 as `img/<content hash>/<width>.webp`, cached for a year.
+4. It prints what changed since the last run (`+` new item, `~` changed fields, `-` removed item, `!` broken link or row left off), then writes `src/data/content.json` (not in git), which the pages read.
 
-The update only touches what changed since the last run. The record of the last run is `06_SPEC_SHEET\catatan_terakhir.json`. The update never writes to the sheet and never commits or pushes. The full guide is `06_SPEC_SHEET\CARA_UPDATE.md`.
+The record of the last run, `manifest.json`, sits in the bucket beside the pictures, so every build and every machine shares it.
 
 | Sheet column | On the site |
 |---|---|
-| LP 1 LINK (LP HERO 1) | The collection's main image: the landing page hero, the collection card and the collection page (`public/collections/<collection>/<room>/hero.jpg`) |
-| LP 2 LINK, LP 3 LINK | `lp-2.jpg`, `lp-3.jpg` in the same folder (kept for later, not shown) |
-| IT F LINK, IT P LINK, IT DET LINK | Item photos: front, 3/4, detail (`<item>/01.jpg`, `02.jpg`, …) |
-| RM 1 LINK, RM 2 LINK | The item in a room (`<item>/room.jpg`, `room-2.jpg`) |
-| STANDARD CODE, NAME, DIMENSION, WEBSITE DESCRIPTION, WEBSITE SPECIFICATION | `src/data/tracker-items.json` (code, name, size, text) |
-| SPEC SHEET DATA tab, with WEBSITE TRACKER as fallback | `<item>/spec.jpg`, the last slide in the item viewer, plus PNG files and zips in `06_SPEC_SHEET\hasil` and `export` |
-| FINISH 1–4 (MAT 1–4, MAT n LINK), HANDLE COLOR | On the spec sheet: the Finish and Hardware rows, and a picture swatch per finish (first photo of its MAT LINK album) |
+| COLLECTION + the room in ROOM / ITEM | Which collection room the item belongs to (the rooms shown, their order and copy are set in `src/data/collections.ts`) |
+| STANDARD CODE | The item code (the CODE column is not used). Rows without a STANDARD CODE or a product photo are left off |
+| NAME, DIMENSION mm, WEBSITE DESCRIPTION, WEBSITE SPECIFICATION | Name, size (inches worked out from mm), the line under the viewer, the notes on the spec page |
+| LP 1 LINK | The collection room's hero: the first one among its rows |
+| RM 1 LINK | The item in a room: the room shot slider on the landing page |
+| IT F LINK, IT P LINK, IT DET LINK | Item photos: front (the catalog card), perspective, detail |
+| FINISH 1–4, HANDLE COLOR (each with its MAT LINK) | The swatches under the card and on the spec page |
+| LP 2/3, RM 2, SPEC, SOC MED, SPEC SHEET DATA tab | Not used |
 
-Each link uses the first photo in its Google Photos album.
+The spec page (the viewer's last slide) is built from these columns in the browser: no spec picture is made, so a changed spec only needs a new build.
 
-- **Empty album or broken (404) link:** the current image stays.
-- **No product photo link:** the row is skipped.
-- **Spec sheets:** every item with a code and photos gets one. Each field comes from SPEC SHEET DATA. Empty fields there are filled from WEBSITE TRACKER: size, and WEBSITE SPECIFICATION as the notes. An item with no SPEC row, or whose SPEC text belongs to another item (reported as `[ISI]`), uses the tracker data only. The finishes, hardware and swatches always come from the tracker when it has them. Empty photo slots and empty rows are left off the image.
-- **Clashes:** the run stops without writing anything if two rows would become the same item, or if a code or description names another collection.
-- **Item folders no longer in the sheet:** only reported. To delete them, run `python isi_item_website.py --hapus`.
+- **Empty album or broken (404) link:** the picture it had stays; a new one is left off. Reported with `!`.
+- **Two rows with the same collection, room and name:** the later one is left off and reported.
+- **Pictures no longer used:** kept in R2 and reported. `npm run sync -- --prune` deletes them.
+
+Commands:
+
+```bash
+npm run sync              # read the sheet now (also run by npm run build)
+npm run sync -- --dry     # only report what would change
+```
+
+Storage settings (Cloudflare Pages > Settings > Variables, and `.env` to upload from a PC): `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` (an R2 API token with write access to the bucket), `R2_BUCKET`, and `ASSET_BASE_URL` (the bucket's public address, e.g. `https://media.talastudio.net`). Without them the pipeline puts the pictures in `public/media` (not in git) for a local preview. On Cloudflare Pages it stops the build instead, so pictures never end up in the deploy.
 
 ## Deploy (Cloudflare Pages)
 

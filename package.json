@@ -4,13 +4,16 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "sync": "node scripts/sync-content.mjs",
+    "predev": "node scripts/sync-content.mjs --if-missing",
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/sync-content.mjs && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.0",
     "@supabase/supabase-js": "^2.45.0",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "sharp": "^0.34.5"
   }
 }

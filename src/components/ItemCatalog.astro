@@ -8,6 +8,7 @@ import { edgeBackground, cardFit, photoRatio } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
+import { atWidth, srcsetOf } from '../lib/content';
 // link: "View the collection" under the cards. only: show just these items (by name); the rest stay on the collection page.
 interface Props { collection: Collection; link?: boolean; only?: string[] }
 const { collection, link = true, only } = Astro.props;
@@ -51,6 +52,14 @@ const id = `cat-${collection.slug}`;
 const finishLine = (parts: string[], code: string | null) => [...parts, code].filter(Boolean).join(' · ');
 const specOf = (it: { name: string; folder: string }) => itemSpec(collection.name, collection.room, it.name, it.folder);
 const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? null;
+// The spec page at the end of the item viewer (built in the browser from this, see specPage below)
+const specData = (it: { name: string; folder: string }) => {
+  const s = specOf(it);
+  return s && JSON.stringify({
+    collection: collection.name, name: it.name, code: s.code, category: s.category, size: s.size, sizeIn: s.sizeIn,
+    notes: s.specification, finishes: s.finishes, handle: s.handle,
+  });
+};
 ---
 {items.length > 0 && (
   <section class="cat" aria-labelledby={`${id}-title`} data-collection={collection.name} data-bgs={JSON.stringify(squareBg)}>
@@ -59,10 +68,10 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
-        <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
+        <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-spec={specData(it) || undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
           <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
-            <span class:list={['frame', 'edge-fill', { 'fill-wide': it.band.wide, 'fill-tall': it.band.tall }]} style={[it.bg && `background:${it.bg}`, `--fill:url(${it.srcs[0]})`, `--band:${it.band.size}%`, it.fit && `--fs:${it.fit.scale};--fx:${it.fit.shift}`].filter(Boolean).join(';')}>
-              <img src={it.srcs[0]} alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% ${it.fit.shiftY}%` : undefined} />
+            <span class:list={['frame', 'edge-fill', { 'fill-wide': it.band.wide, 'fill-tall': it.band.tall }]} style={[it.bg && `background:${it.bg}`, `--fill:url(${atWidth(it.srcs[0], 480)})`, `--band:${it.band.size}%`, it.fit && `--fs:${it.fit.scale};--fx:${it.fit.shift}`].filter(Boolean).join(';')}>
+              <img src={it.srcs[0]} srcset={srcsetOf(it.srcs[0])} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 25vw" alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% ${it.fit.shiftY}%` : undefined} />
             </span>
           </button>
           {woods.length > 0 && (
@@ -106,6 +115,7 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
       li.querySelectorAll<HTMLButtonElement>('.sw').forEach((sw) => sw.addEventListener('click', () => {
         sw.parentElement!.querySelectorAll('.sw').forEach((o) => o.setAttribute('aria-pressed', String(o === sw)));
         const f = finish(li);
+        if (img.src !== new URL(f.srcs[0], location.href).href) img.removeAttribute('srcset');
         img.src = f.srcs[0];
         img.parentElement!.style.setProperty('--fill', `url(${f.srcs[0]})`);
         img.alt = `${sec.dataset.collection} ${li.dataset.name}, ${f.labels.join(', ')}`;
@@ -117,15 +127,39 @@ const codeOf = (it: { name: string; folder: string }) => specOf(it)?.code ?? nul
       const li = b.closest<HTMLElement>('.cat-item')!;
       const name = li.dataset.name ?? '';
       const f = finish(li);
+      const spec = li.dataset.spec ? specPage(JSON.parse(li.dataset.spec)) : null;
       openViewer({
         title: name,
         info: f.soon ? '' : f.labels.join(' · '),
         text: li.dataset.desc,
         opener: b,
-        slides: f.srcs.map((src, i) => ({ src, bg: bgs[src], alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${f.srcs.length}` })),
+        slides: [
+          ...f.srcs.map((src, i) => ({ src, bg: bgs[src], alt: `${sec.dataset.collection} ${name}, view ${i + 1} of ${f.srcs.length}` })),
+          ...(spec ? [{ src: '', html: spec, alt: `${sec.dataset.collection} ${name}, specification`, info: 'Specification' }] : []),
+        ],
       });
     }));
   });
+
+  // The spec page, the viewer's last slide: the item's code, category, finishes, hardware, size and notes from the sheet
+  type Swatch = { name: string; swatch: string | null };
+  type Spec = { collection: string; name: string; code: string | null; category: string; size: string | null; sizeIn: string | null; notes: string[]; finishes: Swatch[]; handle: Swatch | null };
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  function specPage(s: Spec) {
+    const rows = [
+      ['Product', `${s.collection} ${s.name}`], ['Code', s.code], ['Category', s.category],
+      ['Finish', s.finishes.map((f) => f.name).join(', ')], ['Hardware', s.handle?.name],
+      ['Size (mm)', s.size?.replace(/ mm$/, '')], ['Size (in)', s.sizeIn?.replace(/ in$/, '')],
+    ].filter(([, v]) => v);
+    const swatches = [...s.finishes, ...(s.handle ? [s.handle] : [])].filter((f) => f.swatch);
+    return `<div class="spec-page">
+      <p class="spec-coll">${esc(s.collection)}</p><h4>${esc(s.name)}</h4>
+      <p class="spec-head">Specification</p>
+      <dl>${rows.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>
+      ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(f.swatch!)})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}
+      ${s.notes.length ? `<p class="spec-head">Notes</p><ul class="spec-notes">${s.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+    </div>`;
+  }
 </script>
 
 <style is:global>

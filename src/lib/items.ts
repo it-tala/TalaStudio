@@ -27,10 +27,10 @@ const ORDER: [(typeof ROOMS)[number], RegExp][] = [
   ['Bedroom', /mirror/i],
 ];
 const TALL_BOY = ORDER.findIndex(([, re]) => re.source.includes('tall'));
-// src: one of the item's pictures; a mirror whose pictures sit in a bedroom folder ranks right after the tall boy
-const rank = (name: string, src = '') => {
+// folder: the item's folder (collection/room/item); a bedroom mirror ranks right after the tall boy
+const rank = (name: string, folder = '') => {
   const i = ORDER.findIndex(([, re]) => re.test(name));
-  if (/mirror/i.test(name) && src.includes('/bedroom/')) return TALL_BOY + 0.5;
+  if (/mirror/i.test(name) && `/${folder}/`.includes('/bedroom/')) return TALL_BOY + 0.5;
   return i < 0 ? ORDER.length : i;
 };
 
@@ -40,8 +40,9 @@ export const itemRooms = (collection: Collection) => {
   return ROOMS.filter((r) => found.has(r));
 };
 
-// The folder a picture sits in ("doheny/living/console-table"), without the /collections/ prefix
-const folderOf = (src: string) => src.slice(0, src.lastIndexOf('/')).replace(/^\/collections\//, '');
+// The item a picture belongs to ("doheny/living/console-table"): its folder from the content pipeline, else the
+// folder it sits in under /collections/
+const folderOf = (p: Pic) => p.folder ?? p.src.slice(0, p.src.lastIndexOf('/')).replace(/^\/collections\//, '');
 
 // The items of a collection: gallery pictures grouped by caption name and folder (two items may share a name), in
 // catalog order (above). Hidden pictures are left out; the cover picture leads and the spec sheet closes.
@@ -50,7 +51,7 @@ export function groupItems(collection: Collection): { name: string; folder: stri
   const groups = new Map<string, Pic[]>();
   for (const g of collection.gallery ?? []) {
     if (!g.name) continue;
-    const k = `${g.name}\n${folderOf(g.src)}`;
+    const k = `${g.name}\n${folderOf(g)}`;
     groups.set(k, [...(groups.get(k) ?? []), g]);
   }
   return [...groups]
@@ -60,5 +61,5 @@ export function groupItems(collection: Collection): { name: string; folder: stri
       return { name, folder, pics: [...all.filter((p) => p.cover), ...all.filter((p) => !p.cover && !p.spec), ...all.filter((p) => p.spec && !p.cover)] };
     })
     .filter((it) => it.pics.length > 0)
-    .sort((a, b) => rank(a.name, a.pics[0].src) - rank(b.name, b.pics[0].src));
+    .sort((a, b) => rank(a.name, a.folder) - rank(b.name, b.folder));
 }

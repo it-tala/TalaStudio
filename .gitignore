@@ -3,3 +3,7 @@ dist
 .astro
 .env
 .dev.vars
+
+# Written by the content pipeline (scripts/sync-content.mjs) on every build; pictures live in Cloudflare R2
+src/data/content.json
+public/media/

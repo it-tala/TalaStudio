@@ -4,11 +4,8 @@ import Ph from '../components/Ph.astro';
 import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
-import { edgeBackground } from '../lib/edge';
-import sharp from 'sharp';
-import { join } from 'node:path';
-import { readFileSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { edgeBackground, photoRatio } from '../lib/edge';
+import { pictureId, srcsetOf } from '../lib/content';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
@@ -22,10 +19,10 @@ const all = await getCollections();
 const homeItems: Record<string, string[]> = {};
 const roomOrder = ['bedroom', 'living', 'dining', 'other'];
 const roomLabel = (r: string) => (r === 'other' ? 'Collection' : `${r[0].toUpperCase()}${r.slice(1)} collection`);
-// Hero: one slide per room that has a real room shot (hero.jpg), rooms of the same collection side by side
+// Hero: one slide per room that has a real room shot (LP 1 LINK), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
 // A click opens all these room shots in the picture viewer, from the one clicked, each linking to its collection page.
-const withRoomShot = all.filter((c) => /\/hero(-\w+)?\.(jpe?g|png|webp)$/.test(c.hero_image_path ?? ''));
+const withRoomShot = all.filter((c) => c.hero_is_room);
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
 const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
   .map(async (c) => ({
@@ -51,43 +48,26 @@ const groups = [...new Set(collections.map((c) => c.name))].map((name) => collec
 const roomName = (c: (typeof all)[number]) => roomLabel(c.room).replace(/ collection$/, '');
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath. The frame is 16:9 like
 // the room shots; a taller shot (the mirror's) is shown whole, on its own edge colour, instead of being cut.
-// Each piece's picture is its ROOM HERO 1 shot from the tracker (room.jpg; ROOM HERO 2 is room-2.jpg and stays off).
-// No picture twice in one room: pieces often share a room shot (one album link), so a shot already on the card is skipped.
-const fileHash = (src: string) => {
-  try { return createHash('sha1').update(readFileSync(join(process.cwd(), 'public', src))).digest('hex'); } catch { return src; }
-};
-// Pictures left off the cards, wherever the same file sits (picked by the user, 4 Nov 2026). Kept as the content of the
-// photo picked then (sha1, from git), not its path: a new photo the sheet later puts at that path shows again
-// (Calabasas night table and Beechwood queen bed got new room shots on 5 Nov 2026).
-const offCard = new Set([
-  'be4bfb1491c3949ab94a7acd2f8214ac8eff5109', // palisades/bedroom/night-table/room-2.jpg: dark wall, pendant lamps
-  '66a9a278ac4a2334ccbe43e459924c6d4e23aab8', // calabasas/bedroom/night-table/room.jpg: blue bedding
-  '3ab5515041ac137bac4afa36f5e859931aa361c7', // beechwood/bedroom/queen-bed/room.jpg: plant by the window
-  '5c7d82dd8b49904b10a61f1f3678fae29669606a', // calabasas/living/coffee-table/01.jpg
-  'aecbef7f8dc88bcb0b094fcfa25406f911aed5a7', // zuma/living/sofa/room-2.jpg: two armchairs facing the sofa, orange cushions
-]);
-// Only ROOM HERO 1 shots (user, 5 Nov 2026): no hero or other room shot stands in, and a piece without one is skipped.
-// roomb.jpg is a newer RM 1 saved beside a room.jpg that Windows held open (see galleryItems in collections.ts).
-// A "room shot" that is the same file as a product photo is a product shot (the Calabasas sofa's RM 1 link pointed at
-// its product album, 5 Nov 2026): it is left off too.
+// Each piece's picture is its ROOM HERO 1 shot from the sheet (RM 1 LINK; a piece without one is skipped).
+// No picture twice in one room: pieces often share a room shot (one album link), so a shot already on the card is
+// skipped, and a "room shot" that is the same picture as a product photo is a product shot: it is left off too.
 const pickCovers = (c: (typeof all)[number]) => {
   const items = groupItems(c);
-  const used = new Set<string>([...offCard, ...items.flatMap((it) => it.pics.filter((p) => !p.cover && !p.spec).map((p) => fileHash(p.src)))]);
-  const roomHero1 = (p: { src: string }) => /\/roomb?\.(jpe?g|png|webp)$/i.test(p.src);
+  const used = new Set<string>(items.flatMap((it) => it.pics.filter((p) => !p.cover && !p.spec).map((p) => pictureId(p.src))));
   return items.flatMap((it) => {
-    const pick = it.pics.find((p) => roomHero1(p) && !used.has(fileHash(p.src)));
+    const pick = it.pics.find((p) => p.cover && !used.has(pictureId(p.src)));
     if (!pick) return [];
-    used.add(fileHash(pick.src));
+    used.add(pictureId(pick.src));
     return [{ name: it.name, src: pick.src }];
   });
 };
 const coverList = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, await Promise.all(pickCovers(c).map(async (it) => {
   const src = it.src;
-  const meta = await sharp(join(process.cwd(), 'public', src)).metadata().catch(() => null);
-  const tall = !!meta?.width && !!meta.height && meta.width / meta.height < 1.5;
+  const ratio = await photoRatio(src);
+  const tall = ratio > 0 && ratio < 1.5;
   return { name: it.name, src, bg: tall ? await edgeBackground(src, 16 / 9) : null };
 }))])));
-// A room with no piece in a room shot keeps a place in the slider with its own room shot (hero.jpg)
+// A room with no piece in a room shot keeps a place in the slider with its own room shot (LP 1 LINK)
 const covers = (c: (typeof all)[number]) =>
   coverList[c.slug]?.length ? coverList[c.slug] : c.hero_image_path ? [{ name: '', src: imageUrl(c.hero_image_path)!, bg: null }] : [];
 const slidesOf = (rooms: (typeof all)[number][]) => rooms.flatMap((c) => covers(c).map((p) => ({ ...p, c })));
@@ -175,7 +155,7 @@ const materials = [
                 <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
                   {slidesOf(rooms).map((p, i) => (
                     <figure class:list={['fs-slide', { whole: p.bg }]} data-room={p.c.slug} data-item={p.name || undefined} style={p.bg ? `background:${p.bg}` : undefined}>
-                      <img src={p.src} alt={`${p.c.name} ${p.name || roomName(p.c).toLowerCase()}`} loading={i === 0 ? 'eager' : 'lazy'} />
+                      <img src={p.src} srcset={srcsetOf(p.src)} sizes="(max-width: 1000px) 100vw, 60vw" alt={`${p.c.name} ${p.name || roomName(p.c).toLowerCase()}`} loading={i === 0 ? 'eager' : 'lazy'} />
                       <figcaption>{p.name || roomName(p.c)}<span aria-hidden="true">|</span>{p.c.name}</figcaption>
                     </figure>
                   ))}

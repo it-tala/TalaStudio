@@ -4,9 +4,10 @@ export { supabase, imageUrl };
 export type Collection = {
   id: string; slug: string; name: string; room: 'bedroom' | 'living' | 'dining' | 'other';
   description: string | null; hero_image_path: string | null; sort_order: number;
-  gallery?: { src: string; name?: string; code?: string; cover?: boolean; hide?: boolean; spec?: boolean; front?: boolean; finishes?: Record<string, string> }[]; // static v1 only: extra images from /public
+  // static v1 only: the item pictures from the content pipeline (folder = collection/room/item, the item's key)
+  gallery?: { src: string; name?: string; folder?: string; code?: string; cover?: boolean; hide?: boolean; spec?: boolean; front?: boolean; finishes?: Record<string, string> }[];
   woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[]; // static v1 only: swatches on the landing page catalog
-  room_shots?: string[]; // static v1 only: extra room shots of the whole room (room.jpg, room-2.jpg … beside hero.jpg)
+  hero_is_room?: boolean; // static v1 only: the hero is a real room shot (LP 1 LINK), not a product photo standing in
 };
 
 export type Product = {

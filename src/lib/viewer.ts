@@ -3,7 +3,8 @@
 // A click anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
 // the × on the picture's top-right corner (or Esc) closes it; the back arrow beside it also goes to the home page's collection card.
 // A slide's own info and link (the home hero: each room shot names and links its own collection) replace the viewer's
-export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string; info?: string; link?: { href: string; text: string } };
+// html: a page of text in place of a picture (the item's spec page, built by ItemCatalog from the sheet's data)
+export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string; info?: string; link?: { href: string; text: string }; html?: string };
 export type ViewerOptions = {
   slides: ViewerSlide[];
   title: string;                           // shown under the picture when a slide has no name of its own
@@ -108,12 +109,13 @@ export function openViewer(opts: ViewerOptions) {
 
   track.replaceChildren(...opts.slides.map((s) => {
     const slide = el('div', { className: 'cat-slide' });
-    // The spec sheet (spec.jpg, see collections.ts) is a 1:1 page: it gets a square frame, not the 16:9 photo frame
-    const square = el('div', { className: /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
+    // The spec page is a 1:1 page: it gets a square frame, not the 16:9 photo frame
+    const square = el('div', { className: s.html || /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
     if (s.bg) square.style.background = s.bg;
-    const img = el('img', { src: s.src, alt: s.alt });
+    const img = s.html ? el('div', { className: 'spec-wrap', innerHTML: s.html }) : el('img', { src: s.src, alt: s.alt });
+    if (s.html) img.setAttribute('aria-label', s.alt);
     // A photo that is not 16:9 leaves space at its sides or top and bottom; its own edges are stretched into it (edge-fill)
-    if (!square.classList.contains('cat-spec')) {
+    if (img instanceof HTMLImageElement && !square.classList.contains('cat-spec')) {
       square.classList.add('edge-fill');
       square.style.setProperty('--fill', `url(${s.src})`);
       img.addEventListener('load', () => {
@@ -138,8 +140,8 @@ export function openViewer(opts: ViewerOptions) {
     return slide;
   }));
   thumbs.replaceChildren(...opts.slides.map((s, i) => {
-    const t = el('button', { type: 'button', ariaLabel: `Show ${s.name ?? `picture ${i + 1}`}` });
-    t.append(el('img', { src: s.src, alt: '' }));
+    const t = el('button', { type: 'button', ariaLabel: `Show ${s.name ?? (s.html ? 'specification' : `picture ${i + 1}`)}` });
+    t.append(s.html ? el('span', { className: 'cat-thumb-spec', textContent: 'Spec' }) : el('img', { src: s.src, alt: '' }));
     t.addEventListener('click', () => go(i));
     return t;
   }));

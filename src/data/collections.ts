@@ -1,153 +1,74 @@
 // V1 static collections. Replaced by the Supabase table when the admin page is built.
 //
-// Assets live per collection, per room, per item:
-//   public/collections/<collection>/<room>/hero.jpg                 the room shot behind the collection (hero, cards)
-//   public/collections/<collection>/<room>/room.jpg, room-2.jpg …   more shots of the whole room, for the landing page
-//                                                                    card when none of the room's items has a room shot
-//   public/collections/<collection>/<room>/<item>/01.jpg, 02.jpg …  the item's photos in order; 01 is the front view
-//                                                                    (the catalog card), the rest follow in the viewer
-//   public/collections/<collection>/<room>/<item>/room.jpg          ROOM HERO 1 in the tracker: the item in a room, its
-//                                                                    picture in the landing page card slider (left out of
-//                                                                    the catalog); room-2.jpg = ROOM HERO 2 (not shown)
-//   public/collections/<collection>/<room>/<item>/spec.jpg          the spec sheet, always the last picture in the viewer
-// <collection> = the collection name in lower case with dashes (silver-lake), <room> = bedroom | living | dining (| other),
-// <item> = the item name the same way (night-table, 6-drawer-dresser, tv-unit). Any of .jpg / .jpeg / .png / .webp / .svg.
-// The item name shown on the site is its WEBSITE TRACKER name, else it comes from its folder (6-drawer-dresser ->
-// 6 Drawer Dresser); names lists exceptions. Codes, sizes and descriptions come from the tracker too (item-codes.ts).
-// Only watermarked images go in public/. Keep the originals outside the repo.
+// The items and their pictures come from the WEBSITE TRACKER tab of TS LINE SHEET, through the content pipeline
+// (scripts/sync-content.mjs -> src/data/content.json, pictures in Cloudflare R2). Per collection room (a sheet row's
+// COLLECTION and the room in ROOM / ITEM):
+//   LP 1 LINK                          the room shot behind the collection (landing page hero): the first one in the room
+//   RM 1 LINK                          the item in a room (the room shot slider on the landing page)
+//   IT F LINK, IT P LINK, IT DET LINK  the item's photos: front (the catalog card), perspective, detail
+//   STANDARD CODE, NAME, DIMENSION mm, WEBSITE DESCRIPTION, WEBSITE SPECIFICATION, FINISH 1–4, HANDLE COLOR
+//                                      the item's code, name, size and spec (the last page of the item viewer)
+// Each link is a Google Photos album; its first photo is used. Only watermarked photos belong in those albums.
 //
-// To show a collection room: add an entry below with published: true. To hide one: published: false.
-// The page URL is /collections/<slug>. Fill description when known.
-//
-// Wood and fabric choices (the swatches under each item): list them in woods / fabrics, light to dark.
-// shown = the wood (and fabric) the photos show; without it the first of each list is assumed.
-// fabrics only apply to the items named in upholstered. Swatch colours are in finishes.ts.
-// A photo in another finish goes in a sub-folder of the item named after it, with the same file name:
-//   bed/walnut/01.jpg  (wood)     bed/walnut/grey/01.jpg  (wood + fabric)     ('Cream Bouclé' -> cream-boucle)
-// A finish without its own photos still shows as a swatch; the item keeps the default photo, marked "photo soon".
-import { existsSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+// This list only says which collection rooms the site shows, in what order, and their copy. To show a collection
+// room: add an entry below with published: true (its name and room must match the sheet). To hide one: published: false.
 import type { Collection } from '../lib/supabase';
-import { trackerName } from './item-codes';
+import { content, type ContentItem } from '../lib/content';
 
-type Entry = {
-  slug: string; name: string; room: Collection['room']; description: string | null; published: boolean;
-  names?: Record<string, string>; // item folder -> name shown, where the folder name alone is not right
-  hidden?: string[]; // item folders kept on disk but left off the site
-  woods?: string[]; fabrics?: string[]; upholstered?: string[]; shown?: string[];
-};
-
-const dohenyFinishes = {
-  woods: ['Bleached Oak', 'Natural Oak', 'Smoked Oak', 'Walnut'], fabrics: ['Cream Bouclé', 'Cream', 'Grey'], upholstered: ['Queen Bed', '7 Foot Sofa', 'Arm Chair'],
-  shown: ['Natural Oak', 'Cream'],
-};
+type Entry = { slug: string; name: string; room: Collection['room']; description: string | null; published: boolean };
 
 export const collectionEntries: Entry[] = [
-  { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: 'A low bed with rounded wood edges and a padded headboard, with a night table, dresser and mirror to match.', published: true,
-    ...dohenyFinishes },
+  { slug: 'doheny', name: 'Doheny', room: 'bedroom', description: 'A low bed with rounded wood edges and a padded headboard, with a night table, dresser and mirror to match.', published: true },
   // Palisades was listed as Temescal until 2 Nov 2026 ("Palasides" in the line sheet)
   { slug: 'palisades', name: 'Palisades', room: 'bedroom', description: 'Straight lines and a slatted headboard on a light wood frame, with a night table, dresser and chest to match. Simple to live with.', published: true },
-  { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: 'Honey Oak with tan leather cord: wrapped on the round top rail of the bed, the mirror rails and every brass pull. A bed, night table, six-drawer dresser, tall boy and mirror.', published: true,
-    woods: ['Honey Oak'] },
+  { slug: 'calabasas', name: 'Calabasas', room: 'bedroom', description: 'Honey Oak with tan leather cord: wrapped on the round top rail of the bed, the mirror rails and every brass pull. A bed, night table, six-drawer dresser, tall boy and mirror.', published: true },
   { slug: 'beechwood', name: 'Beechwood', room: 'bedroom', description: 'A rounded timber headboard with two open cut-outs over a padded panel. A night table, six-drawer dresser, tall boy and mirror, with milled pulls and johar wood accents.', published: true },
   // Silver Lake: off since 2 Nov 2026
   { slug: 'silver-lake-bedroom', name: 'Silver Lake', room: 'bedroom', description: null, published: false },
   { slug: 'silver-lake', name: 'Silver Lake', room: 'living', description: 'A sofa and armchair framed in sculpted dark wood, with deep, soft seats. Made for the room people actually sit in.', published: false },
-  // console-table-za-211: the old ZA-211 folder, no longer in the sheet (it is DH-211 now): off since 4 Nov 2026
-  { slug: 'doheny-living', name: 'Doheny', room: 'living', hidden: ['console-table-za-211'], description: 'Bouclé seats held by rounded timber arms, with side and coffee tables topped in textured glass. A TV console and console table complete the room.', published: true, ...dohenyFinishes },
+  { slug: 'doheny-living', name: 'Doheny', room: 'living', description: 'Bouclé seats held by rounded timber arms, with side and coffee tables topped in textured glass. A TV console and console table complete the room.', published: true },
   // Beechwood has no living room (3 Nov 2026)
   { slug: 'beechwood-dining', name: 'Beechwood', room: 'dining', description: 'A rectangular table and low-arm chairs with woven seats, a buffet with four doors inset with rattan webbing, and a mirror to match.', published: true },
-  // Calabasas living (items from the WEBSITE TRACKER photo links, 3 Nov 2026)
   { slug: 'calabasas-living', name: 'Calabasas', room: 'living', description: 'Bouclé seating on a low timber base, with oval tables over woven rattan shelves. A TV console and an open cabinet complete the room.', published: true },
   // Zuma, room by room (2 Nov 2026)
   { slug: 'zuma', name: 'Zuma', room: 'bedroom', description: 'An upholstered bed on a timber box, with drawer pieces finished in hand-cast antique brass pulls. The mirror is Venetian antique glass.', published: true },
-  // The old TV Unit and Console Table are now Doheny items (DH-213, DH-211): off since 4 Nov 2026
-  { slug: 'zuma-living', name: 'Zuma', room: 'living', description: 'A sofa and armchair with side and coffee tables and an armoire, drawn to sit with the Zuma bedroom and dining pieces.', published: true, hidden: ['tv-unit', 'console-table'] },
+  { slug: 'zuma-living', name: 'Zuma', room: 'living', description: 'A sofa and armchair with side and coffee tables and an armoire, drawn to sit with the Zuma bedroom and dining pieces.', published: true },
   { slug: 'zuma-dining', name: 'Zuma', room: 'dining', description: 'A dining table and low-arm chairs with woven loom backs, a buffet, and a mirror in Venetian antique glass.', published: true },
   { slug: 'brentwood', name: 'Brentwood', room: 'bedroom', description: null, published: false },
 ];
 
-const IMAGE = /\.(jpe?g|png|webp|svg)$/i;
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const dirs = (dir: string) => readdirSync(dir).filter((f) => statSync(join(dir, f)).isDirectory()).sort();
-const images = (dir: string) => readdirSync(dir).filter((f) => IMAGE.test(f)).sort();
-// night-table -> Night Table, tv-unit -> TV Unit, 6-drawer-dresser -> 6 Drawer Dresser
-const itemName = (folder: string) =>
-  folder.split('-').map((w) => (w === 'tv' ? 'TV' : ['with', 'and', 'of'].includes(w) ? w : w[0].toUpperCase() + w.slice(1))).join(' ');
 
-// hero.jpg, or the newest of hero.jpg / hero-2.jpg / ... (a new room shot can go in beside one Windows keeps locked)
-function heroPath(base: string, url: string): string | null {
-  const all = existsSync(base) ? images(base).filter((x) => /^hero([.-]|$)/i.test(x)) : [];
-  const f = all.sort((a, b) => statSync(join(base, b)).mtimeMs - statSync(join(base, a)).mtimeMs)[0];
-  return f ? `${url}/${f}` : null;
-}
-
-// Photos of the same file in other finishes: { 'walnut': src, 'walnut/grey': src }, keyed by file name.
-function finishPhotos(dir: string, url: string): Map<string, Record<string, string>> {
-  const out = new Map<string, Record<string, string>>();
-  const scan = (key: string) => {
-    for (const f of images(join(dir, key))) out.set(f, { ...out.get(f), [key]: `${url}/${key}/${f}` });
-  };
-  for (const wood of dirs(dir)) {
-    scan(wood);
-    for (const fabric of dirs(join(dir, wood))) scan(`${wood}/${fabric}`);
-  }
-  return out;
-}
-
-// Every item folder of a room, its pictures in the order the site expects: room shots, numbered photos, spec sheet
-function galleryItems(base: string, url: string, names: Record<string, string> = {}, hidden: string[] = []): NonNullable<Collection['gallery']> {
-  if (!existsSync(base)) return [];
-  return dirs(base).filter((folder) => !hidden.includes(folder)).flatMap((folder) => {
-    const dir = join(base, folder);
-    const at = `${url}/${folder}`;
-    // Two tracker items with the same name get a code suffix on the folder (console-table-za-211): the tracker gives the name
-    const name = names[folder] ?? trackerName(`${url.replace('/collections/', '')}/${folder}`) ?? itemName(folder);
-    const finishes = finishPhotos(dir, at);
-    // The sheet update saves a photo as specb.jpg / 02b.jpg / roomb.jpg when Windows still holds the old file open; the
-    // old one then stays behind (and on a later run the b copy can be the old one). Of such a pair only the newer file is
-    // shown (Beechwood dining chair had two spec sheets, 5 Nov 2026)
-    const all = images(dir);
-    const age = (f: string) => statSync(join(dir, f)).mtimeMs;
-    const files = all.filter((f) => {
-      const m = f.match(/^(spec|room|\d+)(b?)\.(jpe?g|png|webp)$/i);
-      if (!m) return true;
-      const other = all.find((g) => g.toLowerCase() === `${m[1]}${m[2] ? '' : 'b'}.${m[3]}`.toLowerCase());
-      return !other || age(f) >= age(other);
-    });
-    const rooms = files.filter((f) => /^room/i.test(f));
-    const specs = files.filter((f) => /^spec/i.test(f));
-    const photos = files.filter((f) => !rooms.includes(f) && !specs.includes(f));
-    return [
-      ...rooms.map((f) => ({ src: `${at}/${f}`, name, cover: true })),
-      ...photos.map((f, i) => ({ src: `${at}/${f}`, name, front: i === 0, finishes: finishes.get(f) })),
-      ...specs.map((f) => ({ src: `${at}/${f}`, name, spec: true })),
-    ];
-  });
+// An item's pictures in the order the site expects: its room shot, then front, perspective and detail
+function itemPictures(it: ContentItem): NonNullable<Collection['gallery']> {
+  const p = it.photos;
+  const product = [p.front, p.perspective, p.detail].filter((s): s is string => !!s);
+  return [
+    ...(p.room ? [{ src: p.room, name: it.name, folder: it.folder, cover: true }] : []),
+    ...product.map((src, i) => ({ src, name: it.name, folder: it.folder, front: i === 0 })),
+  ];
 }
 
 export function staticCollections(): Collection[] {
   return collectionEntries
     .filter((c) => c.published)
     .map((c, i) => {
-      const folder = `${slugify(c.name)}/${c.room}`;
-      const base = join(process.cwd(), 'public', 'collections', folder);
-      const url = `/collections/${folder}`;
-      const gallery = galleryItems(base, url, c.names, c.hidden);
+      const items = content.items.filter((it) => slugify(it.collection) === slugify(c.name) && it.room === c.room);
+      const gallery = items.flatMap(itemPictures);
+      const hero = content.heroes[`${slugify(c.name)}/${c.room}`] ?? null;
+      // The finishes the room's items come in (FINISH 1–4), in sheet order; the photos show none in particular
+      const woods = [...new Set(items.flatMap((it) => it.finishes.map((f) => f.name)))];
       return {
         id: c.slug,
         slug: c.slug,
         name: c.name,
         room: c.room,
         description: c.description,
-        // Without a room shot the first photo stands in
-        hero_image_path: heroPath(base, url) ?? gallery.find((g) => !g.spec)?.src ?? null,
-        room_shots: existsSync(base) ? images(base).filter((f) => /^room([.-]|$)/i.test(f)).map((f) => `${url}/${f}`) : [],
+        // Without a room shot (LP 1 LINK) the first photo stands in
+        hero_image_path: hero ?? gallery.find((g) => !g.cover)?.src ?? null,
+        hero_is_room: !!hero,
         gallery,
-        woods: c.woods,
-        fabrics: c.fabrics,
-        upholstered: c.upholstered,
-        shown: c.shown,
+        woods,
         sort_order: i + 1,
       };
     });

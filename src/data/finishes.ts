@@ -1,3 +1,5 @@
+import { content } from '../lib/content';
+
 // Swatch for each wood and fabric name used in collections.ts (the small dots under a catalog item).
 // Woods show a photo of the grain (public/swatches/<name>.webp, a square crop, 192 px); the colour is the fallback while it loads.
 // Fabric colours are picked from the renders by eye, so only approximate: change them here when the real samples are in.
@@ -15,10 +17,14 @@ const SWATCHES: Record<string, { color: string; image?: string }> = {
   'Cream Bouclé': { color: '#edebe7' },
 };
 
-// CSS background for a swatch
+// Swatch photos from the sheet (the first photo of each FINISH's MAT LINK album, via the content pipeline)
+const fromSheet = new Map(content.items.flatMap((it) => it.finishes).filter((f) => f.swatch).map((f) => [f.name, f.swatch!]));
+
+// CSS background for a swatch: the sheet's photo, else the list above, else a neutral dot
 export const swatch = (finish: string) => {
   const s = SWATCHES[finish] ?? { color: '#cfc8bc' };
-  return s.image ? `url(${s.image}) center / cover no-repeat, ${s.color}` : s.color;
+  const image = fromSheet.get(finish) ?? s.image;
+  return image ? `url(${image}) center / cover no-repeat, ${s.color}` : s.color;
 };
 
 // Folder name for a finish: 'Cream Bouclé' -> cream-boucle
