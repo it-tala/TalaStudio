@@ -10,7 +10,8 @@
 //
 // Storage: Cloudflare R2 when R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET and ASSET_BASE_URL
 // (the bucket's public address, e.g. https://media.talastudio.net) are set; else public/media for a local preview.
-// On Cloudflare Pages (CF_PAGES) it refuses to run without R2, so pictures never end up in the deploy.
+// On Cloudflare's build machines (Workers Builds or Pages) it refuses to run without R2, so pictures never end up in
+// the deploy.
 // The record of the last run (manifest.json) sits next to the pictures, so every machine and every build shares it.
 //
 // node scripts/sync-content.mjs              read the sheet, update pictures and content.json
@@ -44,9 +45,11 @@ if (args.has('--if-missing') && existsSync(OUT)) process.exit(0);
 // ---------- storage: R2 (S3 API, signed with AWS SigV4) or a local folder ----------
 
 const r2 = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET', 'ASSET_BASE_URL'].every((k) => process.env[k]);
-if (!r2 && process.env.CF_PAGES) {
+// Cloudflare's build machines: Workers Builds sets WORKERS_CI, Pages sets CF_PAGES
+if (!r2 && (process.env.WORKERS_CI || process.env.CF_PAGES)) {
   console.error('sync-content: R2 is not set up (R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET, ASSET_BASE_URL).');
-  console.error('Add them in Cloudflare Pages > Settings > Variables, so the pictures go to R2 and not into the deploy.');
+  console.error('Add them as build variables (Workers > talastudio > Settings > Build > Variables and secrets),');
+  console.error('so the pictures go to R2 and not into the deploy. Runtime variables are not passed to the build.');
   process.exit(1);
 }
 

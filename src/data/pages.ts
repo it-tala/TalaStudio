@@ -169,6 +169,11 @@ export const pages: Page[] = [
         figureFirst: true,
         link: { href: '/request-catalog', label: 'Request catalog' },
       },
+      {
+        type: 'cta', title: 'Let’s build your next range.',
+        text: 'Tell us what you sell and where. We will come back with the pieces, finishes and a container plan that fit.',
+        href: 'mailto:evin@talastudio.net?subject=TalaStudio%20enquiry', label: 'Email evin@talastudio.net',
+      },
     ],
   },
   {
@@ -202,6 +207,11 @@ export const pages: Page[] = [
             text: 'David has been in the furniture industry for more than 30 years. He has worked with Palliser, Lane, Natuzzi and other major brands, as well as large manufacturers across Asia. As Director of Marketing, he leads sales, marketing, product development and sourcing, along with upholstery, trend and merchandising. David is based in Vietnam.' },
         ],
         outro: 'To see how we design and build, visit <a href="/how-we-work">How We Work</a>. To talk about a collection, <a href="/contact">contact us</a>.',
+      },
+      {
+        type: 'cta', title: 'Talk to Evin.',
+        text: 'Evin runs the studio in Jepara. Write to him about a collection, a new design or a visit.',
+        href: 'mailto:evin@talastudio.net?subject=TalaStudio%20enquiry', label: 'Email evin@talastudio.net',
       },
     ],
   },

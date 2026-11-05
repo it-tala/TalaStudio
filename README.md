@@ -159,7 +159,7 @@ npm run sync              # read the sheet now (also run by npm run build)
 npm run sync -- --dry     # only report what would change
 ```
 
-Storage settings (Cloudflare Pages > Settings > Variables, and `.env` to upload from a PC): `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` (an R2 API token with write access to the bucket), `R2_BUCKET`, and `ASSET_BASE_URL` (the bucket's public address, e.g. `https://media.talastudio.net`). Without them the pipeline puts the pictures in `public/media` (not in git) for a local preview. On Cloudflare Pages it stops the build instead, so pictures never end up in the deploy.
+Storage settings (build variables: Workers & Pages > talastudio > Settings > Build > Variables and secrets; runtime variables do not reach the build. And `.env` to upload from a PC): `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` (an R2 API token with write access to the bucket), `R2_BUCKET`, and `ASSET_BASE_URL` (the bucket's public address, e.g. `https://media.talastudio.net`). Without them the pipeline puts the pictures in `public/media` (not in git) for a local preview. On Cloudflare's build machines it stops the build instead, so pictures never end up in the deploy.
 
 ## Deploy (Cloudflare Pages)
 
