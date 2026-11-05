@@ -1,7 +1,7 @@
 // Full-screen picture viewer, shared by the item catalog (every angle of one item) and the home hero (every item of a collection).
 // Big square picture on top, its name and position, then a sideways strip of thumbnails. Styles: .cat-box in layout.css.
 // A click anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
-// the back button on the picture's top-right corner closes it and goes to the home page's Collections section; Esc only closes it.
+// the × on the picture's top-right corner (or Esc) closes it; the back arrow beside it also goes to the home page's collection card.
 // A slide's own info and link (the home hero: each room shot names and links its own collection) replace the viewer's
 export type ViewerSlide = { src: string; alt: string; bg?: string | null; name?: string; info?: string; link?: { href: string; text: string } };
 export type ViewerOptions = {
@@ -45,6 +45,7 @@ function build() {
   });
   d.addEventListener('click', (e) => {
     const t = e.target as HTMLElement;
+    if (t.closest('.cat-close')) return d.close();
     if (t.closest('.cat-back')) { d.close(); return toCollections(); }
     // Invisible buttons: the left half of the screen goes back, the right half forward
     if (t.closest('.cat-track') || t === d) go(at() + ((e as MouseEvent).clientX < innerWidth / 2 ? -1 : 1));
@@ -61,10 +62,11 @@ function build() {
   return d;
 }
 
-// The back button lands on the home page's Collections section: scrolls there on the home page, goes there from any other page
+// The back button lands on the home page's collection card (the room panel showing now, its card clear of the sticky
+// header), not the top of the section; from any other page it goes to the home page's Collections section
 function toCollections() {
-  const target = document.getElementById('collections');
-  if (target) target.scrollIntoView({ behavior: still() ? 'auto' : 'smooth' });
+  const target = document.querySelector('.room-panel:not([hidden]) .feat-card') ?? document.getElementById('collections');
+  if (target) target.scrollIntoView({ block: 'start', behavior: still() ? 'auto' : 'smooth' });
   else location.href = '/#collections';
 }
 
@@ -126,8 +128,12 @@ export function openViewer(opts: ViewerOptions) {
     }
     square.append(img);
     const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back to main page' });
-    back.innerHTML = '<span class="cat-back-label" aria-hidden="true">Back to main page</span><span aria-hidden="true">×</span>';
-    square.append(back);
+    // A back arrow, no text (user, 5 Nov 2026); the label is for screen readers
+    back.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>';
+    // × only closes the viewer; the arrow beside it closes it and goes back to the collection card
+    const close = el('button', { type: 'button', className: 'cat-close', ariaLabel: 'Close' });
+    close.innerHTML = '<span aria-hidden="true">×</span>';
+    square.append(back, close);
     slide.append(square);
     return slide;
   }));
