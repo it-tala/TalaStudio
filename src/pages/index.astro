@@ -54,15 +54,16 @@ const siblings = (c: (typeof all)[number]) => collections.filter((x) => x.name =
 const fileHash = (src: string) => {
   try { return createHash('sha1').update(readFileSync(join(process.cwd(), 'public', src))).digest('hex'); } catch { return src; }
 };
-// Pictures left off the cards, wherever the same file sits (picked by the user, 4 Nov 2026). A piece left with no
-// other picture drops out of the card.
+// Pictures left off the cards, wherever the same file sits (picked by the user, 4 Nov 2026). Kept as the content of the
+// photo picked then (sha1, from git), not its path: a new photo the sheet later puts at that path shows again
+// (Calabasas night table and Beechwood queen bed got new room shots on 5 Nov 2026).
 const offCard = new Set([
-  '/collections/palisades/bedroom/night-table/room-2.jpg', // dark wall, pendant lamps
-  '/collections/calabasas/bedroom/night-table/room.jpg', // blue bedding
-  '/collections/beechwood/bedroom/queen-bed/room.jpg', // plant by the window
-  '/collections/calabasas/living/coffee-table/01.jpg',
-  '/collections/zuma/living/sofa/room-2.jpg', // two armchairs facing the sofa, orange cushions (also Zuma living hero.jpg)
-].map(fileHash));
+  'be4bfb1491c3949ab94a7acd2f8214ac8eff5109', // palisades/bedroom/night-table/room-2.jpg: dark wall, pendant lamps
+  '66a9a278ac4a2334ccbe43e459924c6d4e23aab8', // calabasas/bedroom/night-table/room.jpg: blue bedding
+  '3ab5515041ac137bac4afa36f5e859931aa361c7', // beechwood/bedroom/queen-bed/room.jpg: plant by the window
+  '5c7d82dd8b49904b10a61f1f3678fae29669606a', // calabasas/living/coffee-table/01.jpg
+  'aecbef7f8dc88bcb0b094fcfa25406f911aed5a7', // zuma/living/sofa/room-2.jpg: two armchairs facing the sofa, orange cushions
+]);
 // Only ROOM HERO 1 shots (user, 5 Nov 2026): no hero or other room shot stands in, and a piece without one is skipped.
 // roomb.jpg is a newer RM 1 saved beside a room.jpg that Windows held open (see galleryItems in collections.ts).
 // A "room shot" that is the same file as a product photo is a product shot (the Calabasas sofa's RM 1 link pointed at
