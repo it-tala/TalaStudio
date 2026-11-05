@@ -45,8 +45,10 @@ const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.
 const collections = [...new Set(all.map((c) => c.name))]
   .flatMap((name) => all.filter((c) => c.name === name).sort((x, y) => roomOrder.indexOf(x.room) - roomOrder.indexOf(y.room)))
   .filter((c) => groupItems(c).length > 0);
-// The rooms of one collection (Doheny bedroom, Doheny living): the room arrows step only through these
-const siblings = (c: (typeof all)[number]) => collections.filter((x) => x.name === c.name);
+// One panel per collection: its rooms in order (Doheny bedroom, Doheny living). The room shot slider runs through every
+// room of the collection; the copy, the room label and the items below follow the room of the slide on show.
+const groups = [...new Set(collections.map((c) => c.name))].map((name) => collections.filter((c) => c.name === name));
+const roomName = (c: (typeof all)[number]) => roomLabel(c.room).replace(/ collection$/, '');
 // Card picture: the cover (room shot) of each piece in turn, same order as the catalog underneath. The frame is 16:9 like
 // the room shots; a taller shot (the mirror's) is shown whole, on its own edge colour, instead of being cut.
 // Each piece's picture is its ROOM HERO 1 shot from the tracker (room.jpg; ROOM HERO 2 is room-2.jpg and stays off).
@@ -85,10 +87,12 @@ const coverList = Object.fromEntries(await Promise.all(collections.map(async (c)
   const tall = !!meta?.width && !!meta.height && meta.width / meta.height < 1.5;
   return { name: it.name, src, bg: tall ? await edgeBackground(src, 16 / 9) : null };
 }))])));
-const covers = (c: (typeof all)[number]) => coverList[c.slug] ?? [];
+// A room with no piece in a room shot keeps a place in the slider with its own room shot (hero.jpg)
+const covers = (c: (typeof all)[number]) =>
+  coverList[c.slug]?.length ? coverList[c.slug] : c.hero_image_path ? [{ name: '', src: imageUrl(c.hero_image_path)!, bg: null }] : [];
+const slidesOf = (rooms: (typeof all)[number][]) => rooms.flatMap((c) => covers(c).map((p) => ({ ...p, c })));
 // The first three pieces in catalog order (bed first), leaving out hidden photos
 const pieceNames = (c: (typeof all)[number]) => groupItems(c).map((it) => it.name).slice(0, 3).join(', ');
-const bgs: Record<string, string | null> = Object.fromEntries(await Promise.all(collections.map(async (c) => [c.slug, c.hero_image_path ? await edgeBackground(c.hero_image_path) : null])));
 const posts = (await getCollection('insights', (p) => !p.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
@@ -161,50 +165,54 @@ const materials = [
       <h2>A first look at the range.</h2>
       <p>Living and bedroom are ready to view, and dining follows. Each collection is drawn, engineered and costed in our Jepara studio. The full range is in the catalog.</p>
     </div>
-    {collections.length > 0 ? (
+    {groups.length > 0 ? (
       <div class="feat-grid room-panels">
-        {collections.map((c, n) => (
-          <div class="room-panel" data-name={c.name} hidden={n > 0 ? true : undefined}>
-          <div class="feat-card" id={`coll-${c.slug}`}>
-            {covers(c).length > 0 ? (
-              <div class="frame feat-slides" role="group" aria-roledescription="carousel" aria-label={`${c.name} pieces`}>
+        {groups.map((rooms, n) => (
+          <div class="room-panel" data-name={rooms[0].name} data-room={rooms[0].slug} hidden={n > 0 ? true : undefined}>
+          <div class="feat-card" id={`coll-${rooms[0].slug}`}>
+            {slidesOf(rooms).length > 0 ? (
+              <div class="frame feat-slides" role="group" aria-roledescription="carousel" aria-label={`${rooms[0].name} pieces, room by room`}>
                 <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
-                  {covers(c).map((p, i) => (
-                    <figure class:list={['fs-slide', { whole: p.bg }]} style={p.bg ? `background:${p.bg}` : undefined}>
-                      <img src={p.src} alt={`${c.name} ${p.name}`} loading={i === 0 ? 'eager' : 'lazy'} />
-                      <figcaption>{p.name}<span aria-hidden="true">|</span>{c.name}</figcaption>
+                  {slidesOf(rooms).map((p, i) => (
+                    <figure class:list={['fs-slide', { whole: p.bg }]} data-room={p.c.slug} data-item={p.name || undefined} style={p.bg ? `background:${p.bg}` : undefined}>
+                      <img src={p.src} alt={`${p.c.name} ${p.name || roomName(p.c).toLowerCase()}`} loading={i === 0 ? 'eager' : 'lazy'} />
+                      <figcaption>{p.name || roomName(p.c)}<span aria-hidden="true">|</span>{p.c.name}</figcaption>
                     </figure>
                   ))}
                 </div>
-                {covers(c).length > 1 && <>
+                {slidesOf(rooms).length > 1 && <>
                   <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
                   <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
                 </>}
               </div>
-            ) : imageUrl(c.hero_image_path)
-              ? <span class="frame" style={bgs[c.slug] ? `background:${bgs[c.slug]}` : undefined}><img src={imageUrl(c.hero_image_path)!} alt={`${c.name} render`} loading="lazy" /></span>
-              : <Ph label={`${c.name} render`} watermark />}
-            <div class="feat-body">
-              <small>{roomLabel(c.room)}</small>
-              <h3>{c.name}</h3>
-              {c.description && <p>{c.description}</p>}
-              <span class="feat-meta">
-                <span><i>Room</i>{itemRooms(c).join(', ') || (c.room === 'other' ? 'Collection' : c.room)}</span>
-                {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
-              </span>
-              <a class="feat-more" href={`#cat-${c.slug}-title`}>Explore the collection</a>
-            </div>
+            ) : <Ph label={`${rooms[0].name} render`} watermark />}
+            {rooms.map((c, k) => (
+              <div class="feat-body" data-room={c.slug} data-label={roomName(c)} hidden={k > 0 ? true : undefined}>
+                <small>{roomLabel(c.room)}</small>
+                <h3>{c.name}</h3>
+                {c.description && <p>{c.description}</p>}
+                <span class="feat-meta">
+                  <span><i>Room</i>{itemRooms(c).join(', ') || (c.room === 'other' ? 'Collection' : c.room)}</span>
+                  {pieceNames(c) && <span><i>Includes</i>{pieceNames(c)}</span>}
+                </span>
+                <a class="feat-more" href={`#cat-${c.slug}-title`}>Explore the collection</a>
+              </div>
+            ))}
           </div>
-          <nav class="room-nav" aria-label={`${c.name} rooms`}>
-            {siblings(c).length > 1 && <button type="button" class="room-arrow prev" aria-label="Previous room">‹</button>}
-            <span class="room-now">{c.name} · {roomLabel(c.room).replace(/ collection$/, '')}{siblings(c).length > 1 && <small>{siblings(c).indexOf(c) + 1} / {siblings(c).length}</small>}</span>
-            {siblings(c).length > 1 && <button type="button" class="room-arrow next" aria-label="Next room">›</button>}
-            {new Set(collections.map((x) => x.name)).size > 1 && <>
+          <nav class="room-nav" aria-label={`${rooms[0].name} rooms`}>
+            {rooms.length > 1 && <button type="button" class="room-arrow prev" aria-label="Previous room">‹</button>}
+            <span class="room-now"><span class="room-label">{rooms[0].name} · {roomName(rooms[0])}</span>{rooms.length > 1 && <small><span class="room-at">1</span> / {rooms.length}</small>}</span>
+            {rooms.length > 1 && <button type="button" class="room-arrow next" aria-label="Next room">›</button>}
+            {groups.length > 1 && <>
               <button type="button" class="coll-jump prev">Previous collection</button>
               <button type="button" class="coll-jump next">Next collection</button>
             </>}
           </nav>
-          <ItemCatalog collection={c} only={homeItems[c.slug]} link={false} />
+          {rooms.map((c, k) => (
+            <div class="room-cat" data-room={c.slug} hidden={k > 0 ? true : undefined}>
+              <ItemCatalog collection={c} only={homeItems[c.slug]} link={false} />
+            </div>
+          ))}
           </div>
         ))}
       </div>
@@ -285,56 +293,103 @@ const materials = [
 </Base>
 
 <script>
-  // Collection rooms: one panel (room shot card + its items) at a time. The hero and this section follow each other: a
-  // hero picture shows its collection room here, and a room picked here shows its picture in the hero. The arrows between
-  // the card and its items step through that collection's rooms only (Doheny bedroom ↔ Doheny living), round from the
-  // last to the first. A link to #coll-<slug> opens that room's panel.
+  // Collections: one panel (room shot slider + copy + items) per collection at a time. The slider runs through every room
+  // of the collection (Doheny bedroom, then Doheny living); the room of the slide on show leads the rest: its copy, the
+  // room label, its items below (the piece on the slide marked), and the hero. The other way round, a hero picture shows
+  // its collection here, at the first slide of its room. The room arrows jump the slider to the next room's first slide.
+  // A link to #coll-<slug> or #cat-<slug>-title opens that room.
   document.querySelectorAll<HTMLElement>('.room-panels').forEach((box) => {
     const panels = [...box.querySelectorAll<HTMLElement>('.room-panel')];
-    if (panels.length < 2) return;
     let cur = 0;
-    // tell: the hero follows (a coll-room event); off when the hero itself asked for this room
-    const show = (i: number, scroll = false, tell = true) => {
+    const slidesIn = (p: HTMLElement) => [...p.querySelectorAll<HTMLElement>('.fs-slide')];
+    const roomsIn = (p: HTMLElement) => [...p.querySelectorAll<HTMLElement>('.feat-body')].map((b) => b.dataset.room!);
+    const tell = (p: HTMLElement) =>
+      document.dispatchEvent(new CustomEvent('coll-room', { detail: { slug: p.dataset.room, name: p.dataset.name } }));
+    // Show one room of a panel: its copy, label and items, with the piece on the slide marked in the items
+    const setRoom = (p: HTMLElement, slug: string, item?: string) => {
+      p.dataset.room = slug;
+      p.querySelectorAll<HTMLElement>('.feat-body, .room-cat').forEach((el) => { el.hidden = el.dataset.room !== slug; });
+      const rooms = roomsIn(p);
+      const label = p.querySelector<HTMLElement>(`.feat-body[data-room="${CSS.escape(slug)}"]`)?.dataset.label;
+      p.querySelector('.room-label')!.textContent = `${p.dataset.name} · ${label}`;
+      const at = p.querySelector('.room-at');
+      if (at) at.textContent = String(rooms.indexOf(slug) + 1);
+      p.querySelectorAll<HTMLElement>('.cat-item').forEach((li) => {
+        li.classList.toggle('is-now', !!item && li.dataset.name === item && li.closest<HTMLElement>('.room-cat')?.dataset.room === slug);
+      });
+    };
+    // Move a panel's slider to a slide without animation (the room is set first, so the scroll that follows tells no one)
+    const jumpTo = (p: HTMLElement, i: number) => {
+      const track = p.querySelector<HTMLElement>('.fs-track');
+      if (track && i >= 0) track.scrollTo({ left: i * track.clientWidth, behavior: 'auto' });
+    };
+    // Open a panel at a room (its first room when none is named); told: the hero follows
+    const show = (i: number, slug?: string, told = true) => {
       cur = i;
       panels.forEach((p, j) => { p.hidden = j !== cur; });
-      if (scroll) panels[cur].scrollIntoView({ block: 'start' });
-      const slug = panels[cur].querySelector('.feat-card')?.id.replace(/^coll-/, '');
-      if (tell) document.dispatchEvent(new CustomEvent('coll-room', { detail: { slug, name: panels[cur].dataset.name } }));
+      const p = panels[cur];
+      const room = slug ?? roomsIn(p)[0];
+      const at = slidesIn(p).findIndex((s) => s.dataset.room === room);
+      setRoom(p, room, slidesIn(p)[at]?.dataset.item);
+      jumpTo(p, at);
+      if (told) tell(p);
     };
+    // The slide on show leads: once a scroll settles, a slide in another room switches the room (and the hero)
+    panels.forEach((p) => {
+      const track = p.querySelector<HTMLElement>('.fs-track');
+      const slides = slidesIn(p);
+      if (!track || !slides.length) return;
+      let timer = 0;
+      track.addEventListener('scroll', () => {
+        clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          const s = slides[Math.round(track.scrollLeft / Math.max(track.clientWidth, 1))];
+          if (!s || p.hidden) return;
+          const moved = s.dataset.room !== p.dataset.room;
+          setRoom(p, s.dataset.room!, s.dataset.item);
+          if (moved) tell(p);
+        }, 120);
+      }, { passive: true });
+      setRoom(p, slides[0].dataset.room!, slides[0].dataset.item);
+    });
+    // Room arrows: the next or previous room's first slide, round from the last room to the first
     const step = (by: number) => {
-      const same = panels.filter((p) => p.dataset.name === panels[cur].dataset.name);
-      const at = same.indexOf(panels[cur]);
-      show(panels.indexOf(same[(at + by + same.length) % same.length]));
+      const p = panels[cur];
+      const rooms = roomsIn(p);
+      const slug = rooms[(rooms.indexOf(p.dataset.room!) + by + rooms.length) % rooms.length];
+      const at = slidesIn(p).findIndex((s) => s.dataset.room === slug);
+      setRoom(p, slug, slidesIn(p)[at]?.dataset.item);
+      jumpTo(p, at);
+      tell(p);
     };
-    // Each panel has its own pair; the next panel's arrows land where the clicked ones were, so the page needs no scroll
     box.querySelectorAll('.room-arrow.prev').forEach((b) => b.addEventListener('click', () => step(-1)));
     box.querySelectorAll('.room-arrow.next').forEach((b) => b.addEventListener('click', () => step(1)));
     // "Next collection" (right corner of the room row) and "Previous collection" (left corner) open the
-    // next or previous collection's first room, in page order, round at either end
-    const starts = panels.flatMap((p, i) => (i === 0 || p.dataset.name !== panels[i - 1].dataset.name ? [i] : []));
+    // next or previous collection at its first room, in page order, round at either end
     const jump = (by: number) => {
-      const g = starts.findLastIndex((i) => i <= cur);
-      show(starts[(g + by + starts.length) % starts.length]);
+      show((cur + by + panels.length) % panels.length);
       // back up to the new collection's room card, so the visitor starts it from the top (the card clears the sticky header)
       panels[cur].querySelector('.feat-card')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
     };
     box.querySelectorAll('.coll-jump.prev').forEach((b) => b.addEventListener('click', () => jump(-1)));
     box.querySelectorAll('.coll-jump.next').forEach((b) => b.addEventListener('click', () => jump(1)));
-    // #coll-<slug> scrolls to the room's card, #cat-<slug>-title ("Explore the collection") to its items
+    // #coll-<slug> scrolls to the collection card at that room, #cat-<slug>-title ("Explore the collection") to its items
     const fromHash = () => {
-      const sel = location.hash.replace(/[^#\w-]/g, '');
-      const i = panels.findIndex((p) => sel.length > 1 && p.querySelector(sel));
+      const m = location.hash.match(/^#(coll|cat)-([\w-]+?)(?:-title)?$/);
+      if (!m) return;
+      const i = panels.findIndex((p) => roomsIn(p).includes(m[2]));
       if (i < 0) return;
-      show(i);
-      document.querySelector(sel)!.scrollIntoView({ block: 'start' });
+      show(i, m[2]);
+      const target = m[1] === 'cat' ? document.getElementById(`cat-${m[2]}-title`) : panels[i].querySelector('.feat-card');
+      target?.scrollIntoView({ block: 'start' });
     };
     fromHash();
     addEventListener('hashchange', fromHash);
-    // The hero leads: when it moves to a room shot (/collections/palisades), this section shows that collection room
+    // The hero leads: when it moves to a room shot (#coll-doheny-living), this section shows that room of the collection
     document.addEventListener('hero-slide', (e) => {
       const slug = ((e as CustomEvent<{ href: string | null }>).detail.href ?? '').replace(/^.*(#coll-|\/)/, '');
-      const i = panels.findIndex((p) => slug && p.querySelector(`#coll-${CSS.escape(slug)}`));
-      if (i >= 0) show(i, false, false);
+      const i = panels.findIndex((p) => slug && roomsIn(p).includes(slug));
+      if (i >= 0) show(i, slug, false);
     });
   });
 

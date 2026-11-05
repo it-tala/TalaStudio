@@ -176,7 +176,9 @@
 /* Landing page collections: one per row, edge to edge. Slim text column, wider image (2 : 3); text left, image right, sides and light/dark alternate (zig-zag) */
 .feat-grid { display: flex; flex-direction: column; gap: 0; margin: 0 0 48px; }
 /* Home: one collection room at a time, switched by the arrows under its items */
-.room-panel[hidden] { display: none; }
+.room-panel[hidden], .feat-body[hidden], .room-cat[hidden] { display: none; }
+/* The piece on the room shot slide: its name underlined in the items below */
+.cat-item.is-now .cat-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 .room-nav { display: flex; align-items: center; justify-content: center; gap: 32px; padding: clamp(56px, 6vw, 88px) 20px clamp(24px, 3vw, 40px); }
 /* Sized for readers in their 40s and 50s: large label, large round buttons */
 .room-now { min-width: 14ch; text-align: center; font-size: 19px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
