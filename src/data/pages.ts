@@ -211,7 +211,7 @@ export const pages: Page[] = [
       {
         type: 'cta', title: 'Let’s talk.',
         text: 'Write to us about a collection, a new design or a visit to the studio in Jepara.',
-        href: 'mailto:evin@talastudio.net?subject=TalaStudio%20enquiry', label: 'Email us',
+        href: '/contact', label: 'Contact us',
       },
     ],
   },
