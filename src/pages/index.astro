@@ -160,6 +160,8 @@ const materials = [
                     </figure>
                   ))}
                 </div>
+                {/* See-through button, top left of the picture: back up to the top of the landing page */}
+                <a href="#top" class="fs-top" aria-label="Back to the top of the page"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
                 {slidesOf(rooms).length > 1 && <>
                   <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
                   <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
@@ -374,8 +376,7 @@ const materials = [
   });
 
   // Collection card picture: one slide per piece. Swipe or scroll sideways, use the arrows, or click the left or right
-  // half of the picture; moves on every 5 seconds
-  // while the mouse is elsewhere. With reduced motion it only moves when asked.
+  // half of the picture. It moves only when asked (no autoplay, user 6 Nov 2026).
   document.querySelectorAll<HTMLElement>('.feat-slides').forEach((box) => {
     const track = box.querySelector<HTMLElement>('.fs-track')!;
     const prev = box.querySelector<HTMLButtonElement>('.prev');
@@ -389,31 +390,19 @@ const materials = [
       const wrap = i < 0 || i >= n;
       track.scrollTo({ left: ((i + n) % n) * track.clientWidth, behavior: still.matches || wrap ? 'auto' : 'smooth' });
     };
-    let timer = 0;
-    let hover = false;
-    const start = () => {
-      clearInterval(timer);
-      if (!still.matches && !hover && !document.hidden) timer = window.setInterval(() => go(at() + 1), 5000);
-    };
-    prev.addEventListener('click', () => { go(at() - 1); start(); });
-    next.addEventListener('click', () => { go(at() + 1); start(); });
+    prev.addEventListener('click', () => go(at() - 1));
+    next.addEventListener('click', () => go(at() + 1));
     // Invisible buttons on the picture, as in the hero and the picture viewer: the left half goes back, the right half forward
     const back = (x: number) => { const r = track.getBoundingClientRect(); return x < r.left + r.width / 2; };
-    track.addEventListener('click', (e) => { go(at() + (back(e.clientX) ? -1 : 1)); start(); });
+    track.addEventListener('click', (e) => go(at() + (back(e.clientX) ? -1 : 1)));
     track.addEventListener('mousemove', (e) => {
       const b = back(e.clientX);
       track.classList.toggle('to-prev', b);
       track.classList.toggle('to-next', !b);
     });
     track.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); start(); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); start(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); }
     });
-    box.addEventListener('mouseenter', () => { hover = true; start(); });
-    box.addEventListener('mouseleave', () => { hover = false; start(); });
-    track.addEventListener('touchstart', start, { passive: true }); // a swipe restarts the count
-    document.addEventListener('visibilitychange', start);
-    still.addEventListener('change', start);
-    start();
   });
 </script>

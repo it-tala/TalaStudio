@@ -1,6 +1,7 @@
 // Full-screen picture viewer, shared by the item catalog (every angle of one item) and the home hero (every item of a collection).
 // Big square picture on top, its name and position, then a sideways strip of thumbnails. Styles: .cat-box in layout.css.
-// A click anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
+// A click on the top band of the picture (the strip the back arrow sits in) does what the back arrow does; below it, a click
+// anywhere on the left or right half of the screen (on the picture or the dark space beside it) goes back or forward;
 // the × on the picture's top-right corner (or Esc) closes it; the back arrow beside it also goes to the home page's collection card.
 // A slide's own info and link (the home hero: each room shot names and links its own collection) replace the viewer's
 // html: a page of text in place of a picture (the item's spec page, built by ItemCatalog from the sheet's data)
@@ -48,14 +49,25 @@ function build() {
     const t = e.target as HTMLElement;
     if (t.closest('.cat-close')) return d.close();
     if (t.closest('.cat-back')) { d.close(); return toCollections(); }
-    // Invisible buttons: the left half of the screen goes back, the right half forward
-    if (t.closest('.cat-track') || t === d) go(at() + ((e as MouseEvent).clientX < innerWidth / 2 ? -1 : 1));
+    if (!t.closest('.cat-track') && t !== d) return;
+    // Invisible buttons: the picture's top band goes back to the collection card, then the left half of the screen
+    // goes back a picture, the right half forward
+    const { clientX: x, clientY: y } = e as MouseEvent;
+    if (inTop(y)) { d.close(); return toCollections(); }
+    go(at() + (x < innerWidth / 2 ? -1 : 1));
   });
+  // The top band: as tall as the picture's top quarter, from the top of the screen down
+  const inTop = (y: number) => {
+    const sq = track.children[at()]?.querySelector('.cat-sq')?.getBoundingClientRect();
+    return !!sq && y < sq.top + sq.height / 4;
+  };
   // The pointer shows which way a click goes (and nothing at either end)
   track.addEventListener('mousemove', (e) => {
+    const top = inTop(e.clientY);
     const back = e.clientX < innerWidth / 2;
-    track.classList.toggle('to-prev', back && at() > 0);
-    track.classList.toggle('to-next', !back && at() < track.children.length - 1);
+    track.classList.toggle('to-back', top);
+    track.classList.toggle('to-prev', !top && back && at() > 0);
+    track.classList.toggle('to-next', !top && !back && at() < track.children.length - 1);
   });
   // preventScroll: the back button scrolls to the collections, and the focus must not pull the page back to the opener
   d.addEventListener('close', () => { document.documentElement.style.overflow = ''; current?.opener?.focus({ preventScroll: true }); });
@@ -111,23 +123,9 @@ export function openViewer(opts: ViewerOptions) {
     const slide = el('div', { className: 'cat-slide' });
     // The spec page is a 1:1 page: it gets a square frame, not the 16:9 photo frame
     const square = el('div', { className: s.html || /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
-    if (s.bg) square.style.background = s.bg;
     const img = s.html ? el('div', { className: 'spec-wrap', innerHTML: s.html }) : el('img', { src: s.src, alt: s.alt });
     if (s.html) img.setAttribute('aria-label', s.alt);
-    // A photo that is not 16:9 leaves space at its sides or top and bottom; its own edges are stretched into it (edge-fill)
-    if (img instanceof HTMLImageElement && !square.classList.contains('cat-spec')) {
-      square.classList.add('edge-fill');
-      square.style.setProperty('--fill', `url(${s.src})`);
-      img.addEventListener('load', () => {
-        const r = img.naturalWidth / img.naturalHeight;
-        const wide = r > 16 / 9 * 1.01;
-        const tall = r < 16 / 9 * 0.99;
-        square.classList.toggle('fill-wide', wide);
-        square.classList.toggle('fill-tall', tall);
-        // Each empty band's share of the frame (see .edge-fill)
-        if (wide || tall) square.style.setProperty('--band', `${(1 - (wide ? 16 / 9 / r : r / (16 / 9))) * 50}%`);
-      }, { once: true });
-    }
+    // A photo that is not 16:9 leaves black space at its sides or top and bottom (.cat-box .cat-sq)
     square.append(img);
     const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back to main page' });
     // A back arrow, no text (user, 5 Nov 2026); the label is for screen readers

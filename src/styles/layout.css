@@ -228,6 +228,10 @@
 .fs-slide figcaption span { margin: 0 .7em; opacity: .7; } /* divider between product and collection name */
 .fs-arrow.prev { left: 20px; }
 .fs-arrow.next { right: 20px; }
+/* Back to the top of the landing page: see-through, top left of the collection picture */
+.fs-top { position: absolute; z-index: 2; top: 16px; left: 16px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, .45); border-radius: 50%; background: transparent; color: #fff; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45)); transition: background .2s, border-color .2s; }
+.fs-top:hover { background: rgba(20, 17, 14, .35); border-color: rgba(255, 255, 255, .8); }
+.fs-top:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 @media (max-width: 800px) {
   .feat-card, .feat-card:nth-of-type(even) { grid-template-columns: 1fr; }
   .feat-card .frame, .feat-card > .ph { order: 0; }
@@ -370,6 +374,9 @@
 .edge-fill .cat-back, .edge-fill .cat-close { z-index: 3; }
 .cat-track.to-prev { cursor: w-resize; }
 .cat-track.to-next { cursor: e-resize; }
+.cat-track.to-back { cursor: n-resize; }
+/* In the viewer the space beside a photo that is not 16:9 is plain black (user, 6 Nov 2026) */
+.cat-box .cat-sq:not(.cat-spec) { background: #000; }
 /* Back, on the picture's top-right corner, close to where the eye is */
 .cat-back, .cat-close { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: rgba(20, 17, 14, .55); color: #f3ece2; font-size: 26px; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: background .2s; }
 .cat-back:hover, .cat-close:hover { background: rgba(20, 17, 14, .8); }
