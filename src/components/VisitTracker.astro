@@ -1,0 +1,78 @@
+---
+// Logs page time for contacts who arrive from an outreach email link (?r=<contacts.track_code>), and on the home page
+// the time each collection room was on screen. Visitors without a code are not tracked.
+// Data goes to schema talastudio_visitor_tracker in the shared Supabase project, not the site's own Supabase.
+// Off without PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, and when the browser sends Global Privacy Control. Guide: docs/visitor-tracking.md
+---
+<script>
+  const url = import.meta.env.PUBLIC_TRACKER_URL;
+  const key = import.meta.env.PUBLIC_TRACKER_KEY;
+
+  const store = (s: Storage, k: string, v?: string) => {
+    try { if (v === undefined) return s.getItem(k); s.setItem(k, v); } catch {}
+    return v ?? null;
+  };
+
+  const params = new URLSearchParams(location.search);
+  const fromLink = params.get('r');
+  const code = fromLink ? store(localStorage, 'tala_r', fromLink) : store(localStorage, 'tala_r');
+
+  // Drop ?r= from the address bar so a copied link does not carry the code to someone else.
+  if (fromLink) {
+    params.delete('r');
+    const q = params.toString();
+    history.replaceState(history.state, '', location.pathname + (q ? `?${q}` : '') + location.hash);
+  }
+
+  const gpc = (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl;
+  if (url && key && code && /^[a-z0-9]{6,32}$/i.test(code) && !gpc) {
+    let session = store(sessionStorage, 'tala_s');
+    if (!session) session = store(sessionStorage, 'tala_s', crypto.randomUUID());
+
+    // One row for the page, one per collection room seen on it. Seconds = time while the tab was visible.
+    type Row = { id: string; collection: string | null; section: boolean; seconds: number; sent: number };
+    const page: Row = {
+      id: crypto.randomUUID(), section: false, seconds: 0, sent: -1,
+      collection: location.pathname.match(/^\/collections\/([^/]+)/)?.[1] ?? null,
+    };
+    const rooms = new Map<string, Row>();
+
+    const send = (r: Row) => {
+      if (r.seconds === r.sent) return;
+      r.sent = r.seconds;
+      fetch(`${url}/rest/v1/rpc/talastudio_log_page_visit`, {
+        method: 'POST',
+        keepalive: true,
+        headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p_id: r.id, p_session: session, p_code: code, p_path: location.pathname,
+          p_collection: r.collection, p_section: r.section, p_seconds: r.seconds,
+        }),
+      }).catch(() => {});
+    };
+    const flush = () => { send(page); rooms.forEach(send); };
+
+    // The room on screen: the open collection panel's visible room, when it fills a third of the window.
+    const roomInView = () => {
+      const panel = document.querySelector<HTMLElement>('.room-panel:not([hidden])');
+      if (!panel) return null;
+      const box = panel.getBoundingClientRect();
+      const seen = Math.min(box.bottom, innerHeight) - Math.max(box.top, 0);
+      if (seen < innerHeight / 3) return null;
+      return panel.querySelector<HTMLElement>('.feat-body:not([hidden])')?.dataset.room ?? panel.dataset.room ?? null;
+    };
+
+    send(page);
+    setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      page.seconds++;
+      const slug = roomInView();
+      if (!slug) return;
+      let r = rooms.get(slug);
+      if (!r) rooms.set(slug, (r = { id: crypto.randomUUID(), collection: slug, section: true, seconds: 0, sent: -1 }));
+      r.seconds++;
+    }, 1000);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
+    addEventListener('pagehide', flush);
+  }
+</script>

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/layout.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import VisitTracker from '../components/VisitTracker.astro';
 
 interface Props { title: string; description: string; image?: string; theme?: string }
 const { title, description, image = '/og-default.jpg', theme } = Astro.props;
@@ -42,5 +43,6 @@ const noindex = import.meta.env.PUBLIC_USE_SAMPLE_DATA === 'true' || import.meta
     <Header />
     <main><slot /></main>
     <Footer />
+    <VisitTracker />
   </body>
 </html>
