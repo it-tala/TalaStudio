@@ -1,0 +1,15 @@
+// Static site on Cloudflare Workers: Workers Builds runs `npm run build`, then
+// uploads dist/ as assets. No Worker script.
+{
+  "name": "talastudio",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  // `wrangler preview` (branch builds) needs the bindings set in the dashboard's
+  // Preview base config declared here.
+  "previews": {
+    "send_email": [{ "name": "EMAIL" }]
+  }
+}
