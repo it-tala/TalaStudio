@@ -161,10 +161,10 @@ const materials = [
                   ))}
                 </div>
                 {/* See-through button, top left of the picture: back up to the top of the landing page */}
-                <a href="#top" class="fs-top" aria-label="Back to the top of the page"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
+                <a href="#top" class="fs-top" aria-label="Back to the top of the page" data-tip="Go up"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
                 {slidesOf(rooms).length > 1 && <>
-                  <button type="button" class="fs-arrow prev" aria-label="Previous piece">‹</button>
-                  <button type="button" class="fs-arrow next" aria-label="Next piece">›</button>
+                  <button type="button" class="fs-arrow prev" aria-label="Previous piece" data-tip="Previous">‹</button>
+                  <button type="button" class="fs-arrow next" aria-label="Next piece" data-tip="Next">›</button>
                 </>}
               </div>
             ) : <Ph label={`${rooms[0].name} render`} watermark />}
@@ -275,6 +275,19 @@ const materials = [
 </Base>
 
 <script>
+  import { followHint } from '../lib/hint';
+  // #collections lands on the collection card (the room panel showing now, its top clear of the sticky header), not on
+  // the section's heading above it (user, 6 Nov 2026): on load with the hash, and from any link to it on this page
+  const toCard = () => document.querySelector('.room-panel:not([hidden]) .feat-card')?.scrollIntoView({ block: 'start' });
+  // After load: the browser's own jump to the section comes late and would undo an earlier one
+  if (location.hash === '#collections') addEventListener('load', () => setTimeout(toCard, 0));
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[href$="#collections"]');
+    if (!a || a.pathname !== location.pathname) return;
+    e.preventDefault();
+    history.replaceState(null, '', '#collections');
+    toCard();
+  });
   // Collections: one panel (room shot slider + copy + items) per collection at a time. The slider runs through every room
   // of the collection (Doheny bedroom, then Doheny living); the room of the slide on show leads the rest: its copy, the
   // room label, its items below (the piece on the slide marked), and the hero. The other way round, a hero picture shows
@@ -400,6 +413,7 @@ const materials = [
       track.classList.toggle('to-prev', b);
       track.classList.toggle('to-next', !b);
     });
+    followHint(track, (e) => (back(e.clientX) ? 'Previous' : 'Next'));
     track.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); }
       if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); }

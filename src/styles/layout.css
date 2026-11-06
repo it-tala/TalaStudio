@@ -232,6 +232,16 @@
 .fs-top { position: absolute; z-index: 2; top: 16px; left: 16px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, .45); border-radius: 50%; background: transparent; color: #fff; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45)); transition: background .2s, border-color .2s; }
 .fs-top:hover { background: rgba(20, 17, 14, .35); border-color: rgba(255, 255, 255, .8); }
 .fs-top:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* Helper text on hover: [data-tip] buttons show it under themselves; .hint (lib/hint.ts) follows the pointer over a
+   picture's invisible buttons. Mouse only */
+.hint, [data-tip]::after { padding: 4px 9px; border-radius: 4px; background: rgba(20, 17, 14, .85); color: #f3ece2; font: 500 12px/1.3 'Inter', system-ui, sans-serif; letter-spacing: .02em; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; }
+[data-tip]::after { content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; translate: -50% 0; z-index: 5; }
+.cat-close[data-tip]::after { left: auto; right: 0; translate: none; }
+.hint { position: fixed; top: 0; left: 0; z-index: 10; }
+@media (hover: hover) {
+  [data-tip]:hover::after, [data-tip]:focus-visible::after, .hint.on { opacity: 1; }
+}
 @media (max-width: 800px) {
   .feat-card, .feat-card:nth-of-type(even) { grid-template-columns: 1fr; }
   .feat-card .frame, .feat-card > .ph { order: 0; }

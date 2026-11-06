@@ -16,6 +16,8 @@ export type ViewerOptions = {
   start?: number;                          // the slide shown first (default the first)
 };
 
+import { followHint } from './hint';
+
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}) => Object.assign(document.createElement(tag), props);
 const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -69,6 +71,11 @@ function build() {
     track.classList.toggle('to-prev', !top && back && at() > 0);
     track.classList.toggle('to-next', !top && !back && at() < track.children.length - 1);
   });
+  followHint(track, (e) => {
+    if (inTop(e.clientY)) return 'Go back';
+    if (e.clientX < innerWidth / 2) return at() > 0 ? 'Previous' : '';
+    return at() < track.children.length - 1 ? 'Next' : '';
+  }, d);
   // preventScroll: the back button scrolls to the collections, and the focus must not pull the page back to the opener
   d.addEventListener('close', () => { document.documentElement.style.overflow = ''; current?.opener?.focus({ preventScroll: true }); });
   (d as HTMLDialogElement & { go: typeof go }).go = go;
@@ -128,11 +135,13 @@ export function openViewer(opts: ViewerOptions) {
     // A photo that is not 16:9 leaves black space at its sides or top and bottom (.cat-box .cat-sq)
     square.append(img);
     const back = el('button', { type: 'button', className: 'cat-back', ariaLabel: 'Back to main page' });
+    back.dataset.tip = 'Go back';
     // A back arrow, no text (user, 5 Nov 2026); the label is for screen readers
     back.innerHTML = '<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>';
     // × only closes the viewer; the arrow beside it closes it and goes back to the collection card
     const close = el('button', { type: 'button', className: 'cat-close', ariaLabel: 'Close' });
     close.innerHTML = '<span aria-hidden="true">×</span>';
+    close.dataset.tip = 'Close';
     square.append(back, close);
     slide.append(square);
     return slide;
