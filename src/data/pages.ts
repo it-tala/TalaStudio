@@ -27,7 +27,9 @@ export type StoryBlock = {
   figure?: StoryFigure;
   figureFirst?: boolean;  // photo on the left
   aside?: StoryFigure;    // small photo under the copy
-  gallery?: { row: StoryFigure[]; wide?: StoryFigure }; // photos in a row of three under the text, then one wide
+  // Photos under the text: a row of three, then one wide; or a mosaic (the first shot big on the left, the other two
+  // stacked beside it)
+  gallery?: { row?: StoryFigure[]; wide?: StoryFigure; mosaic?: StoryFigure };
   top?: boolean;          // text and photo line up at the top instead of the middle
   link?: { href: string; label: string };
 };
@@ -155,12 +157,13 @@ export const pages: Page[] = [
           { trace: ['Item barcoded', 'Carton marked', 'Container loaded', 'On the water'] },
           "We're building a dashboard that puts production status, order status, shipping status and every document online, in real time.",
         ],
-        // Three photos stepping down and overlapping, as the user's mock-up (5 Nov 2026); see .trio in StoryFigure.astro
-        figure: { shots: [
-          { name: 'qc-machine', label: 'Drilling line', hint: 'Operator at the CNC drilling line, parts stacked beside it', ratio: '770 / 415', class: 'q1' },
-          { name: 'qc-warehouse', label: 'Packing hall', hint: 'Packing hall with cartons and a stacker', ratio: '621 / 404', class: 'q2' },
-          { name: 'qc-floor', label: 'Assembly floor', hint: 'Assembly floor with carts of parts ready for checking', ratio: '1000 / 483', class: 'q3' },
-        ] },
+        // Text on top, then the assembly floor big with the other two stacked beside it (option B, user 6 Nov 2026);
+        // see .mosaic in StoryFigure.astro
+        gallery: { mosaic: { shots: [
+          { name: 'qc-floor', label: 'Assembly floor', hint: 'Assembly floor with carts of parts ready for checking', ratio: '1000 / 483' },
+          { name: 'qc-machine', label: 'Drilling line', hint: 'Operator at the CNC drilling line, parts stacked beside it', ratio: '770 / 415' },
+          { name: 'qc-warehouse', label: 'Packing hall', hint: 'Packing hall with cartons and a stacker', ratio: '621 / 404' },
+        ] } },
       },
       {
         type: 'story', tone: 'goal', num: 'Our goal is simple',

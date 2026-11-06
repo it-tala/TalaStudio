@@ -20,8 +20,9 @@ const { id, tone, num, title, copy = [], figure, figureFirst, aside, gallery, to
         </div>
         <Copy copy={copy} />
       </div>
-      <div class="row three">{gallery.row.map((f) => <Figure figure={f} />)}</div>
+      {gallery.row && <div class="row three">{gallery.row.map((f) => <Figure figure={f} />)}</div>}
       {gallery.wide && <Figure figure={gallery.wide} class="wide" />}
+      {gallery.mosaic && <Figure figure={gallery.mosaic} class="mosaic" />}
     </div>
   ) : (
     <div class:list={['wrap', { pair: figure, top }]}>

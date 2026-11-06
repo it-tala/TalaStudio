@@ -6,7 +6,7 @@ import type { StoryFigure } from '../../data/pages';
 interface Props { figure: StoryFigure; class?: string }
 const { figure, class: cls } = Astro.props;
 ---
-<figure class:list={[cls, { stack: figure.shots.length === 2, trio: figure.shots.length === 3 }]}>
+<figure class:list={[cls, { stack: figure.shots.length === 2 }]}>
   {figure.shots.map((s) => <Shot {...s} />)}
   {figure.caption && <figcaption>{figure.caption}</figcaption>}
 </figure>
@@ -23,11 +23,12 @@ const { figure, class: cls } = Astro.props;
   .stack figcaption { text-align: right; }
   .small { max-width: 22rem; margin-top: 2rem; }
 
-  /* Three photos stepping down from right to left and back, as the user's mock-up: no shadows, and the middle one lies
-     over the edges of the other two (Quality control) */
-  .trio { display: flex; flex-direction: column; }
-  .trio :global(.shot) { position: relative; }
-  .trio :global(.q1) { width: 65%; margin-left: auto; }
-  .trio :global(.q2) { width: 52%; margin-top: -3%; z-index: 1; }
-  .trio :global(.q3) { width: 84%; margin-left: auto; margin-top: -5%; }
+  /* Three photos under the text: the first big on the left, the other two stacked beside it, cropped to fill.
+     On phones they stack at their own ratio (Quality control) */
+  .mosaic { display: grid; gap: 1rem; margin-top: clamp(2rem, 5vw, 3.5rem); }
+  @media (min-width: 700px) {
+    .mosaic { grid-template-columns: 1.7fr 1fr; grid-template-rows: 1fr 1fr; height: min(46vw, 640px); }
+    .mosaic :global(.shot) { height: 100%; aspect-ratio: auto !important; } /* fill the grid cell, not the photo's own ratio */
+    .mosaic > :global(:first-child) { grid-row: span 2; }
+  }
 </style>
