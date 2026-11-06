@@ -6,5 +6,10 @@
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
+  },
+  // `wrangler preview` (branch builds) needs the bindings set in the dashboard's
+  // Preview base config declared here.
+  "previews": {
+    "send_email": [{ "name": "EMAIL" }]
   }
 }
