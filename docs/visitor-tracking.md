@@ -1,84 +1,98 @@
-# Who opened our email link, and what they looked at
+# Visitor tracker
 
-Each contact gets a private code. Outreach emails link to the site with `?r=<code>`.
-When that person opens the link, the site logs each page they view, how long the tab was visible, and on the home page
-how long each collection room was on screen. Visitors without a code are not tracked. Browsers that send Global
-Privacy Control are not tracked.
+The website logs every visit: pages viewed and for how long, the collection rooms looked at on the home page, the site
+the visitor came from, IP address, country and device. People who arrive from an outreach email link (`?r=<code>`) are
+linked to their contact record; everyone else is anonymous. Browsers that send Global Privacy Control are not tracked.
 
-## Where the data lives
-Supabase project **john-lau-v01**, schema **`talastudio_visitor_tracker`** (SQL: `supabase/visitor-tracker/001_schema.sql`).
+- **Dashboard and link generator:** `https://talastudio.net/tracker` (staff login, not linked anywhere, not in Google).
+- **Data:** Supabase project **Talastudio** (`sobinutyzhldustwwmmw`), schema **`talastudio_visitor_tracker`**.
+- **SQL:** `supabase/visitor-tracker/001_schema.sql`, then `002_dashboard.sql` (both applied 11 Nov 2026).
+- **Script on every page:** `src/components/VisitTracker.astro`. The dashboard page itself is not tracked.
 
-| Object | What it is |
-| --- | --- |
-| `contacts` | One row per person we email. `track_code` and `link` fill themselves. |
-| `page_visits` | Every page view and every collection room seen. |
-| `engagement` | Report: one row per contact who visited. Visits, page views, seconds, first and last seen. Most engaged first. |
-| `collection_time` | Report: seconds per contact per collection room (`zuma`, `zuma-living`, ...). |
-| `public.talastudio_log_page_visit()` | The website's only way in. It writes visits and cannot read anything. |
+## Setup (once)
 
-The schema is not exposed to the public API. Read it in the Supabase dashboard: Table Editor, pick the schema
-`talastudio_visitor_tracker` in the schema menu at the top left.
+### 1. Website settings
+Cloudflare > Workers & Pages > TalaStudio > Settings > **Build** > Variables and secrets (not "Runtime variables and
+secrets": the site has no Worker script, and Astro writes these into the pages while it builds). Type: Text.
 
-Website settings (Cloudflare > Workers & Pages > TalaStudio > Settings > Variables, plain text, then redeploy):
+    PUBLIC_TRACKER_URL=https://sobinutyzhldustwwmmw.supabase.co
+    PUBLIC_TRACKER_KEY=<Supabase > Project Settings > API Keys > Publishable key (sb_publishable_...)>
 
-    PUBLIC_TRACKER_URL=https://hhphmfqbtwcxpvubmwbq.supabase.co
-    PUBLIC_TRACKER_KEY=<Supabase > Project Settings > API Keys > publishable key>
+Then start a new build (Deployments > Retry, or push a commit). Without these two the site does not track and
+`/tracker` shows a warning.
+They are separate from `PUBLIC_SUPABASE_URL` on purpose: that one switches the site's collections to Supabase.
 
-Separate from `PUBLIC_SUPABASE_URL` on purpose: that one switches the site's collections to Supabase.
+### 2. Email codes for signing in
+The dashboard has no passwords. You type your email, Supabase emails a code (and a sign-in link), you type the code.
 
-## Making links
+a. **Put the code in the email.** Authentication > Emails > Templates > **Magic Link**. Subject:
+   `Your TalaStudio tracker code`. Body:
 
-### A. Directly in Supabase
-Table Editor > `talastudio_visitor_tracker` > `contacts` > Insert row. Fill company, contact name, email
-(and `campaign` if you like, e.g. `2026-11 US retailers`). Leave `track_code` and `link` empty: the link appears on save.
+       <h2>Your sign-in code</h2>
+       <p style="font-size:28px;letter-spacing:4px"><b>{{ .Token }}</b></p>
+       <p>Or <a href="{{ .ConfirmationURL }}">click here to sign in</a>. The code works once and expires in 1 hour.</p>
 
-Many at once, in SQL Editor:
+   Without `{{ .Token }}` the email only has the link.
 
-    insert into talastudio_visitor_tracker.contacts (company, contact_name, email, campaign) values
-      ('Acme Home', 'Pat Lee', 'pat@acmehome.com', '2026-11 US retailers'),
-      ('Oak & Co', 'Sam Diaz', 'sam@oakco.com', '2026-11 US retailers')
-    returning contact_name, email, link;
+b. **Let the link come back to the dashboard.** Authentication > URL Configuration: Site URL `https://talastudio.net`,
+   and under Redirect URLs add `https://talastudio.net/tracker` (and `http://localhost:4321/tracker` for testing).
 
-Copy the result (or Export > CSV) into the email tool and use its merge tag for the `link` column, e.g. `{{link}}`.
+c. **Send the emails from your own address.** Supabase's built-in sender allows only a few emails per hour and is for
+   testing. Authentication > Emails > SMTP Settings > Enable custom SMTP. With Google Workspace: host
+   `smtp.gmail.com`, port `465`, user = a Workspace mailbox (e.g. it@talaliving.com), password = an App Password for it
+   (Google Account > Security > 2-Step Verification > App passwords), sender name `TalaStudio`.
 
-Links to another page, e.g. one collection room:
+### 2b. A login for each person who may open the dashboard
+Authentication > Users > Add user > **Send invitation** (or Create new user, any password, tick "Auto Confirm User": the
+password is never used). Only addresses added here can get a code.
 
-    select contact_name, email, 'https://talastudio.net/?r=' || track_code || '#coll-zuma' as link
-    from talastudio_visitor_tracker.contacts where campaign = '2026-11 US retailers';
+### 3. Give someone access
+Supabase > SQL Editor:
 
-Keep `?r=` before the `#`. Do not link to `/collections/<slug>` while `/collections` is switched off in
-`src/data/sections.ts`: it redirects to the home page and the code is lost.
+    insert into talastudio_visitor_tracker.admins (user_id, note)
+    select id, 'IT' from auth.users where email = 'it@talaliving.com';
 
-### B. From a spreadsheet
-1. Keep the list in a sheet with these column headers: `company`, `contact_name`, `email`, `campaign`, and `notes` if
-   you want it. No other columns, and no `track_code` or `link` column: Supabase makes those.
-2. File > Download > CSV.
-3. Supabase > Table Editor > `talastudio_visitor_tracker` > `contacts` > Insert > Import data from CSV.
-   Each row gets its code and link. A row with an email already in the table is refused, so re-importing is safe to try.
-4. Get the links back into the sheet: SQL Editor >
+Remove access: `delete from talastudio_visitor_tracker.admins where user_id = (select id from auth.users where email = '...');`
 
-       select email, link from talastudio_visitor_tracker.contacts where campaign = '<campaign>';
+A login that is not on this list can sign in but sees "not on the tracker admin list" and no data.
 
-   Export > CSV, paste into a second tab, and in the main tab look the link up by email:
+### 4. Recommended
+Authentication > Sign In / Providers: turn off "Allow new users to sign up", so only accounts you create exist.
+The dashboard already refuses codes for unknown addresses; this closes the other doors too.
 
-       =XLOOKUP(C2, Links!A:A, Links!B:B, "")
+## Using the dashboard
+Sign in at `/tracker`: work email > "Email me a code" > type the code (or click the link in the email).
 
-Do not make codes in the sheet with RAND(): it changes every time the sheet recalculates. Let Supabase make them.
+**Dashboard tab:** pick the period. Totals (visitors = browsers, visits = tab sessions), visitors per day, time per
+collection room, pages, countries, devices and where people came from. The Visitors table has one row per browser: the
+contact's name if they came from an email link, otherwise "Anonymous", plus country, device and browser, IP address,
+visits, pages, time and favourite collection. Click a row for the full trail. "Download Excel" exports the table.
 
-## Reading the results
-Table Editor > `engagement` or `collection_time`, or in SQL Editor:
+**Links tab:**
+1. Choose where the link opens (the collections section, the top of the home page, or one collection room) and a
+   campaign name for rows that have none.
+2. Upload an Excel (.xlsx) or CSV file, or copy rows in Excel and paste them, header row included. Recognised headers:
+   Company, Name (or Full name / Contact), Email, Campaign, Notes. "Download the Excel template" gives the layout.
+3. "Create links". You get a table with a link per person: copy one, "Copy all" (pastes into Excel as columns), or
+   "Download Excel" (your columns plus Code and Link).
 
-    -- Who came in the last 7 days
-    select company, contact_name, visits, round(total_seconds / 60.0, 1) as minutes, last_seen
-    from talastudio_visitor_tracker.engagement where last_seen > now() - interval '7 days';
+An email already in the list keeps its code, so running the same sheet again gives the same links. The "All contacts"
+table lists everyone, their visits, and their link for the page chosen in step 1. Deleting a contact also deletes their
+visit history.
 
-    -- The collection each contact spent longest on
-    select distinct on (contact_id) company, contact_name, collection_slug, total_seconds
-    from talastudio_visitor_tracker.collection_time order by contact_id, total_seconds desc;
+Links look like `https://talastudio.net/?r=1a2b3c4d5e6f#collections`. Keep `?r=` before the `#`. Do not link to
+`/collections/<slug>` while `/collections` is switched off in `src/data/sections.ts`: it redirects and loses the code.
+
+## Straight from Supabase (optional)
+Table Editor > schema `talastudio_visitor_tracker`: `contacts`, `page_visits`, and the reports `engagement` and
+`collection_time`. New contacts can be added here too: `track_code` and `link` fill themselves.
 
 ## Limits
-- Opening the email is tracked by the email tool, not here. Here we see only people who clicked a link.
-- If someone forwards the email, the colleague is counted as the same contact.
-- Time counts only while the tab is visible, at most 2 hours per row. A room counts while its panel fills at least a
-  third of the window.
-- Someone who opts out: delete their row in `contacts` (their visits go with it).
+- Opening the email is tracked by the email tool, not here. Here we see people who opened the website.
+- If someone forwards the email, the colleague is counted as the same contact. A new browser or device is a new visitor
+  until they open a link with their code there too.
+- Time counts only while the tab is visible, at most 2 hours per row. A collection room counts while its panel fills
+  at least a third of the window.
+- Country comes from the IP address (Cloudflare). City is not available. Office networks and VPNs can show another
+  country.
+- Clearing site data or a private window makes a returning person look new.
