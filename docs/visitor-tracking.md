@@ -22,29 +22,10 @@ Then start a new build (Deployments > Retry, or push a commit). Without these tw
 `/tracker` shows a warning.
 They are separate from `PUBLIC_SUPABASE_URL` on purpose: that one switches the site's collections to Supabase.
 
-### 2. Email codes for signing in
-The dashboard has no passwords. You type your email, Supabase emails a code (and a sign-in link), you type the code.
-
-a. **Put the code in the email.** Authentication > Emails > Templates > **Magic Link**. Subject:
-   `Your TalaStudio tracker code`. Body:
-
-       <h2>Your sign-in code</h2>
-       <p style="font-size:28px;letter-spacing:4px"><b>{{ .Token }}</b></p>
-       <p>Or <a href="{{ .ConfirmationURL }}">click here to sign in</a>. The code works once and expires in 1 hour.</p>
-
-   Without `{{ .Token }}` the email only has the link.
-
-b. **Let the link come back to the dashboard.** Authentication > URL Configuration: Site URL `https://talastudio.net`,
-   and under Redirect URLs add `https://talastudio.net/tracker` (and `http://localhost:4321/tracker` for testing).
-
-c. **Send the emails from your own address.** Supabase's built-in sender allows only a few emails per hour and is for
-   testing. Authentication > Emails > SMTP Settings > Enable custom SMTP. With Google Workspace: host
-   `smtp.gmail.com`, port `465`, user = a Workspace mailbox (e.g. it@talaliving.com), password = an App Password for it
-   (Google Account > Security > 2-Step Verification > App passwords), sender name `TalaStudio`.
-
-### 2b. A login for each person who may open the dashboard
-Authentication > Users > Add user > **Send invitation** (or Create new user, any password, tick "Auto Confirm User": the
-password is never used). Only addresses added here can get a code.
+### 2. A login for each person who may open the dashboard
+Supabase (Talastudio project) > Authentication > Users > Add user > **Create new user**: their email, a password
+(at least 8 characters; share it with them privately), tick **Auto Confirm User**. No emails are sent, so no SMTP setup
+is needed. Change a password later: the user's row > "..." > Reset password, or delete and re-create the user.
 
 ### 3. Give someone access
 Supabase > SQL Editor:
@@ -58,10 +39,9 @@ A login that is not on this list can sign in but sees "not on the tracker admin 
 
 ### 4. Recommended
 Authentication > Sign In / Providers: turn off "Allow new users to sign up", so only accounts you create exist.
-The dashboard already refuses codes for unknown addresses; this closes the other doors too.
 
 ## Using the dashboard
-Sign in at `/tracker`: work email > "Email me a code" > type the code (or click the link in the email).
+Sign in at `/tracker` with your work email and password.
 
 **Dashboard tab:** pick the period. Totals (visitors = browsers, visits = tab sessions), visitors per day, time per
 collection room, pages, countries, devices and where people came from. The Visitors table has one row per browser: the

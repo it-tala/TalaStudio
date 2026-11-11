@@ -44,19 +44,13 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
     {!configured && <p class="tk-wrap tk-note">PUBLIC_TRACKER_URL and PUBLIC_TRACKER_KEY are not set for this build. See docs/visitor-tracking.md.</p>}
 
     <main class="tk-wrap">
-      <!-- Sign in: a one-time code (or link) by email. Only accounts that already exist can get one. -->
+      <!-- Sign in: email and password of an account made in Supabase > Authentication > Users -->
       <div id="login" class="tk-card tk-login" hidden>
         <h2>Sign in</h2>
-        <form id="login-email">
+        <form id="login-form">
           <label>Work email<input type="email" name="email" autocomplete="username" required /></label>
-          <button type="submit" class="tk-btn">Email me a code</button>
-        </form>
-        <form id="login-code" hidden>
-          <p class="tk-help">We sent a code to <b id="code-to"></b>. Type it here, or click the link in the email.</p>
-          <label>Code<input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" maxlength="10" required /></label>
+          <label>Password<input type="password" name="password" autocomplete="current-password" required /></label>
           <button type="submit" class="tk-btn">Sign in</button>
-          <p class="tk-actions"><button type="button" class="tk-link" id="code-resend">Send a new code</button>
-            <button type="button" class="tk-link" id="code-back">Use another email</button></p>
         </form>
         <p class="tk-msg" id="login-msg"></p>
       </div>
@@ -255,51 +249,17 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         for (const s of ['login', 'denied', 'app']) $(`#${s}`).hidden = s !== id;
         $('.tk-user').hidden = id === 'login';
       };
-      // Step 1: email a code. shouldCreateUser false: an address without an account gets nothing.
-      let email = '';
-      const sendCode = async () => {
-        $('#login-msg').textContent = 'Sending…';
-        const { error } = await sb!.auth.signInWithOtp({
-          email, options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}/tracker` },
-        });
-        if (error) {
-          $('#login-msg').textContent = /signups not allowed|not found/i.test(error.message)
-            ? 'This email has no tracker account. Ask the Supabase owner to add it.' : error.message;
-          return false;
-        }
-        $('#login-msg').textContent = '';
-        return true;
-      };
-      $('#login-email').addEventListener('submit', async (e) => {
+      $('#login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        email = String(new FormData(e.target as HTMLFormElement).get('email')).trim().toLowerCase();
-        if (!(await sendCode())) return;
-        $('#code-to').textContent = email;
-        $('#login-email').hidden = true;
-        $('#login-code').hidden = false;
-        $<HTMLInputElement>('#login-code input').focus();
-      });
-      // Step 2: the code from the email
-      $('#login-code').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const token = String(new FormData(e.target as HTMLFormElement).get('code')).replace(/\D/g, '');
+        const f = new FormData(e.target as HTMLFormElement);
         $('#login-msg').textContent = 'Signing in…';
-        const { error } = await sb!.auth.verifyOtp({ email, token, type: 'email' });
-        $('#login-msg').textContent = error ? 'That code is wrong or has expired. Send a new one.' : '';
+        const { error } = await sb!.auth.signInWithPassword({
+          email: String(f.get('email')).trim().toLowerCase(), password: String(f.get('password')),
+        });
+        $('#login-msg').textContent = error
+          ? (/invalid login credentials/i.test(error.message) ? 'Wrong email or password.' : error.message) : '';
         if (!error) start();
       });
-      $('#code-resend').addEventListener('click', async () => { if (await sendCode()) $('#login-msg').textContent = 'New code sent.'; });
-      $('#code-back').addEventListener('click', () => {
-        $('#login-code').hidden = true;
-        $('#login-email').hidden = false;
-        $('#login-msg').textContent = '';
-      });
-      // The link in the email lands here with the session (or an error) in the address; supabase-js reads the session
-      const linkError = new URLSearchParams(location.hash.slice(1)).get('error_description');
-      if (linkError) {
-        $('#login-msg').textContent = `${linkError.replace(/\+/g, ' ')}. Ask for a new code.`;
-        history.replaceState(null, '', location.pathname);
-      }
       $('#signout').addEventListener('click', async () => { await sb!.auth.signOut(); show('login'); });
 
       async function start() {
@@ -607,7 +567,6 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
   .tk-login { max-width: 380px; margin: 3rem auto; }
   .tk-login form { display: grid; gap: .8rem; }
   .tk-login .tk-msg { margin-top: .8rem; }
-  .tk-login input[name='code'] { font-size: 1.4rem; letter-spacing: .3em; text-align: center; }
   .tk-login h2 { font-size: 1.3rem; }
   .tk label { display: grid; gap: .25rem; font-size: .82rem; color: var(--text-soft); }
   .tk input[type='email'], .tk input[type='password'], .tk input[type='text'], .tk input[type='search'], .tk select, .tk textarea {
