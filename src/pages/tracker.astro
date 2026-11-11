@@ -1,0 +1,670 @@
+---
+// Staff dashboard for the visitor tracker: who visited, from where, on what device, which pages and collection rooms,
+// and the link generator for outreach emails (Excel in, Excel out). Not linked anywhere, not in the sitemap, not tracked.
+// Sign-in: a Supabase account of the Talastudio project that is listed in talastudio_visitor_tracker.admins.
+// Guide: docs/visitor-tracking.md
+import '../styles/global.css';
+import { getCollections } from '../lib/supabase';
+
+const all = await getCollections();
+const roomOrder = ['bedroom', 'living', 'dining', 'other'];
+const rooms = [...new Set(all.map((c) => c.name))]
+  .flatMap((name) => all.filter((c) => c.name === name).sort((x, y) => roomOrder.indexOf(x.room) - roomOrder.indexOf(y.room)));
+const roomName = (c: (typeof all)[number]) => (c.room === 'other' ? c.name : `${c.name} · ${c.room}`);
+// slug → "Zuma · living", for the reports; and the link targets for the generator
+const names = Object.fromEntries(rooms.map((c) => [c.slug, roomName(c)]));
+const targets = [
+  { hash: '#collections', label: 'Collections section (home page)' },
+  { hash: '', label: 'Home page, top' },
+  ...rooms.map((c) => ({ hash: `#coll-${c.slug}`, label: roomName(c) })),
+];
+const site = (Astro.site?.href ?? 'https://talastudio.net/').replace(/\/$/, '');
+const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env.PUBLIC_TRACKER_KEY);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Visitor tracker | TalaStudio</title>
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="tk" data-names={JSON.stringify(names)} data-site={site}>
+    <header class="tk-top">
+      <div class="tk-wrap tk-bar">
+        <h1>TalaStudio <span>Visitor tracker</span></h1>
+        <div class="tk-user" hidden><span id="who"></span><button type="button" id="signout" class="tk-link">Sign out</button></div>
+      </div>
+    </header>
+
+    {!configured && <p class="tk-wrap tk-note">PUBLIC_TRACKER_URL and PUBLIC_TRACKER_KEY are not set for this build. See docs/visitor-tracking.md.</p>}
+
+    <main class="tk-wrap">
+      <!-- Sign in: a one-time code (or link) by email. Only accounts that already exist can get one. -->
+      <div id="login" class="tk-card tk-login" hidden>
+        <h2>Sign in</h2>
+        <form id="login-email">
+          <label>Work email<input type="email" name="email" autocomplete="username" required /></label>
+          <button type="submit" class="tk-btn">Email me a code</button>
+        </form>
+        <form id="login-code" hidden>
+          <p class="tk-help">We sent a code to <b id="code-to"></b>. Type it here, or click the link in the email.</p>
+          <label>Code<input type="text" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" maxlength="10" required /></label>
+          <button type="submit" class="tk-btn">Sign in</button>
+          <p class="tk-actions"><button type="button" class="tk-link" id="code-resend">Send a new code</button>
+            <button type="button" class="tk-link" id="code-back">Use another email</button></p>
+        </form>
+        <p class="tk-msg" id="login-msg"></p>
+      </div>
+
+      <p class="tk-card tk-msg" id="denied" hidden>
+        This account is signed in but is not on the tracker admin list. Ask the Supabase owner to add it
+        (docs/visitor-tracking.md, "Give someone access").
+      </p>
+
+      <div id="app" hidden>
+        <nav class="tk-tabs" role="tablist">
+          <button type="button" role="tab" data-tab="dash" aria-selected="true">Dashboard</button>
+          <button type="button" role="tab" data-tab="links" aria-selected="false">Links</button>
+        </nav>
+
+        <!-- Dashboard -->
+        <section data-panel="dash">
+          <div class="tk-filters">
+            <label>Period
+              <select id="range">
+                <option value="1">Today</option>
+                <option value="7" selected>Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="3650">All time</option>
+              </select>
+            </label>
+            <label class="tk-check"><input type="checkbox" id="known" /> Emailed contacts only</label>
+            <button type="button" class="tk-link" id="refresh">Refresh</button>
+            <span class="tk-msg" id="dash-msg"></span>
+          </div>
+
+          <div class="tk-kpis" id="kpis"></div>
+
+          <div class="tk-card">
+            <h3>Visitors per day</h3>
+            <div class="tk-chart" id="chart"></div>
+          </div>
+
+          <div class="tk-grid">
+            <div class="tk-card"><h3>Collections <small>time on screen</small></h3><div id="collections"></div></div>
+            <div class="tk-card"><h3>Pages <small>views</small></h3><div id="pages"></div></div>
+            <div class="tk-card"><h3>Countries <small>visitors</small></h3><div id="countries"></div></div>
+            <div class="tk-card"><h3>Devices <small>visitors</small></h3><div id="devices"></div></div>
+            <div class="tk-card"><h3>Came from <small>visitors</small></h3><div id="referrers"></div></div>
+          </div>
+
+          <div class="tk-card">
+            <div class="tk-head">
+              <h3>Visitors <small>one row per browser · click for the full trail</small></h3>
+              <div class="tk-actions">
+                <input type="search" id="vsearch" placeholder="Search name, company, IP, country" />
+                <button type="button" class="tk-btn ghost" id="vexport">Download Excel</button>
+              </div>
+            </div>
+            <div class="tk-scroll">
+              <table class="tk-table" id="vtable">
+                <thead><tr><th>Who</th><th>Country</th><th>Device</th><th>IP address</th><th>Visits</th><th>Pages</th><th>Time</th><th>Top collection</th><th>Last seen</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Links -->
+        <section data-panel="links" hidden>
+          <div class="tk-card">
+            <h3>1. Where the link opens</h3>
+            <div class="tk-filters">
+              <label>Page
+                <select id="target">
+                  {targets.map((t) => <option value={t.hash}>{t.label}</option>)}
+                </select>
+              </label>
+              <label>Campaign for rows without one <input type="text" id="campaign" placeholder="e.g. 2026-11 US retailers" /></label>
+            </div>
+          </div>
+
+          <div class="tk-card">
+            <h3>2. Add people</h3>
+            <p class="tk-help">
+              Columns: <b>Company</b>, <b>Name</b>, <b>Email</b>, <b>Campaign</b> (optional), <b>Notes</b> (optional). Upload an Excel or
+              CSV file, or copy the rows in Excel and paste them below, header row included. An email that is already in the list keeps
+              its link.
+            </p>
+            <div class="tk-actions">
+              <label class="tk-btn ghost tk-file">Upload Excel / CSV<input type="file" id="file" accept=".xlsx,.xls,.csv,.txt" /></label>
+              <button type="button" class="tk-link" id="template">Download the Excel template</button>
+            </div>
+            <textarea id="paste" rows="7" placeholder={'Company\tName\tEmail\tCampaign\nAcme Home\tPat Lee\tpat@acmehome.com\t2026-11 US retailers'}></textarea>
+            <div class="tk-actions">
+              <span class="tk-msg" id="parse-msg">Nothing added yet.</span>
+              <button type="button" class="tk-btn" id="create" disabled>Create links</button>
+            </div>
+          </div>
+
+          <div class="tk-card" id="result-card" hidden>
+            <div class="tk-head">
+              <h3>3. Your links</h3>
+              <div class="tk-actions">
+                <button type="button" class="tk-btn ghost" id="copy-all">Copy all</button>
+                <button type="button" class="tk-btn" id="result-export">Download Excel</button>
+              </div>
+            </div>
+            <div class="tk-scroll"><table class="tk-table" id="rtable">
+              <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Link</th><th></th></tr></thead><tbody></tbody>
+            </table></div>
+          </div>
+
+          <div class="tk-card">
+            <div class="tk-head">
+              <h3>All contacts <small>links use the page chosen in step 1</small></h3>
+              <div class="tk-actions">
+                <input type="search" id="csearch" placeholder="Search" />
+                <button type="button" class="tk-btn ghost" id="contacts-export">Download Excel</button>
+              </div>
+            </div>
+            <div class="tk-scroll"><table class="tk-table" id="ctable">
+              <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Campaign</th><th>Visits</th><th>Time</th><th>Last seen</th><th>Link</th><th></th><th></th></tr></thead><tbody></tbody>
+            </table></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="detail" class="tk-detail">
+      <div class="tk-head"><h3 id="detail-title">Visitor</h3><button type="button" class="tk-link" id="detail-close">Close</button></div>
+      <p class="tk-help" id="detail-meta"></p>
+      <div class="tk-scroll"><table class="tk-table" id="dtable">
+        <thead><tr><th>When</th><th>Page / collection</th><th>Time</th><th>Came from</th></tr></thead><tbody></tbody>
+      </table></div>
+    </dialog>
+
+    <script>
+      import { createClient } from '@supabase/supabase-js';
+
+      const url = import.meta.env.PUBLIC_TRACKER_URL;
+      const key = import.meta.env.PUBLIC_TRACKER_KEY;
+      const names: Record<string, string> = JSON.parse(document.body.dataset.names || '{}');
+      const site = document.body.dataset.site!;
+      const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+
+      // ---------- helpers ----------
+      const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+      const dur = (s: number) => {
+        s = Math.round(s || 0);
+        if (s < 60) return `${s}s`;
+        if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s`;
+        return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
+      };
+      const when = (t: string) => new Date(t).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      const regions = new Intl.DisplayNames(['en'], { type: 'region' });
+      const flag = (cc: string) => (/^[A-Z]{2}$/.test(cc) ? String.fromCodePoint(...[...cc].map((c) => 127397 + c.charCodeAt(0))) : '');
+      const country = (cc?: string | null) => {
+        if (!cc || cc === '??' || cc === 'XX') return 'Unknown';
+        try { return `${flag(cc)} ${regions.of(cc)}`; } catch { return cc; }
+      };
+      const room = (slug?: string | null) => (slug ? names[slug] ?? slug : '');
+      const linkFor = (code: string) => `${site}/?r=${code}${$<HTMLSelectElement>('#target').value}`;
+
+      // Excel (SheetJS) loads only when needed. CSV is the fallback if it cannot load.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type XLSX = any; // SheetJS from its CDN (the npm copy is out of date)
+      let xlsx: Promise<XLSX | null> | null = null;
+      const sheetjs = () => (xlsx ??= import(/* @vite-ignore */ 'https://cdn.sheetjs.com/xlsx-0.20.3/package/xlsx.mjs').catch(() => null));
+      const download = async (name: string, rows: (string | number)[][]) => {
+        const X = await sheetjs();
+        if (X) {
+          const ws = X.utils.aoa_to_sheet(rows);
+          ws['!cols'] = rows[0].map((_, i) => ({ wch: Math.min(60, Math.max(...rows.map((r) => String(r[i] ?? '').length), 8) + 2) }));
+          const wb = X.utils.book_new();
+          X.utils.book_append_sheet(wb, ws, 'Sheet1');
+          X.writeFile(wb, `${name}.xlsx`);
+          return;
+        }
+        const csv = rows.map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+        const a = Object.assign(document.createElement('a'), {
+          href: URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })), download: `${name}.csv`,
+        });
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+      const stamp = () => new Date().toISOString().slice(0, 10);
+
+      // ---------- Supabase ----------
+      // fetch is passed through so the page always uses the current window.fetch
+      const sb = url && key ? createClient(url, key, { global: { fetch: (...a) => fetch(...a) } }) : null;
+      const rpc = async <T,>(fn: string, args: Record<string, unknown> = {}): Promise<T> => {
+        const { data, error } = await sb!.rpc(fn, args);
+        if (error) throw error;
+        return data as T;
+      };
+
+      // ---------- sign in ----------
+      const show = (id: 'login' | 'denied' | 'app') => {
+        for (const s of ['login', 'denied', 'app']) $(`#${s}`).hidden = s !== id;
+        $('.tk-user').hidden = id === 'login';
+      };
+      // Step 1: email a code. shouldCreateUser false: an address without an account gets nothing.
+      let email = '';
+      const sendCode = async () => {
+        $('#login-msg').textContent = 'Sending…';
+        const { error } = await sb!.auth.signInWithOtp({
+          email, options: { shouldCreateUser: false, emailRedirectTo: `${location.origin}/tracker` },
+        });
+        if (error) {
+          $('#login-msg').textContent = /signups not allowed|not found/i.test(error.message)
+            ? 'This email has no tracker account. Ask the Supabase owner to add it.' : error.message;
+          return false;
+        }
+        $('#login-msg').textContent = '';
+        return true;
+      };
+      $('#login-email').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        email = String(new FormData(e.target as HTMLFormElement).get('email')).trim().toLowerCase();
+        if (!(await sendCode())) return;
+        $('#code-to').textContent = email;
+        $('#login-email').hidden = true;
+        $('#login-code').hidden = false;
+        $<HTMLInputElement>('#login-code input').focus();
+      });
+      // Step 2: the code from the email
+      $('#login-code').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const token = String(new FormData(e.target as HTMLFormElement).get('code')).replace(/\D/g, '');
+        $('#login-msg').textContent = 'Signing in…';
+        const { error } = await sb!.auth.verifyOtp({ email, token, type: 'email' });
+        $('#login-msg').textContent = error ? 'That code is wrong or has expired. Send a new one.' : '';
+        if (!error) start();
+      });
+      $('#code-resend').addEventListener('click', async () => { if (await sendCode()) $('#login-msg').textContent = 'New code sent.'; });
+      $('#code-back').addEventListener('click', () => {
+        $('#login-code').hidden = true;
+        $('#login-email').hidden = false;
+        $('#login-msg').textContent = '';
+      });
+      // The link in the email lands here with the session (or an error) in the address; supabase-js reads the session
+      const linkError = new URLSearchParams(location.hash.slice(1)).get('error_description');
+      if (linkError) {
+        $('#login-msg').textContent = `${linkError.replace(/\+/g, ' ')}. Ask for a new code.`;
+        history.replaceState(null, '', location.pathname);
+      }
+      $('#signout').addEventListener('click', async () => { await sb!.auth.signOut(); show('login'); });
+
+      async function start() {
+        const { data } = await sb!.auth.getSession();
+        if (!data.session) return show('login');
+        $('#who').textContent = data.session.user.email ?? '';
+        try {
+          await loadDash();
+          show('app');
+        } catch (err) {
+          if ((err as { code?: string }).code === '42501') show('denied');
+          else { show('app'); $('#dash-msg').textContent = (err as Error).message; }
+        }
+      }
+
+      // ---------- tabs ----------
+      document.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => b.addEventListener('click', () => {
+        document.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+        document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
+        if (b.dataset.tab === 'links') loadContacts();
+      }));
+
+      // ---------- dashboard ----------
+      type Visitor = {
+        visitor_id: string; contact_id: string | null; contact_name: string | null; company: string | null; email: string | null;
+        country: string | null; ip: string | null; device: string; browser: string; visits: number; page_views: number;
+        seconds: number; top_collection: string | null; first_seen: string; last_seen: string;
+      };
+      type Dash = {
+        totals: { visitors: number; visits: number; page_views: number; seconds: number; contacts: number; countries: number };
+        by_day: { day: string; visitors: number; page_views: number }[];
+        visitors: Visitor[];
+        pages: { path: string; views: number; visitors: number; seconds: number }[];
+        collections: { slug: string; visitors: number; seconds: number }[];
+        countries: { country: string; visitors: number }[];
+        devices: { device: string; visitors: number }[];
+        referrers: { source: string; visitors: number }[];
+      };
+      let dash: Dash | null = null;
+
+      async function loadDash() {
+        const days = Number($<HTMLSelectElement>('#range').value);
+        const from = new Date();
+        from.setHours(0, 0, 0, 0);
+        from.setDate(from.getDate() - (days - 1));
+        $('#dash-msg').textContent = 'Loading…';
+        dash = await rpc<Dash>('talastudio_tracker_dashboard', { p_from: from.toISOString(), p_to: new Date(Date.now() + 864e5).toISOString() });
+        $('#dash-msg').textContent = `Updated ${new Date().toLocaleTimeString()}`;
+        renderDash(from, days);
+      }
+
+      const bars = (rows: { label: string; value: number; note?: string }[], fmt: (n: number) => string = String) => {
+        if (!rows.length) return '<p class="tk-empty">No data yet.</p>';
+        const max = Math.max(...rows.map((r) => r.value), 1);
+        return `<ul class="tk-bars">${rows.map((r) => `<li><span class="tk-fill" style="width:${(r.value / max) * 100}%"></span>
+          <span class="tk-bl">${esc(r.label)}${r.note ? ` <small>${esc(r.note)}</small>` : ''}</span><b>${esc(fmt(r.value))}</b></li>`).join('')}</ul>`;
+      };
+
+      function renderDash(from: Date, days: number) {
+        if (!dash) return;
+        const knownOnly = $<HTMLInputElement>('#known').checked;
+        const vis = dash.visitors.filter((v) => !knownOnly || v.contact_id);
+        const t = dash.totals;
+        const kpi = (label: string, value: string, note = '') => `<div class="tk-kpi"><small>${label}</small><b>${value}</b>${note ? `<span>${note}</span>` : ''}</div>`;
+        $('#kpis').innerHTML =
+          kpi('Visitors', String(t.visitors), 'unique browsers') +
+          kpi('Visits', String(t.visits)) +
+          kpi('Page views', String(t.page_views)) +
+          kpi('Avg. time', dur(t.visitors ? t.seconds / t.visitors : 0), 'per visitor') +
+          kpi('Emailed contacts', String(t.contacts), 'who visited') +
+          kpi('Countries', String(t.countries));
+
+        // Day chart: every day of the period (up to 90), gaps as zero
+        const byDay = new Map(dash.by_day.map((d) => [d.day, d]));
+        const span = days > 90 ? dash.by_day.map((d) => d.day) : Array.from({ length: days }, (_, i) => {
+          const d = new Date(from); d.setDate(d.getDate() + i);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        });
+        const max = Math.max(...span.map((d) => byDay.get(d)?.visitors ?? 0), 1);
+        $('#chart').innerHTML = span.length ? span.map((d) => {
+          const n = byDay.get(d)?.visitors ?? 0;
+          const label = new Date(`${d}T00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+          return `<div class="tk-col" title="${esc(label)}: ${n} visitor${n === 1 ? '' : 's'}"><span style="height:${(n / max) * 100}%"></span><small>${n || ''}</small></div>`;
+        }).join('') : '<p class="tk-empty">No data yet.</p>';
+
+        $('#collections').innerHTML = bars(dash.collections.map((c) => ({ label: room(c.slug), value: c.seconds, note: `${c.visitors} visitor${c.visitors === 1 ? '' : 's'}` })), dur);
+        $('#pages').innerHTML = bars(dash.pages.map((p) => ({ label: p.path, value: p.views, note: dur(p.seconds) })));
+        $('#countries').innerHTML = bars(dash.countries.map((c) => ({ label: country(c.country), value: c.visitors })));
+        $('#devices').innerHTML = bars(dash.devices.map((d) => ({ label: d.device[0].toUpperCase() + d.device.slice(1), value: d.visitors })));
+        $('#referrers').innerHTML = bars(dash.referrers.map((r) => ({ label: r.source, value: r.visitors })));
+        renderVisitors(vis);
+      }
+
+      function renderVisitors(list: Visitor[]) {
+        const q = $<HTMLInputElement>('#vsearch').value.trim().toLowerCase();
+        const rows = list.filter((v) => !q || [v.contact_name, v.company, v.email, v.ip, v.country, country(v.country)].some((x) => x?.toLowerCase().includes(q)));
+        $('#vtable tbody').innerHTML = rows.length ? rows.map((v) => `<tr data-v="${esc(v.visitor_id)}" tabindex="0">
+          <td>${v.contact_id ? `<b>${esc(v.contact_name || v.email || 'Contact')}</b><small>${esc(v.company || '')}</small>` : '<span class="tk-anon">Anonymous</span>'}</td>
+          <td>${esc(country(v.country))}</td><td>${esc(v.device)}<small>${esc(v.browser)}</small></td><td class="tk-mono">${esc(v.ip || '')}</td>
+          <td>${v.visits}</td><td>${v.page_views}</td><td>${dur(v.seconds)}</td><td>${esc(room(v.top_collection))}</td><td>${when(v.last_seen)}</td>
+        </tr>`).join('') : '<tr><td colspan="9" class="tk-empty">No visitors in this period.</td></tr>';
+      }
+
+      $('#range').addEventListener('change', () => loadDash().catch((e) => ($('#dash-msg').textContent = e.message)));
+      $('#refresh').addEventListener('click', () => loadDash().catch((e) => ($('#dash-msg').textContent = e.message)));
+      $('#known').addEventListener('change', () => dash && renderVisitors(dash.visitors.filter((v) => !$<HTMLInputElement>('#known').checked || v.contact_id)));
+      $('#vsearch').addEventListener('input', () => dash && renderVisitors(dash.visitors.filter((v) => !$<HTMLInputElement>('#known').checked || v.contact_id)));
+      $('#vexport').addEventListener('click', () => dash && download(`talastudio-visitors-${stamp()}`, [
+        ['Name', 'Company', 'Email', 'Country', 'Device', 'Browser', 'IP address', 'Visits', 'Page views', 'Time (seconds)', 'Top collection', 'First seen', 'Last seen'],
+        ...dash.visitors.map((v) => [v.contact_name ?? (v.contact_id ? '' : 'Anonymous'), v.company ?? '', v.email ?? '', country(v.country), v.device, v.browser,
+          v.ip ?? '', v.visits, v.page_views, v.seconds, room(v.top_collection), new Date(v.first_seen).toLocaleString(), new Date(v.last_seen).toLocaleString()]),
+      ]));
+
+      // Visitor trail
+      const openVisitor = async (id: string) => {
+        const v = dash?.visitors.find((x) => x.visitor_id === id);
+        if (!v) return;
+        $('#detail-title').textContent = v.contact_id ? `${v.contact_name || v.email} ${v.company ? '· ' + v.company : ''}` : 'Anonymous visitor';
+        $('#detail-meta').textContent = `${country(v.country)} · ${v.device}, ${v.browser} · IP ${v.ip ?? 'unknown'} · first seen ${when(v.first_seen)}`;
+        $('#dtable tbody').innerHTML = '<tr><td colspan="4" class="tk-empty">Loading…</td></tr>';
+        $<HTMLDialogElement>('#detail').showModal();
+        try {
+          const rows = await rpc<{ started_at: string; path: string; collection_slug: string | null; is_section: boolean; seconds: number; referrer: string | null }[]>('talastudio_tracker_visitor', { p_visitor: id });
+          // Oldest first: each page, then the collection rooms seen on it
+          $('#dtable tbody').innerHTML = rows.slice().reverse().map((r) => `<tr class="${r.is_section ? 'tk-sub' : ''}">
+            <td>${r.is_section ? '' : when(r.started_at)}</td>
+            <td>${r.is_section ? `↳ ${esc(room(r.collection_slug))}` : esc(r.path) + (r.collection_slug ? ` <small>${esc(room(r.collection_slug))}</small>` : '')}</td>
+            <td>${dur(r.seconds)}</td><td>${esc(r.referrer ? r.referrer.replace(/^https?:\/\//, '') : '')}</td></tr>`).join('');
+        } catch (e) { $('#dtable tbody').innerHTML = `<tr><td colspan="4">${esc((e as Error).message)}</td></tr>`; }
+      };
+      $('#vtable').addEventListener('click', (e) => { const tr = (e.target as HTMLElement).closest<HTMLElement>('tr[data-v]'); if (tr) openVisitor(tr.dataset.v!); });
+      $('#vtable').addEventListener('keydown', (e) => { const tr = (e.target as HTMLElement).closest<HTMLElement>('tr[data-v]'); if (tr && e.key === 'Enter') openVisitor(tr.dataset.v!); });
+      $('#detail-close').addEventListener('click', () => $<HTMLDialogElement>('#detail').close());
+
+      // ---------- links ----------
+      type Person = { company?: string; contact_name?: string; email?: string; campaign?: string; notes?: string };
+      type Made = Person & { id: string; track_code: string; existing: boolean };
+      let people: Person[] = [];
+      let made: Made[] = [];
+
+      // Header names people actually use in Excel, mapped to our fields
+      const field = (h: string): keyof Person | null => {
+        const k = h.toLowerCase().replace(/[^a-z]/g, '');
+        if (/^(company|companyname|organisation|organization|business|account)$/.test(k)) return 'company';
+        if (/^(name|contactname|contact|fullname|person|firstname)$/.test(k)) return 'contact_name';
+        if (/^(email|emailaddress|mail|email1)$/.test(k)) return 'email';
+        if (/^(campaign|batch|list)$/.test(k)) return 'campaign';
+        if (/^(notes|note|comment|comments)$/.test(k)) return 'notes';
+        return null;
+      };
+      const fromRows = (rows: string[][]) => {
+        rows = rows.filter((r) => r.some((c) => String(c ?? '').trim()));
+        if (!rows.length) return [];
+        let cols = rows[0].map((h) => field(String(h ?? '')));
+        let body = rows.slice(1);
+        // No header row: assume Company, Name, Email, Campaign, Notes
+        if (!cols.some(Boolean)) { cols = ['company', 'contact_name', 'email', 'campaign', 'notes']; body = rows; }
+        return body.map((r) => {
+          const p: Person = {};
+          cols.forEach((c, i) => { if (c && String(r[i] ?? '').trim()) p[c] = String(r[i]).trim(); });
+          return p;
+        }).filter((p) => p.company || p.contact_name || p.email);
+      };
+      const parseText = (t: string) => {
+        const sep = t.includes('\t') ? '\t' : t.split('\n')[0].includes(';') && !t.split('\n')[0].includes(',') ? ';' : ',';
+        if (sep === '\t') return t.split(/\r?\n/).map((l) => l.split('\t'));
+        // CSV with quotes
+        const out: string[][] = []; let row: string[] = []; let cell = ''; let q = false;
+        for (let i = 0; i < t.length; i++) {
+          const c = t[i];
+          if (q) { if (c === '"' && t[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+          else if (c === '"') q = true;
+          else if (c === sep) { row.push(cell); cell = ''; }
+          else if (c === '\n' || c === '\r') { if (c === '\r' && t[i + 1] === '\n') i++; row.push(cell); out.push(row); row = []; cell = ''; }
+          else cell += c;
+        }
+        row.push(cell); out.push(row);
+        return out;
+      };
+      const setPeople = (p: Person[]) => {
+        people = p;
+        const noEmail = p.filter((x) => !x.email).length;
+        $('#parse-msg').textContent = p.length
+          ? `${p.length} ${p.length === 1 ? 'person' : 'people'} ready${noEmail ? ` (${noEmail} without email: they each get a new link every time)` : ''}.`
+          : 'No rows found. Check the header row: Company, Name, Email.';
+        $<HTMLButtonElement>('#create').disabled = !p.length;
+      };
+      $('#paste').addEventListener('input', () => setPeople(fromRows(parseText($<HTMLTextAreaElement>('#paste').value))));
+      $('#file').addEventListener('change', async () => {
+        const f = $<HTMLInputElement>('#file').files?.[0];
+        if (!f) return;
+        $('#parse-msg').textContent = `Reading ${f.name}…`;
+        if (/\.(xlsx|xls)$/i.test(f.name)) {
+          const X = await sheetjs();
+          if (!X) { $('#parse-msg').textContent = 'Could not load the Excel reader. Save the sheet as CSV and upload that.'; return; }
+          const wb = X.read(await f.arrayBuffer());
+          setPeople(fromRows(X.utils.sheet_to_json<string[]>(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: false, defval: '' })));
+        } else setPeople(fromRows(parseText(await f.text())));
+        $<HTMLInputElement>('#file').value = '';
+      });
+      $('#template').addEventListener('click', () => download('talastudio-links-template', [
+        ['Company', 'Name', 'Email', 'Campaign', 'Notes'], ['Acme Home', 'Pat Lee', 'pat@acmehome.com', '2026-11 US retailers', ''],
+      ]));
+
+      $('#create').addEventListener('click', async () => {
+        const camp = $<HTMLInputElement>('#campaign').value.trim();
+        const rows = people.map((p) => ({ ...p, campaign: p.campaign || camp || undefined }));
+        $<HTMLButtonElement>('#create').disabled = true;
+        $('#parse-msg').textContent = `Creating ${rows.length} links…`;
+        try {
+          made = [];
+          for (let i = 0; i < rows.length; i += 1000) made.push(...await rpc<Made[]>('talastudio_tracker_add_contacts', { p_rows: rows.slice(i, i + 1000) }));
+          const old = made.filter((m) => m.existing).length;
+          $('#parse-msg').textContent = `Done: ${made.length - old} new${old ? `, ${old} already in the list (same link as before)` : ''}.`;
+          $<HTMLTextAreaElement>('#paste').value = '';
+          people = [];
+          renderMade();
+          contacts = null;
+        } catch (e) {
+          $('#parse-msg').textContent = (e as Error).message;
+          $<HTMLButtonElement>('#create').disabled = false;
+        }
+      });
+
+      const linkCell = (code: string) => `<td class="tk-mono tk-linkcell">${esc(linkFor(code))}</td><td><button type="button" class="tk-link" data-copy="${esc(code)}">Copy</button></td>`;
+      function renderMade() {
+        $('#result-card').hidden = !made.length;
+        $('#rtable tbody').innerHTML = made.map((m) => `<tr><td>${esc(m.contact_name)}${m.existing ? ' <small>already listed</small>' : ''}</td>
+          <td>${esc(m.company)}</td><td>${esc(m.email)}</td>${linkCell(m.track_code)}</tr>`).join('');
+      }
+      document.addEventListener('click', async (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-copy]');
+        if (!b) return;
+        await navigator.clipboard.writeText(linkFor(b.dataset.copy!));
+        b.textContent = 'Copied'; setTimeout(() => (b.textContent = 'Copy'), 1200);
+      });
+      $('#copy-all').addEventListener('click', async () => {
+        // Tab-separated: pastes straight into Excel as columns
+        await navigator.clipboard.writeText([['Name', 'Company', 'Email', 'Link'], ...made.map((m) => [m.contact_name ?? '', m.company ?? '', m.email ?? '', linkFor(m.track_code)])].map((r) => r.join('\t')).join('\n'));
+        $('#copy-all').textContent = 'Copied';
+        setTimeout(() => ($('#copy-all').textContent = 'Copy all'), 1200);
+      });
+      const sheetOf = (list: (Person & { track_code: string })[]) => [
+        ['Company', 'Name', 'Email', 'Campaign', 'Notes', 'Code', 'Link'],
+        ...list.map((m) => [m.company ?? '', m.contact_name ?? '', m.email ?? '', m.campaign ?? '', m.notes ?? '', m.track_code, linkFor(m.track_code)]),
+      ];
+      $('#result-export').addEventListener('click', () => download(`talastudio-links-${stamp()}`, sheetOf(made)));
+      $('#target').addEventListener('change', () => { renderMade(); renderContacts(); });
+
+      // All contacts
+      type Contact = Person & { id: string; track_code: string; visits: number; seconds: number; last_seen: string | null };
+      let contacts: Contact[] | null = null;
+      async function loadContacts() {
+        if (contacts) return renderContacts();
+        $('#ctable tbody').innerHTML = '<tr><td colspan="9" class="tk-empty">Loading…</td></tr>';
+        try { contacts = await rpc<Contact[]>('talastudio_tracker_contacts'); renderContacts(); }
+        catch (e) { $('#ctable tbody').innerHTML = `<tr><td colspan="9">${esc((e as Error).message)}</td></tr>`; }
+      }
+      function renderContacts() {
+        if (!contacts) return;
+        const q = $<HTMLInputElement>('#csearch').value.trim().toLowerCase();
+        const rows = contacts.filter((c) => !q || [c.contact_name, c.company, c.email, c.campaign].some((x) => x?.toLowerCase().includes(q)));
+        $('#ctable tbody').innerHTML = rows.length ? rows.map((c) => `<tr><td>${esc(c.contact_name)}</td><td>${esc(c.company)}</td><td>${esc(c.email)}</td>
+          <td>${esc(c.campaign)}</td><td>${c.visits}</td><td>${c.visits ? dur(c.seconds) : ''}</td><td>${c.last_seen ? when(c.last_seen) : ''}</td>
+          ${linkCell(c.track_code)}<td><button type="button" class="tk-link danger" data-del="${esc(c.id)}">Delete</button></td></tr>`).join('')
+          : '<tr><td colspan="10" class="tk-empty">No contacts yet.</td></tr>';
+      }
+      $('#csearch').addEventListener('input', renderContacts);
+      $('#contacts-export').addEventListener('click', async () => {
+        await loadContacts();
+        if (contacts) download(`talastudio-contacts-${stamp()}`, [
+          ...sheetOf(contacts).map((r, i) => [...r, ...(i === 0 ? ['Visits', 'Time (seconds)', 'Last seen'] : [])]).map((r, i) => i === 0 ? r :
+            [...r, contacts![i - 1].visits, contacts![i - 1].seconds, contacts![i - 1].last_seen ? new Date(contacts![i - 1].last_seen!).toLocaleString() : '']),
+        ]);
+      });
+      $('#ctable').addEventListener('click', async (e) => {
+        const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-del]');
+        if (!b) return;
+        const c = contacts?.find((x) => x.id === b.dataset.del);
+        if (!c || !confirm(`Delete ${c.contact_name || c.email || 'this contact'} and their visit history? Their link stops counting. This cannot be undone.`)) return;
+        try { await rpc('talastudio_tracker_delete_contact', { p_id: c.id }); contacts = contacts!.filter((x) => x.id !== c.id); renderContacts(); }
+        catch (err) { alert((err as Error).message); }
+      });
+
+      if (sb) start();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .tk { --card: #f1ece3; --soft: #cfc4b2; --good: #4f6b4a; --bad: #9b3b2e; background: var(--bg); }
+  html:has(.tk) { font-size: 100%; }
+  .tk [hidden] { display: none !important; }
+  .tk-wrap { width: min(1280px, 100% - 2rem); margin-inline: auto; }
+  .tk-top { background: var(--bg-dark); color: var(--on-dark); padding: .9rem 0; margin-bottom: 1.4rem; }
+  .tk-bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .tk-top h1 { font-size: 1.6rem; }
+  .tk-top h1 span { font: 500 .8rem/1 Inter, sans-serif; letter-spacing: .12em; text-transform: uppercase; opacity: .7; margin-left: .6rem; }
+  .tk-user { display: flex; gap: 1rem; align-items: center; font-size: .9rem; }
+  .tk-user .tk-link { color: var(--on-dark); }
+  .tk-note { background: #f3dcc7; padding: .7rem 1rem; border-radius: 6px; margin-bottom: 1rem; }
+  .tk-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+  .tk-card h3, .tk-login h2 { font: 600 .95rem/1.3 Inter, sans-serif; margin-bottom: .8rem; }
+  .tk-card h3 small { font-weight: 400; color: var(--text-soft); margin-left: .4rem; }
+  .tk-login { max-width: 380px; margin: 3rem auto; }
+  .tk-login form { display: grid; gap: .8rem; }
+  .tk-login .tk-msg { margin-top: .8rem; }
+  .tk-login input[name='code'] { font-size: 1.4rem; letter-spacing: .3em; text-align: center; }
+  .tk-login h2 { font-size: 1.3rem; }
+  .tk label { display: grid; gap: .25rem; font-size: .82rem; color: var(--text-soft); }
+  .tk input[type='email'], .tk input[type='password'], .tk input[type='text'], .tk input[type='search'], .tk select, .tk textarea {
+    font: inherit; font-size: .9rem; color: var(--text); background: #fbf8f3; border: 1px solid var(--soft); border-radius: 6px; padding: .5rem .65rem; }
+  .tk textarea { width: 100%; font: .85rem/1.5 ui-monospace, Consolas, monospace; margin: .7rem 0; resize: vertical; }
+  .tk-btn { font: 500 .88rem Inter, sans-serif; background: var(--bg-dark); color: var(--on-dark); border: 1px solid var(--bg-dark); border-radius: 6px; padding: .55rem 1rem; cursor: pointer; }
+  .tk-btn.ghost { background: transparent; color: var(--text); border-color: var(--soft); }
+  .tk-btn:disabled { opacity: .45; cursor: default; }
+  .tk-link { font: inherit; font-size: .88rem; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; }
+  .tk-link.danger { color: var(--bad); }
+  .tk-msg { font-size: .85rem; color: var(--text-soft); }
+  .tk-help { font-size: .88rem; color: var(--text-soft); margin-bottom: .8rem; max-width: 70ch; }
+  .tk-file { position: relative; overflow: hidden; display: inline-block; color: var(--text); font-size: .88rem; }
+  .tk-file input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .tk-tabs { display: flex; gap: .3rem; margin-bottom: 1rem; border-bottom: 1px solid var(--line); }
+  .tk-tabs button { font: 500 .95rem Inter, sans-serif; background: none; border: 0; padding: .6rem 1rem; color: var(--text-soft); border-bottom: 2px solid transparent; cursor: pointer; }
+  .tk-tabs button[aria-selected='true'] { color: var(--text); border-color: var(--accent); }
+  .tk-filters, .tk-actions { display: flex; gap: 1rem; align-items: end; flex-wrap: wrap; margin-bottom: 1rem; }
+  .tk-actions { margin-bottom: 0; align-items: center; }
+  .tk-card .tk-filters { margin-bottom: 0; }
+  .tk-check { display: flex !important; flex-direction: row; align-items: center; gap: .4rem !important; padding-bottom: .5rem; }
+  .tk-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: .8rem; }
+  .tk-head h3 { margin: 0; }
+  .tk-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-bottom: 1rem; }
+  .tk-kpi { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .9rem 1rem; display: grid; gap: .15rem; }
+  .tk-kpi small { font-size: .78rem; color: var(--text-soft); text-transform: uppercase; letter-spacing: .06em; }
+  .tk-kpi b { font: 500 2rem/1.1 'Cormorant Garamond', serif; }
+  .tk-kpi span { font-size: .78rem; color: var(--text-soft); }
+  .tk-chart { display: flex; align-items: end; gap: 3px; height: 160px; }
+  .tk-col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: end; align-items: center; min-width: 4px; }
+  .tk-col span { width: 100%; background: var(--accent); border-radius: 3px 3px 0 0; min-height: 1px; opacity: .85; }
+  .tk-col small { font-size: .65rem; color: var(--text-soft); height: 1rem; }
+  .tk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 1rem; }
+  .tk-bars { list-style: none; padding: 0; display: grid; gap: .35rem; }
+  .tk-bars li { position: relative; display: flex; justify-content: space-between; gap: .8rem; padding: .3rem .5rem; font-size: .86rem; }
+  .tk-fill { position: absolute; inset: 0 auto 0 0; background: rgba(138, 90, 59, .14); border-radius: 4px; }
+  .tk-bl, .tk-bars b { position: relative; }
+  .tk-bl small { color: var(--text-soft); }
+  .tk-bars b { font-weight: 600; white-space: nowrap; }
+  .tk-empty { color: var(--text-soft); font-size: .88rem; padding: .4rem 0; }
+  .tk-scroll { overflow-x: auto; }
+  .tk-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .tk-table th { text-align: left; font-weight: 600; color: var(--text-soft); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: .5rem .6rem; border-bottom: 1px solid var(--soft); white-space: nowrap; }
+  .tk-table td { padding: .55rem .6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tk-table td small { display: block; color: var(--text-soft); font-size: .78rem; }
+  .tk-table tr[data-v] { cursor: pointer; }
+  .tk-table tr[data-v]:hover, .tk-table tr[data-v]:focus { background: rgba(138, 90, 59, .07); outline: none; }
+  .tk-table tr.tk-sub td { color: var(--text-soft); border-bottom-style: dashed; }
+  .tk-mono { font-family: ui-monospace, Consolas, monospace; font-size: .8rem; }
+  .tk-linkcell { word-break: break-all; min-width: 220px; }
+  .tk-anon { color: var(--text-soft); font-style: italic; }
+  .tk-detail { margin: auto; width: min(900px, 100% - 2rem); max-height: 85vh; border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem; background: var(--card); color: var(--text); }
+  .tk-detail::backdrop { background: rgba(20, 18, 16, .45); }
+  @media (max-width: 640px) {
+    .tk-kpis { grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .tk-kpi { padding: .7rem .8rem; }
+    .tk-kpi b { font-size: 1.6rem; }
+    .tk-top h1 span { display: block; margin: .3rem 0 0; }
+  }
+</style>

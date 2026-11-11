@@ -1,7 +1,7 @@
 // Privacy policy and terms of use, shown on /privacy-and-terms (see src/data/pages.ts).
 // DRAFT v2 FOR LEGAL REVIEW. Built from the stack's real data flows (see README, "Privacy and terms").
 // Still needs: the legal entity and address, retention periods, governing law (README open questions 1, 4, 5).
-export const updated = '6 November 2026';
+export const updated = '11 November 2026';
 
 type Part = [id: string, title: string, paras: string[]][];
 
@@ -14,8 +14,8 @@ export const privacy: Part = [
     'Catalog request form: your full name, company, country, email address, phone number (optional), buyer type and message.',
     'Buyer accounts and orders: if you become a buyer, your login details, the names and work contact details of your team, orders, production status, inspection photos, shipping details and the emails and notes about your account.',
     'Emails, calls and meetings with us: what you send, and notes we keep about the conversation.',
-    'Website usage: page views, referrer, country, device and browser type, collected by privacy-friendly analytics without advertising cookies.',
-    'Visits from our emails: links in our business emails may carry a personal code. If you open one, we record which pages of this site you view and for how long, linked to your business contact record.',
+    'Website usage: the pages you view and for how long, the collections you look at, the site you came from, your IP address, the country it points to, and your device and browser type. We collect this ourselves, without advertising cookies.',
+    'Visits from our emails: links in our business emails may carry a personal code. If you open one, the website usage above is linked to your business contact record.',
     'Social media: if you message or interact with our LinkedIn, Instagram or Pinterest accounts, we see what you send us and your public profile name.',
     'We do not run a shop and we do not collect payment card details on this site.',
   ]],
@@ -56,7 +56,7 @@ export const privacy: Part = [
   ]],
   ['cookies', 'Cookies and analytics', [
     'We use Cloudflare Web Analytics, which does not use cookies or track you across sites. Cloudflare Turnstile may use limited browser storage to tell people from bots. We do not use advertising or marketing cookies.',
-    'If you arrive from a link in one of our emails, the site keeps that link\'s code in your browser\'s local storage and records the pages you view on this site and how long you spend on them. We use this to see which collections interest you and to follow up. It never tracks you on other sites. We do not do this if your browser sends a Global Privacy Control signal. To stop it, clear this site\'s data in your browser or ask us at hello@talastudio.net and we will delete the record.',
+    "We also run our own visit log. It keeps a random ID for your browser in local storage (and, if you came from a link in one of our emails, that link's code), and records the pages you view on this site, how long you spend on them, your IP address, country, device and browser. We use it to understand which pages and collections interest buyers and, for people we have emailed, to follow up. It never tracks you on other sites, and we do not use it for advertising. We do not record anything if your browser sends a Global Privacy Control signal. To stop it, clear this site's data in your browser or ask us at hello@talastudio.net and we will delete what we hold.",
   ]],
   ['not-for-children', 'Not for children', [
     'This site is for business buyers and is not directed at children. We do not knowingly collect data from anyone under 16.',

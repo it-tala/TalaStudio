@@ -1,6 +1,6 @@
 -- TalaStudio visitor tracker: which emailed contacts visited the site, and what they looked at.
--- Lives in its own schema in the shared Supabase project (john-lau-v01), apart from everything else there.
--- Applied 6 Nov 2026 as migration talastudio_visitor_tracker_001. Guide: docs/visitor-tracking.md
+-- Lives in its own schema in the Talastudio Supabase project (sobinutyzhldustwwmmw), apart from everything else there.
+-- Applied 11 Nov 2026 as migration talastudio_visitor_tracker_001, then 002_dashboard.sql. Guide: docs/visitor-tracking.md
 --
 -- The website never touches this schema directly. Its only way in is public.talastudio_log_page_visit(),
 -- which writes visits and returns nothing. Contacts and reports are read in the Supabase dashboard.

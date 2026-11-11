@@ -1,8 +1,9 @@
 ---
-// Logs page time for contacts who arrive from an outreach email link (?r=<contacts.track_code>), and on the home page
-// the time each collection room was on screen. Visitors without a code are not tracked.
-// Data goes to schema talastudio_visitor_tracker in the shared Supabase project, not the site's own Supabase.
-// Off without PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, and when the browser sends Global Privacy Control. Guide: docs/visitor-tracking.md
+// Logs each visit: page time and, on the home page, the time each collection room was on screen. Visitors who arrive
+// from an outreach email link (?r=<contacts.track_code>) are linked to that contact; everyone else is anonymous.
+// Supabase adds IP, country and browser from the request. Data: schema talastudio_visitor_tracker (Talastudio project).
+// Off without PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, and when the browser sends Global Privacy Control.
+// Dashboard: /tracker. Guide: docs/visitor-tracking.md
 ---
 <script>
   const url = import.meta.env.PUBLIC_TRACKER_URL;
@@ -25,9 +26,15 @@
   }
 
   const gpc = (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl;
-  if (url && key && code && /^[a-z0-9]{6,32}$/i.test(code) && !gpc) {
+  if (url && key && !gpc) {
+    // visitor = this browser (counts unique visitors), session = this tab session (counts visits)
+    let visitor = store(localStorage, 'tala_v');
+    if (!visitor) visitor = store(localStorage, 'tala_v', crypto.randomUUID());
     let session = store(sessionStorage, 'tala_s');
     if (!session) session = store(sessionStorage, 'tala_s', crypto.randomUUID());
+    const known = code && /^[a-z0-9]{6,32}$/i.test(code) ? code : null;
+    // Only an outside page counts as where they came from
+    const referrer = document.referrer && new URL(document.referrer).host !== location.host ? document.referrer : null;
 
     // One row for the page, one per collection room seen on it. Seconds = time while the tab was visible.
     type Row = { id: string; collection: string | null; section: boolean; seconds: number; sent: number };
@@ -45,8 +52,8 @@
         keepalive: true,
         headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          p_id: r.id, p_session: session, p_code: code, p_path: location.pathname,
-          p_collection: r.collection, p_section: r.section, p_seconds: r.seconds,
+          p_id: r.id, p_visitor: visitor, p_session: session, p_code: known, p_path: location.pathname,
+          p_collection: r.collection, p_section: r.section, p_seconds: r.seconds, p_referrer: r.section ? null : referrer,
         }),
       }).catch(() => {});
     };
