@@ -6,7 +6,7 @@ linked to their contact record; everyone else is anonymous. Browsers that send G
 
 - **Dashboard and link generator:** `https://talastudio.net/tracker` (staff login, not linked anywhere, not in Google).
 - **Data:** Supabase project **Talastudio** (`sobinutyzhldustwwmmw`), schema **`talastudio_visitor_tracker`**.
-- **SQL:** `supabase/visitor-tracker/001_schema.sql`, then `002_dashboard.sql` (both applied 11 Nov 2026).
+- **SQL:** `supabase/visitor-tracker/001_schema.sql`, `002_dashboard.sql`, `003_sources.sql` (all applied 11 Nov 2026).
 - **Script on every page:** `src/components/VisitTracker.astro`. The dashboard page itself is not tracked.
 
 ## Setup (once)
@@ -48,7 +48,22 @@ collection room, pages, countries, devices and where people came from. The Visit
 contact's name if they came from an email link, otherwise "Anonymous", plus country, device and browser, IP address,
 visits, pages, time and favourite collection. Click a row for the full trail. "Download Excel" exports the table.
 
-**Links tab:**
+**Posts & channels tab:** one link per post or channel, not per person: a LinkedIn post by Evin or David, an Instagram
+story, the bio link, a WhatsApp status, a newsletter.
+1. Pick the channel, who posted it, a title ("Zuma living launch post") and where on the site it opens. The post URL can
+   be added later ("Add post URL"), once the post is live.
+2. "Create link" gives a link like `https://talastudio.net/?s=li3f9a2c#collections`. Put it in the post.
+3. The table shows, per link: visitors, visits, pages, average time, top country, share on mobile, how many of them are
+   known contacts ("Named"), and the last visit. "Download Excel" exports it; "Archive" hides old posts.
+
+Everyone who opens a post link is counted for that post on every page of that visit. They stay anonymous unless the same
+browser has also opened a personal email link, so a contact who clicks Evin's post shows up by name, with "via ..." in the
+Visitors table. The Dashboard tab also has a "Posts & channels" card for the chosen period.
+
+Instagram: links in captions cannot be clicked. Use a story link sticker, the bio link, or a Reel's link, each with its
+own link. LinkedIn: put the link in the post text (or the first comment).
+
+**Email links tab:**
 1. Choose where the link opens (the collections section, the top of the home page, or one collection room) and a
    campaign name for rows that have none.
 2. Upload an Excel (.xlsx) or CSV file, or copy rows in Excel and paste them, header row included. Recognised headers:

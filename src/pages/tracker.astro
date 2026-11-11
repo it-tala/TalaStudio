@@ -63,7 +63,8 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
       <div id="app" hidden>
         <nav class="tk-tabs" role="tablist">
           <button type="button" role="tab" data-tab="dash" aria-selected="true">Dashboard</button>
-          <button type="button" role="tab" data-tab="links" aria-selected="false">Links</button>
+          <button type="button" role="tab" data-tab="posts" aria-selected="false">Posts &amp; channels</button>
+          <button type="button" role="tab" data-tab="links" aria-selected="false">Email links</button>
         </nav>
 
         <!-- Dashboard -->
@@ -96,6 +97,7 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
             <div class="tk-card"><h3>Countries <small>visitors</small></h3><div id="countries"></div></div>
             <div class="tk-card"><h3>Devices <small>visitors</small></h3><div id="devices"></div></div>
             <div class="tk-card"><h3>Came from <small>visitors</small></h3><div id="referrers"></div></div>
+            <div class="tk-card"><h3>Posts &amp; channels <small>visitors from each post link</small></h3><div id="sources"></div></div>
           </div>
 
           <div class="tk-card">
@@ -134,13 +136,13 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
             <p class="tk-help">
               Columns: <b>Company</b>, <b>Name</b>, <b>Email</b>, <b>Campaign</b> (optional), <b>Notes</b> (optional). Upload an Excel or
               CSV file, or copy the rows in Excel and paste them below, header row included. An email that is already in the list keeps
-              its link.
+              its link. Example: <code>Company · Name · Email</code>, then <code>Acme Home · Pat Lee · pat@acmehome.com</code>.
             </p>
             <div class="tk-actions">
               <label class="tk-btn ghost tk-file">Upload Excel / CSV<input type="file" id="file" accept=".xlsx,.xls,.csv,.txt" /></label>
               <button type="button" class="tk-link" id="template">Download the Excel template</button>
             </div>
-            <textarea id="paste" rows="7" placeholder={'Company\tName\tEmail\tCampaign\nAcme Home\tPat Lee\tpat@acmehome.com\t2026-11 US retailers'}></textarea>
+            <textarea id="paste" rows="7" placeholder="Paste the rows from Excel here, header row first"></textarea>
             <div class="tk-actions">
               <span class="tk-msg" id="parse-msg">Nothing added yet.</span>
               <button type="button" class="tk-btn" id="create" disabled>Create links</button>
@@ -171,6 +173,61 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
             <div class="tk-scroll"><table class="tk-table" id="ctable">
               <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Campaign</th><th>Visits</th><th>Time</th><th>Last seen</th><th>Link</th><th></th><th></th></tr></thead><tbody></tbody>
             </table></div>
+          </div>
+        </section>
+
+        <!-- Posts & channels: one link per post, not per person -->
+        <section data-panel="posts" hidden>
+          <div class="tk-card">
+            <h3>New link for a post or channel</h3>
+            <p class="tk-help">
+              One link per post: put it in the LinkedIn post, the Instagram story link sticker or bio, the WhatsApp status. Everyone who
+              opens it counts for that post: how many, from where, on what device, which collections. People are not named, unless
+              they have also opened one of their own email links.
+            </p>
+            <form id="post-form" class="tk-filters">
+              <label>Channel
+                <select name="channel">
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="facebook">Facebook</option>
+                  <option value="whatsapp">WhatsApp</option>
+                  <option value="newsletter">Newsletter</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label>Posted by <input type="text" name="owner" list="owners" placeholder="Evin" /></label>
+              <label class="tk-grow">What it is <input type="text" name="title" required maxlength="200" placeholder="e.g. Zuma living launch post" /></label>
+              <label>Opens on
+                <select name="target">
+                  {targets.map((t) => <option value={t.hash}>{t.label}</option>)}
+                </select>
+              </label>
+              <label class="tk-grow">Post URL (optional, add it later) <input type="url" name="post_url" placeholder="https://www.linkedin.com/posts/..." /></label>
+              <button type="submit" class="tk-btn">Create link</button>
+            </form>
+            <datalist id="owners"><option value="Evin"></option><option value="David"></option><option value="TalaStudio page"></option></datalist>
+            <p class="tk-msg" id="post-msg"></p>
+            <div class="tk-newlink" id="post-new" hidden></div>
+          </div>
+
+          <div class="tk-card">
+            <div class="tk-head">
+              <h3>Post links <small>all-time numbers</small></h3>
+              <div class="tk-actions">
+                <select id="pfilter"><option value="">All channels</option><option value="linkedin">LinkedIn</option><option value="instagram">Instagram</option>
+                  <option value="facebook">Facebook</option><option value="whatsapp">WhatsApp</option><option value="newsletter">Newsletter</option><option value="other">Other</option></select>
+                <input type="search" id="psearch" placeholder="Search title or person" />
+                <label class="tk-check"><input type="checkbox" id="parchived" /> Show archived</label>
+                <button type="button" class="tk-btn ghost" id="posts-export">Download Excel</button>
+              </div>
+            </div>
+            <div class="tk-scroll"><table class="tk-table" id="ptable">
+              <thead><tr><th>Post</th><th>Link</th><th></th><th>Visitors</th><th>Visits</th><th>Pages</th><th>Avg. time</th><th>Top country</th><th>Mobile</th><th>Named</th><th>Last visit</th><th></th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+            <p class="tk-help tk-foot">Instagram: links in captions cannot be clicked. Use a story link sticker, the bio link, or a
+              Reel's link, and make a separate link for each.</p>
           </div>
         </section>
       </div>
@@ -210,6 +267,10 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
       };
       const room = (slug?: string | null) => (slug ? names[slug] ?? slug : '');
       const linkFor = (code: string) => `${site}/?r=${code}${$<HTMLSelectElement>('#target').value}`;
+      const postLink = (s: { code: string; target: string }) => `${site}/?s=${s.code}${s.target}`;
+      const channelName: Record<string, string> = {
+        linkedin: 'LinkedIn', instagram: 'Instagram', facebook: 'Facebook', whatsapp: 'WhatsApp', newsletter: 'Newsletter', other: 'Other',
+      };
 
       // Excel (SheetJS) loads only when needed. CSV is the fallback if it cannot load.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -280,13 +341,14 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         document.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
         document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== b.dataset.tab));
         if (b.dataset.tab === 'links') loadContacts();
+        if (b.dataset.tab === 'posts') loadSources();
       }));
 
       // ---------- dashboard ----------
       type Visitor = {
         visitor_id: string; contact_id: string | null; contact_name: string | null; company: string | null; email: string | null;
         country: string | null; ip: string | null; device: string; browser: string; visits: number; page_views: number;
-        seconds: number; top_collection: string | null; first_seen: string; last_seen: string;
+        seconds: number; top_collection: string | null; first_seen: string; last_seen: string; sources?: string[];
       };
       type Dash = {
         totals: { visitors: number; visits: number; page_views: number; seconds: number; contacts: number; countries: number };
@@ -297,6 +359,7 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         countries: { country: string; visitors: number }[];
         devices: { device: string; visitors: number }[];
         referrers: { source: string; visitors: number }[];
+        sources?: { id: string; title: string; channel: string; owner: string | null; visitors: number; visits: number; seconds: number }[];
       };
       let dash: Dash | null = null;
 
@@ -350,6 +413,9 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         $('#countries').innerHTML = bars(dash.countries.map((c) => ({ label: country(c.country), value: c.visitors })));
         $('#devices').innerHTML = bars(dash.devices.map((d) => ({ label: d.device[0].toUpperCase() + d.device.slice(1), value: d.visitors })));
         $('#referrers').innerHTML = bars(dash.referrers.map((r) => ({ label: r.source, value: r.visitors })));
+        $('#sources').innerHTML = bars((dash.sources ?? []).map((s) => ({
+          label: s.title, value: s.visitors, note: [channelName[s.channel] ?? s.channel, s.owner].filter(Boolean).join(' · '),
+        })));
         renderVisitors(vis);
       }
 
@@ -357,7 +423,8 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         const q = $<HTMLInputElement>('#vsearch').value.trim().toLowerCase();
         const rows = list.filter((v) => !q || [v.contact_name, v.company, v.email, v.ip, v.country, country(v.country)].some((x) => x?.toLowerCase().includes(q)));
         $('#vtable tbody').innerHTML = rows.length ? rows.map((v) => `<tr data-v="${esc(v.visitor_id)}" tabindex="0">
-          <td>${v.contact_id ? `<b>${esc(v.contact_name || v.email || 'Contact')}</b><small>${esc(v.company || '')}</small>` : '<span class="tk-anon">Anonymous</span>'}</td>
+          <td>${v.contact_id ? `<b>${esc(v.contact_name || v.email || 'Contact')}</b><small>${esc(v.company || '')}</small>` : '<span class="tk-anon">Anonymous</span>'}
+            ${v.sources?.length ? `<small>via ${esc(v.sources.join(', '))}</small>` : ''}</td>
           <td>${esc(country(v.country))}</td><td>${esc(v.device)}<small>${esc(v.browser)}</small></td><td class="tk-mono">${esc(v.ip || '')}</td>
           <td>${v.visits}</td><td>${v.page_views}</td><td>${dur(v.seconds)}</td><td>${esc(room(v.top_collection))}</td><td>${when(v.last_seen)}</td>
         </tr>`).join('') : '<tr><td colspan="9" class="tk-empty">No visitors in this period.</td></tr>';
@@ -447,7 +514,13 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
           : 'No rows found. Check the header row: Company, Name, Email.';
         $<HTMLButtonElement>('#create').disabled = !p.length;
       };
-      $('#paste').addEventListener('input', () => setPeople(fromRows(parseText($<HTMLTextAreaElement>('#paste').value))));
+      $('#paste').addEventListener('input', () => {
+        const text = $<HTMLTextAreaElement>('#paste').value;
+        if (text.trim()) return setPeople(fromRows(parseText(text)));
+        people = [];
+        $('#parse-msg').textContent = 'Nothing added yet.';
+        $<HTMLButtonElement>('#create').disabled = true;
+      });
       $('#file').addEventListener('change', async () => {
         const f = $<HTMLInputElement>('#file').files?.[0];
         if (!f) return;
@@ -544,6 +617,90 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
         catch (err) { alert((err as Error).message); }
       });
 
+      // ---------- posts & channels ----------
+      type Source = {
+        id: string; code: string; channel: string; owner: string | null; title: string; post_url: string | null; target: string;
+        archived: boolean; created_at: string; visitors: number; visits: number; page_views: number; seconds: number;
+        contacts: number; top_country: string | null; mobile_pct: number | null; last_seen: string | null;
+      };
+      let sources: Source[] | null = null;
+      async function loadSources(force = false) {
+        if (sources && !force) return renderSources();
+        $('#ptable tbody').innerHTML = '<tr><td colspan="12" class="tk-empty">Loading…</td></tr>';
+        try { sources = await rpc<Source[]>('talastudio_tracker_sources'); renderSources(); }
+        catch (e) { $('#ptable tbody').innerHTML = `<tr><td colspan="12">${esc((e as Error).message)}</td></tr>`; }
+      }
+      const shownSources = () => {
+        const ch = $<HTMLSelectElement>('#pfilter').value;
+        const q = $<HTMLInputElement>('#psearch').value.trim().toLowerCase();
+        const arch = $<HTMLInputElement>('#parchived').checked;
+        return (sources ?? []).filter((s) => (arch || !s.archived) && (!ch || s.channel === ch)
+          && (!q || [s.title, s.owner, s.post_url].some((x) => x?.toLowerCase().includes(q))));
+      };
+      function renderSources() {
+        const rows = shownSources();
+        $('#ptable tbody').innerHTML = rows.length ? rows.map((s) => `<tr class="${s.archived ? 'tk-sub' : ''}">
+          <td><b>${esc(s.title)}</b><small>${esc([channelName[s.channel], s.owner].filter(Boolean).join(' · '))}${s.archived ? ' · archived' : ''}</small>
+            ${s.post_url ? `<small><a href="${esc(s.post_url)}" target="_blank" rel="noopener">Open the post</a></small>` : ''}</td>
+          <td class="tk-mono tk-linkcell">${esc(postLink(s))}</td>
+          <td><button type="button" class="tk-link" data-copypost="${esc(s.id)}">Copy</button></td>
+          <td><b>${s.visitors}</b></td><td>${s.visits}</td><td>${s.page_views}</td><td>${s.visitors ? dur(s.seconds / s.visitors) : ''}</td>
+          <td>${s.top_country ? esc(country(s.top_country)) : ''}</td><td>${s.mobile_pct != null ? `${s.mobile_pct}%` : ''}</td>
+          <td>${s.contacts || ''}</td><td>${s.last_seen ? when(s.last_seen) : ''}</td>
+          <td class="tk-nowrap"><button type="button" class="tk-link" data-posturl="${esc(s.id)}">${s.post_url ? 'Change URL' : 'Add post URL'}</button>
+            <button type="button" class="tk-link" data-archive="${esc(s.id)}">${s.archived ? 'Restore' : 'Archive'}</button></td>
+        </tr>`).join('') : '<tr><td colspan="12" class="tk-empty">No post links yet. Create one above.</td></tr>';
+      }
+      ['#pfilter', '#psearch', '#parchived'].forEach((id) => $(id).addEventListener('input', renderSources));
+
+      $('#post-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const f = Object.fromEntries(new FormData(form)) as Record<string, string>;
+        $('#post-msg').textContent = 'Creating…';
+        try {
+          const s = await rpc<Source>('talastudio_tracker_add_source', { p: f });
+          $('#post-msg').textContent = '';
+          $('#post-new').hidden = false;
+          $('#post-new').innerHTML = `<span>Link for <b>${esc(s.title)}</b>:</span> <code class="tk-mono">${esc(postLink(s))}</code>
+            <button type="button" class="tk-btn" data-copytext="${esc(postLink(s))}">Copy link</button>`;
+          form.querySelector<HTMLInputElement>('[name=title]')!.value = '';
+          form.querySelector<HTMLInputElement>('[name=post_url]')!.value = '';
+          await loadSources(true);
+        } catch (err) { $('#post-msg').textContent = (err as Error).message; }
+      });
+
+      document.addEventListener('click', async (e) => {
+        const t = e.target as HTMLElement;
+        const copy = t.closest<HTMLButtonElement>('[data-copypost], [data-copytext]');
+        if (copy) {
+          const s = sources?.find((x) => x.id === copy.dataset.copypost);
+          await navigator.clipboard.writeText(copy.dataset.copytext ?? (s ? postLink(s) : ''));
+          const was = copy.textContent;
+          copy.textContent = 'Copied'; setTimeout(() => (copy.textContent = was), 1200);
+          return;
+        }
+        const edit = t.closest<HTMLButtonElement>('[data-posturl], [data-archive]');
+        if (!edit) return;
+        const s = sources?.find((x) => x.id === (edit.dataset.posturl ?? edit.dataset.archive));
+        if (!s) return;
+        let change: Record<string, unknown>;
+        if (edit.dataset.posturl) {
+          const v = prompt(`Post URL for "${s.title}" (the LinkedIn / Instagram address of the post):`, s.post_url ?? '');
+          if (v === null) return;
+          change = { post_url: v };
+        } else change = { archived: !s.archived };
+        try { await rpc('talastudio_tracker_update_source', { p_id: s.id, p: change }); await loadSources(true); }
+        catch (err) { alert((err as Error).message); }
+      });
+
+      $('#posts-export').addEventListener('click', () => download(`talastudio-post-links-${stamp()}`, [
+        ['Channel', 'Posted by', 'Title', 'Post URL', 'Link', 'Visitors', 'Visits', 'Page views', 'Avg. time (seconds)', 'Top country', 'Mobile %', 'Named contacts', 'Last visit', 'Created', 'Archived'],
+        ...shownSources().map((s) => [channelName[s.channel] ?? s.channel, s.owner ?? '', s.title, s.post_url ?? '', postLink(s), s.visitors, s.visits,
+          s.page_views, s.visitors ? Math.round(s.seconds / s.visitors) : 0, s.top_country ? country(s.top_country) : '', s.mobile_pct ?? '',
+          s.contacts, s.last_seen ? new Date(s.last_seen).toLocaleString() : '', new Date(s.created_at).toLocaleDateString(), s.archived ? 'yes' : '']),
+      ]));
+
       if (sb) start();
     </script>
   </body>
@@ -569,7 +726,7 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
   .tk-login .tk-msg { margin-top: .8rem; }
   .tk-login h2 { font-size: 1.3rem; }
   .tk label { display: grid; gap: .25rem; font-size: .82rem; color: var(--text-soft); }
-  .tk input[type='email'], .tk input[type='password'], .tk input[type='text'], .tk input[type='search'], .tk select, .tk textarea {
+  .tk input[type='email'], .tk input[type='password'], .tk input[type='text'], .tk input[type='url'], .tk input[type='search'], .tk select, .tk textarea {
     font: inherit; font-size: .9rem; color: var(--text); background: #fbf8f3; border: 1px solid var(--soft); border-radius: 6px; padding: .5rem .65rem; }
   .tk textarea { width: 100%; font: .85rem/1.5 ui-monospace, Consolas, monospace; margin: .7rem 0; resize: vertical; }
   .tk-btn { font: 500 .88rem Inter, sans-serif; background: var(--bg-dark); color: var(--on-dark); border: 1px solid var(--bg-dark); border-radius: 6px; padding: .55rem 1rem; cursor: pointer; }
@@ -618,6 +775,16 @@ const configured = Boolean(import.meta.env.PUBLIC_TRACKER_URL && import.meta.env
   .tk-mono { font-family: ui-monospace, Consolas, monospace; font-size: .8rem; }
   .tk-linkcell { word-break: break-all; min-width: 220px; }
   .tk-anon { color: var(--text-soft); font-style: italic; }
+  .tk-grow { flex: 1 1 260px; }
+  .tk-grow input { width: 100%; }
+  .tk-nowrap { white-space: nowrap; }
+  #ptable td:first-child { min-width: 190px; }
+  .tk-nowrap .tk-link + .tk-link { margin-left: .7rem; }
+  .tk-foot { margin: .8rem 0 0; }
+  .tk code { font: .8rem ui-monospace, Consolas, monospace; background: rgba(138, 90, 59, .1); padding: .1rem .3rem; border-radius: 3px; }
+  .tk-newlink { display: flex; gap: .8rem; align-items: center; flex-wrap: wrap; margin-top: .9rem; padding: .8rem 1rem;
+    background: rgba(79, 107, 74, .1); border: 1px solid rgba(79, 107, 74, .3); border-radius: 6px; font-size: .9rem; }
+  .tk-newlink code { word-break: break-all; }
   .tk-detail { margin: auto; width: min(900px, 100% - 2rem); max-height: 85vh; border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem; background: var(--card); color: var(--text); }
   .tk-detail::backdrop { background: rgba(20, 18, 16, .45); }
   @media (max-width: 640px) {

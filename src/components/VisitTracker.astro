@@ -1,6 +1,7 @@
 ---
 // Logs each visit: page time and, on the home page, the time each collection room was on screen. Visitors who arrive
 // from an outreach email link (?r=<contacts.track_code>) are linked to that contact; everyone else is anonymous.
+// A post or channel link (?s=<sources.code>, e.g. Evin's LinkedIn post) counts for every page of that visit only.
 // Supabase adds IP, country and browser from the request. Data: schema talastudio_visitor_tracker (Talastudio project).
 // Off without PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, and when the browser sends Global Privacy Control.
 // Dashboard: /tracker. Guide: docs/visitor-tracking.md
@@ -17,10 +18,14 @@
   const params = new URLSearchParams(location.search);
   const fromLink = params.get('r');
   const code = fromLink ? store(localStorage, 'tala_r', fromLink) : store(localStorage, 'tala_r');
+  // The person's own code stays in the browser; a post link lasts for this tab session
+  const fromPost = params.get('s');
+  const source = fromPost ? store(sessionStorage, 'tala_src', fromPost) : store(sessionStorage, 'tala_src');
 
-  // Drop ?r= from the address bar so a copied link does not carry the code to someone else.
-  if (fromLink) {
+  // Drop ?r= and ?s= from the address bar so a copied link does not carry the code to someone else.
+  if (fromLink || fromPost) {
     params.delete('r');
+    params.delete('s');
     const q = params.toString();
     history.replaceState(history.state, '', location.pathname + (q ? `?${q}` : '') + location.hash);
   }
@@ -33,6 +38,7 @@
     let session = store(sessionStorage, 'tala_s');
     if (!session) session = store(sessionStorage, 'tala_s', crypto.randomUUID());
     const known = code && /^[a-z0-9]{6,32}$/i.test(code) ? code : null;
+    const post = source && /^[a-z]{2}[0-9a-f]{6}$/i.test(source) ? source : null;
     // Only an outside page counts as where they came from
     const referrer = document.referrer && new URL(document.referrer).host !== location.host ? document.referrer : null;
 
@@ -54,6 +60,7 @@
         body: JSON.stringify({
           p_id: r.id, p_visitor: visitor, p_session: session, p_code: known, p_path: location.pathname,
           p_collection: r.collection, p_section: r.section, p_seconds: r.seconds, p_referrer: r.section ? null : referrer,
+          p_source: post,
         }),
       }).catch(() => {});
     };
