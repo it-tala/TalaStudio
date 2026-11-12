@@ -9,8 +9,10 @@
 // That name is a link down to the collections section, which already shows that collection's room.
 // The covers start at their display width (1600); once the page is up each switches to the stored width that fills this
 // screen sharply (up to 3200 on large and retina screens).
+// Each picture keeps its own shape: it shows whole in the hero's 16:9 frame, and one of another shape gets bands beside
+// it in its own edge colours (--band), see .hero-full in layout.css.
 import { srcsetOf } from '../lib/content';
-interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
+interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; edge?: string | null; band?: string | null }[] }
 const { slides } = Astro.props;
 ---
 {slides.length === 0 && <div class="media"></div>}
@@ -21,7 +23,7 @@ const { slides } = Astro.props;
     aria-label={`${s.name}: ${s.label}`}
     aria-hidden={i === 0 ? undefined : 'true'}
     tabindex={i === 0 ? undefined : -1}
-    style={[i === 0 && `--img:url(${s.src})`, s.pos && `--pos:${s.pos}`].filter(Boolean).join(';') || undefined}
+    style={[i === 0 && `--img:url(${s.src})`, s.band && `--band:${s.band}`].filter(Boolean).join(';') || undefined}
     data-bg={i === 0 ? undefined : s.src}
     data-src={s.src}
     data-set={srcsetOf(s.src)}
@@ -48,14 +50,14 @@ const { slides } = Astro.props;
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
     const names = [...hero.querySelectorAll<HTMLElement>('.hero-names a')];
-    // The stored width that covers this screen: a cover is cropped to the screen, so a wide photo needs about 1.6x the
-    // height in width; two device pixels per CSS pixel at most
+    // The stored width that fills this screen: a cover shows whole, so never wider than the hero; two device pixels
+    // per CSS pixel at most
     const sharp = (s: HTMLElement) => {
       const set = (s.dataset.set ?? '').split(', ').map((c) => c.split(' ')).filter((c) => c.length === 2)
         .map(([url, w]) => ({ url, w: parseInt(w) })).sort((a, b) => a.w - b.w);
       if (!set.length) return s.dataset.bg ?? s.dataset.src;
       const r = hero.getBoundingClientRect();
-      const need = Math.max(r.width, r.height * 1.6) * Math.min(devicePixelRatio || 1, 2);
+      const need = r.width * Math.min(devicePixelRatio || 1, 2);
       return (set.find((c) => c.w >= need) ?? set[set.length - 1]).url;
     };
     // A cover is only switched in once its picture is decoded, so it never fades in half-drawn

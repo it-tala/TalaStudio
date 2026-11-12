@@ -11,7 +11,6 @@ import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
-import { heroPos } from '../data/hero-pos';
 import { versioned } from '../lib/version';
 
 const all = await getCollections();
@@ -30,11 +29,12 @@ const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.
     label: `${c.name} collection, ${c.room} render`,
     name: `${c.name} collection`,
     href: `#coll-${c.slug}`,
-    pos: heroPos[c.slug]?.pos,
     room: c.room === 'other' ? 'Collection' : `${c.room} collection`,
     text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
     // Colour round the picture when the viewer shows it whole in its square
     edge: await edgeBackground(imageUrl(c.hero_image_path)!, 1),
+    // Colour for the bands beside a picture that is not 16:9: the hero shows every picture whole, never cropped
+    band: await edgeBackground(imageUrl(c.hero_image_path)!, 16 / 9),
   })));
 // One panel per collection room, grouped as on the collections page: each collection in list order (Doheny first),
 // inside it bedroom → living → dining. Only one panel shows at a time; the arrows under its items switch rooms.
