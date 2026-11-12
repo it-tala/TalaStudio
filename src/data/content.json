@@ -1,0 +1,5847 @@
+{
+  "generatedAt": "archived copy of the live site, 2026-11-12 (2)",
+  "base": "https://media.talastudio.net",
+  "assets": {
+    "5ffc6a1036349631": {
+      "w": 250,
+      "h": 515,
+      "widths": [
+        160,
+        250
+      ],
+      "ratio": 0.4854,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(226,196,154), rgb(231,204,170))",
+        "y": "linear-gradient(180deg, rgb(231,205,167), rgb(225,200,169))"
+      },
+      "fit": null
+    },
+    "08087c3b724a2fbd": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(135,125,118), rgb(170,158,150))",
+        "y": "linear-gradient(180deg, rgb(153,140,130), rgb(176,171,167))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": -1.12,
+        "shiftY": 0
+      }
+    },
+    "50d0ffaf69074aaa": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(157,147,139), rgb(188,179,172))",
+        "y": "linear-gradient(180deg, rgb(163,151,141), rgb(194,189,185))"
+      },
+      "fit": {
+        "scale": 1.25,
+        "shift": -2.6,
+        "shiftY": 0
+      }
+    },
+    "d793ab78848542b4": {
+      "w": 344,
+      "h": 503,
+      "widths": [
+        160,
+        344
+      ],
+      "ratio": 0.6839,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(184,157,132), rgb(195,174,160))",
+        "y": "linear-gradient(180deg, rgb(176,149,126), rgb(173,144,120))"
+      },
+      "fit": null
+    },
+    "b3b17f4b6f977877": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,219,212), rgb(107,93,81))",
+        "y": "linear-gradient(180deg, rgb(144,130,117), rgb(141,132,128))"
+      },
+      "fit": {
+        "scale": 1.101,
+        "shift": -5.05,
+        "shiftY": 0
+      }
+    },
+    "a679e13a628c0f11": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(200,169,145), rgb(220,210,184))",
+        "y": "linear-gradient(180deg, rgb(214,194,178), rgb(196,171,154))"
+      },
+      "fit": null
+    },
+    "64e66a597ab445d3": {
+      "w": 363,
+      "h": 468,
+      "widths": [
+        160,
+        363
+      ],
+      "ratio": 0.7756,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(88,73,61), rgb(97,83,72))",
+        "y": "linear-gradient(180deg, rgb(85,71,59), rgb(87,72,61))"
+      },
+      "fit": null
+    },
+    "1a12d9f4ac3e319d": {
+      "w": 318,
+      "h": 315,
+      "widths": [
+        160,
+        318
+      ],
+      "ratio": 1.0095,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(111,84,64), rgb(129,100,75))",
+        "y": "linear-gradient(180deg, rgb(125,97,73), rgb(114,88,67))"
+      },
+      "fit": null
+    },
+    "cb8c19519d6a81be": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(191,170,154), rgb(129,116,105))",
+        "y": "linear-gradient(180deg, rgb(161,147,136), rgb(126,103,85))"
+      },
+      "fit": {
+        "scale": 1.106,
+        "shift": 5.3,
+        "shiftY": 0
+      }
+    },
+    "34162cfabfede11a": {
+      "w": 2048,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2048
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(183,162,142), rgb(138,124,116))",
+        "y": "linear-gradient(180deg, rgb(103,85,73), rgb(165,149,140))"
+      },
+      "fit": null
+    },
+    "a05486b0cce21599": {
+      "w": 2048,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2048
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(170,152,138), rgb(135,121,114))",
+        "y": "linear-gradient(180deg, rgb(91,72,61), rgb(180,162,153))"
+      },
+      "fit": null
+    },
+    "544a89458dffb8a1": {
+      "w": 1917,
+      "h": 1437,
+      "widths": [
+        480,
+        960,
+        1600,
+        1917
+      ],
+      "ratio": 1.334,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(166,148,134), rgb(195,149,108))",
+        "y": "linear-gradient(180deg, rgb(169,145,125), rgb(118,84,59))"
+      },
+      "fit": null
+    },
+    "2f112d40fa2b6d4e": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(169,149,130), rgb(121,110,103))",
+        "y": "linear-gradient(180deg, rgb(96,80,70), rgb(162,146,137))"
+      },
+      "fit": {
+        "scale": 1.116,
+        "shift": -2.09,
+        "shiftY": 0
+      }
+    },
+    "ef973a2b22870115": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(158,140,124), rgb(72,55,41))",
+        "y": "linear-gradient(180deg, rgb(132,114,97), rgb(167,148,134))"
+      },
+      "fit": {
+        "scale": 1.081,
+        "shift": 4.05,
+        "shiftY": 0
+      }
+    },
+    "abe55c3c4f54aad7": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(170,152,132), rgb(115,106,99))",
+        "y": "linear-gradient(180deg, rgb(94,79,67), rgb(160,146,136))"
+      },
+      "fit": {
+        "scale": 1.132,
+        "shift": 1.65,
+        "shiftY": 0
+      }
+    },
+    "b81fc6030b4e841b": {
+      "w": 2048,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2048
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(189,168,149), rgb(138,125,117))",
+        "y": "linear-gradient(180deg, rgb(103,86,75), rgb(165,148,139))"
+      },
+      "fit": null
+    },
+    "df7acdb65162c51f": {
+      "w": 2048,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2048
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(152,133,120), rgb(137,121,114))",
+        "y": "linear-gradient(180deg, rgb(90,73,64), rgb(166,149,142))"
+      },
+      "fit": null
+    },
+    "9a9486124100a3c8": {
+      "w": 2475,
+      "h": 1503,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.6467,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(204,192,184), rgb(189,179,171))",
+        "y": "linear-gradient(180deg, rgb(191,180,171), rgb(197,187,178))"
+      },
+      "fit": {
+        "scale": 1.235,
+        "shift": -2.06,
+        "shiftY": 0
+      }
+    },
+    "dbc0ca5c74576632": {
+      "w": 1678,
+      "h": 931,
+      "widths": [
+        480,
+        960,
+        1600,
+        1678
+      ],
+      "ratio": 1.8024,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(160,149,140), rgb(182,176,169))",
+        "y": "linear-gradient(180deg, rgb(171,154,139), rgb(186,175,164))"
+      },
+      "fit": {
+        "scale": 1.194,
+        "shift": -9.7,
+        "shiftY": 0
+      }
+    },
+    "856142de1933ae65": {
+      "w": 2424,
+      "h": 1334,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.8171,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(212,201,192), rgb(190,181,172))",
+        "y": "linear-gradient(180deg, rgb(198,185,177), rgb(203,191,183))"
+      },
+      "fit": {
+        "scale": 1.212,
+        "shift": 1.01,
+        "shiftY": 0
+      }
+    },
+    "bb93210a953e1454": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(222,212,206), rgb(82,68,56))",
+        "y": "linear-gradient(180deg, rgb(129,107,94), rgb(147,135,131))"
+      },
+      "fit": {
+        "scale": 1.159,
+        "shift": 6.04,
+        "shiftY": 0
+      }
+    },
+    "98924aa187cb4739": {
+      "w": 2736,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7813,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(150,139,128), rgb(130,114,98))",
+        "y": "linear-gradient(180deg, rgb(136,120,104), rgb(163,151,140))"
+      },
+      "fit": {
+        "scale": 1.013,
+        "shift": -0.63,
+        "shiftY": 0
+      }
+    },
+    "82517e04136f3e7c": {
+      "w": 2736,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7813,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(189,180,173), rgb(162,144,123))",
+        "y": "linear-gradient(180deg, rgb(140,125,108), rgb(160,151,138))"
+      },
+      "fit": {
+        "scale": 1.013,
+        "shift": -0.63,
+        "shiftY": 0
+      }
+    },
+    "43e18db5150e19e1": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(156,142,135), rgb(115,100,88))",
+        "y": "linear-gradient(180deg, rgb(173,160,151), rgb(160,142,136))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": 1.4,
+        "shiftY": 0
+      }
+    },
+    "69827b492c24051c": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(148,133,123), rgb(130,113,97))",
+        "y": "linear-gradient(180deg, rgb(135,117,101), rgb(154,141,132))"
+      },
+      "fit": {
+        "scale": 1.263,
+        "shift": -0.26,
+        "shiftY": 0
+      }
+    },
+    "95bd4eccd8892691": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(221,202,194), rgb(167,146,130))",
+        "y": "linear-gradient(180deg, rgb(175,155,143), rgb(156,133,122))"
+      },
+      "fit": {
+        "scale": 1.067,
+        "shift": -0.44,
+        "shiftY": 0
+      }
+    },
+    "d36ef17adb14f4e4": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(150,135,126), rgb(132,114,99))",
+        "y": "linear-gradient(180deg, rgb(136,118,104), rgb(157,144,136))"
+      },
+      "fit": {
+        "scale": 1.297,
+        "shift": -0.27,
+        "shiftY": 0
+      }
+    },
+    "be4ff5f879035b39": {
+      "w": 1536,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(206,193,185), rgb(176,163,154))",
+        "y": "linear-gradient(180deg, rgb(169,154,145), rgb(200,187,179))"
+      },
+      "fit": null
+    },
+    "59831d652ace7019": {
+      "w": 1536,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(175,159,147), rgb(210,193,178))",
+        "y": "linear-gradient(180deg, rgb(210,194,183), rgb(160,140,124))"
+      },
+      "fit": null
+    },
+    "439c7248710034ae": {
+      "w": 1536,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(199,188,179), rgb(207,197,189))",
+        "y": "linear-gradient(180deg, rgb(207,196,190), rgb(214,203,194))"
+      },
+      "fit": null
+    },
+    "2e227ce40721f2e3": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(181,171,168), rgb(107,92,79))",
+        "y": "linear-gradient(180deg, rgb(131,114,102), rgb(129,117,111))"
+      },
+      "fit": {
+        "scale": 1.218,
+        "shift": 10.91,
+        "shiftY": 0
+      }
+    },
+    "a9dbdc2bbe204da0": {
+      "w": 2753,
+      "h": 1262,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 2.1815,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(181,169,158), rgb(194,184,179))",
+        "y": "linear-gradient(180deg, rgb(179,167,157), rgb(213,204,196))"
+      },
+      "fit": {
+        "scale": 1.188,
+        "shift": 0.99,
+        "shiftY": 0
+      }
+    },
+    "b660b97bbe451579": {
+      "w": 1987,
+      "h": 956,
+      "widths": [
+        480,
+        960,
+        1600,
+        1987
+      ],
+      "ratio": 2.0785,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(207,196,187), rgb(184,172,163))",
+        "y": "linear-gradient(180deg, rgb(181,167,157), rgb(201,190,181))"
+      },
+      "fit": {
+        "scale": 1.2,
+        "shift": 2,
+        "shiftY": 0
+      }
+    },
+    "7398623fbb08959a": {
+      "w": 1394,
+      "h": 803,
+      "widths": [
+        480,
+        960,
+        1394
+      ],
+      "ratio": 1.736,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(155,136,120), rgb(167,149,133))",
+        "y": "linear-gradient(180deg, rgb(147,133,121), rgb(185,167,153))"
+      },
+      "fit": null
+    },
+    "309755f9cd7d9288": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,217,211), rgb(155,134,121))",
+        "y": "linear-gradient(180deg, rgb(169,147,134), rgb(150,136,134))"
+      },
+      "fit": {
+        "scale": 1.326,
+        "shift": 1.38,
+        "shiftY": 0
+      }
+    },
+    "d5eff2f2ba5522c4": {
+      "w": 2778,
+      "h": 1553,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7888,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(181,175,161), rgb(162,156,144))",
+        "y": "linear-gradient(180deg, rgb(222,217,206), rgb(149,142,133))"
+      },
+      "fit": {
+        "scale": 1.021,
+        "shift": -0.85,
+        "shiftY": 0
+      }
+    },
+    "37bbccc386623b83": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(204,192,181), rgb(160,147,134))",
+        "y": "linear-gradient(180deg, rgb(167,153,141), rgb(180,169,161))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": -16.67,
+        "shiftY": 0
+      }
+    },
+    "e344befa1a0c7d06": {
+      "w": 3072,
+      "h": 1728,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(172,158,148), rgb(151,138,129))",
+        "y": "linear-gradient(180deg, rgb(169,156,147), rgb(208,194,182))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0.28,
+        "shiftY": 0
+      }
+    },
+    "575e752247fa0b33": {
+      "w": 2784,
+      "h": 1556,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7892,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(195,193,188), rgb(166,161,156))",
+        "y": "linear-gradient(180deg, rgb(213,211,207), rgb(165,159,154))"
+      },
+      "fit": {
+        "scale": 1.132,
+        "shift": 0.24,
+        "shiftY": 0
+      }
+    },
+    "f7f89b2f53fcf7bf": {
+      "w": 3109,
+      "h": 2022,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.5376,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(161,148,137), rgb(147,134,124))",
+        "y": "linear-gradient(180deg, rgb(157,141,132), rgb(196,184,174))"
+      },
+      "fit": {
+        "scale": 1.153,
+        "shift": -0.96,
+        "shiftY": 0
+      }
+    },
+    "eae71556663b83f3": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        2730
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(212,205,201), rgb(99,87,79))",
+        "y": "linear-gradient(180deg, rgb(155,140,130), rgb(154,141,136))"
+      },
+      "fit": {
+        "scale": 1.154,
+        "shift": 5.29,
+        "shiftY": 0
+      }
+    },
+    "9871843833c813db": {
+      "w": 3034,
+      "h": 1597,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.8998,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(199,194,192), rgb(179,170,170))",
+        "y": "linear-gradient(180deg, rgb(217,209,206), rgb(172,163,161))"
+      },
+      "fit": {
+        "scale": 1.127,
+        "shift": 0.47,
+        "shiftY": 0
+      }
+    },
+    "2ad3d88f25be814f": {
+      "w": 2596,
+      "h": 1506,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7238,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(205,195,188), rgb(173,161,154))",
+        "y": "linear-gradient(180deg, rgb(232,220,212), rgb(160,149,142))"
+      },
+      "fit": {
+        "scale": 1.121,
+        "shift": 0.47,
+        "shiftY": 0
+      }
+    },
+    "33e9e80f6a76cc52": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(223,210,205), rgb(80,64,54))",
+        "y": "linear-gradient(180deg, rgb(132,108,96), rgb(139,125,121))"
+      },
+      "fit": {
+        "scale": 1.218,
+        "shift": -3.3,
+        "shiftY": 0
+      }
+    },
+    "689eb7818f563956": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(218,193,180), rgb(165,138,123))",
+        "y": "linear-gradient(180deg, rgb(208,185,172), rgb(176,142,129))"
+      },
+      "fit": null
+    },
+    "d732b3a1fd71a7e0": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(191,171,166), rgb(148,122,104))",
+        "y": "linear-gradient(180deg, rgb(192,170,159), rgb(153,131,117))"
+      },
+      "fit": {
+        "scale": 1.132,
+        "shift": -0.71,
+        "shiftY": 0
+      }
+    },
+    "4378b4e6d37abbdc": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(159,142,132), rgb(158,133,112))",
+        "y": "linear-gradient(180deg, rgb(191,168,149), rgb(163,148,136))"
+      },
+      "fit": {
+        "scale": 1.03,
+        "shift": -1.5,
+        "shiftY": 0
+      }
+    },
+    "6d4ca44816fd8817": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(208,190,177), rgb(157,140,130))",
+        "y": "linear-gradient(180deg, rgb(207,190,179), rgb(150,120,101))"
+      },
+      "fit": null
+    },
+    "a87d682e6dff22fd": {
+      "w": 1600,
+      "h": 1371,
+      "widths": [
+        480,
+        960,
+        1600
+      ],
+      "ratio": 1.167,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(128,117,110), rgb(156,133,116))",
+        "y": "linear-gradient(180deg, rgb(140,121,108), rgb(146,127,114))"
+      },
+      "fit": null
+    },
+    "49005217c4549af5": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(193,180,172), rgb(156,136,117))",
+        "y": "linear-gradient(180deg, rgb(193,179,168), rgb(158,135,119))"
+      },
+      "fit": {
+        "scale": 1.206,
+        "shift": -0.5,
+        "shiftY": 0
+      }
+    },
+    "1296e93f619c7646": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(194,174,169), rgb(140,117,102))",
+        "y": "linear-gradient(180deg, rgb(194,174,163), rgb(157,131,117))"
+      },
+      "fit": null
+    },
+    "3286ffccfba31a26": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(208,190,180), rgb(199,176,163))",
+        "y": "linear-gradient(180deg, rgb(210,190,179), rgb(168,147,141))"
+      },
+      "fit": null
+    },
+    "eb12ee957cdc6084": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(126,123,122), rgb(152,99,54))",
+        "y": "linear-gradient(180deg, rgb(162,123,95), rgb(149,110,77))"
+      },
+      "fit": {
+        "scale": 1.127,
+        "shift": 2.11,
+        "shiftY": 0
+      }
+    },
+    "8a93263a9ea65a04": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(194,178,171), rgb(144,122,107))",
+        "y": "linear-gradient(180deg, rgb(195,178,167), rgb(155,130,115))"
+      },
+      "fit": {
+        "scale": 1.053,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "ada37ab2cb8ccdf9": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(215,206,201), rgb(163,148,137))",
+        "y": "linear-gradient(180deg, rgb(206,197,192), rgb(174,155,144))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": 6.16,
+        "shiftY": 0
+      }
+    },
+    "e5bab62df0689be3": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(211,201,196), rgb(156,142,130))",
+        "y": "linear-gradient(180deg, rgb(202,192,186), rgb(167,151,139))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": 1.68,
+        "shiftY": 0
+      }
+    },
+    "cdb555b5de83266b": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(193,177,170), rgb(163,140,120))",
+        "y": "linear-gradient(180deg, rgb(192,176,163), rgb(172,148,132))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "4e31d28f017e437c": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(186,172,166), rgb(197,176,162))",
+        "y": "linear-gradient(180deg, rgb(212,194,184), rgb(160,128,108))"
+      },
+      "fit": null
+    },
+    "543c73fefeeed4e8": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(136,127,118), rgb(152,96,36))",
+        "y": "linear-gradient(180deg, rgb(169,127,89), rgb(184,126,65))"
+      },
+      "fit": {
+        "scale": 1.017,
+        "shift": 0.85,
+        "shiftY": 0
+      }
+    },
+    "127b56b8536cb901": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(222,218,215), rgb(184,175,172))",
+        "y": "linear-gradient(180deg, rgb(213,209,206), rgb(188,180,176))"
+      },
+      "fit": {
+        "scale": 1.326,
+        "shift": -5.8,
+        "shiftY": 0
+      }
+    },
+    "7d363f65a06d5c96": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(221,219,216), rgb(194,190,186))",
+        "y": "linear-gradient(180deg, rgb(210,208,204), rgb(209,205,202))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": 0.28,
+        "shiftY": 0
+      }
+    },
+    "93c406399e12acfd": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(114,98,90), rgb(152,100,54))",
+        "y": "linear-gradient(180deg, rgb(162,118,80), rgb(170,120,74))"
+      },
+      "fit": null
+    },
+    "50a0084c239c9d72": {
+      "w": 1600,
+      "h": 900,
+      "widths": [
+        480,
+        960,
+        1600
+      ],
+      "ratio": 1.7778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(182,154,130), rgb(228,212,199))",
+        "y": "linear-gradient(180deg, rgb(103,58,33), rgb(182,157,138))"
+      },
+      "fit": null
+    },
+    "dda6f12ad4c76040": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(235,226,216), rgb(178,133,107))",
+        "y": "linear-gradient(180deg, rgb(239,230,220), rgb(151,129,109))"
+      },
+      "fit": {
+        "scale": 1.021,
+        "shift": -1.06,
+        "shiftY": 0
+      }
+    },
+    "93c3a1b33fe4af8d": {
+      "w": 1366,
+      "h": 899,
+      "widths": [
+        480,
+        960,
+        1366
+      ],
+      "ratio": 1.5195,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(198,168,140), rgb(196,185,159))",
+        "y": "linear-gradient(180deg, rgb(145,118,103), rgb(210,186,162))"
+      },
+      "fit": null
+    },
+    "7bbc552b579ce055": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(201,194,190), rgb(159,153,149))",
+        "y": "linear-gradient(180deg, rgb(209,203,200), rgb(159,150,145))"
+      },
+      "fit": {
+        "scale": 1.034,
+        "shift": 1.72,
+        "shiftY": 0
+      }
+    },
+    "1979f32a2759ea73": {
+      "w": 1600,
+      "h": 893,
+      "widths": [
+        480,
+        960,
+        1600
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(189,178,175), rgb(192,182,179))",
+        "y": "linear-gradient(180deg, rgb(217,208,206), rgb(173,159,152))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": -6.44,
+        "shiftY": 0
+      }
+    },
+    "c74abffd4567677c": {
+      "w": 3759,
+      "h": 2109,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        3200
+      ],
+      "ratio": 1.7824,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(209,198,205), rgb(164,143,139))",
+        "y": "linear-gradient(180deg, rgb(179,164,163), rgb(161,135,132))"
+      },
+      "fit": null
+    },
+    "cee19d427ad2553b": {
+      "w": 1393,
+      "h": 920,
+      "widths": [
+        480,
+        960,
+        1393
+      ],
+      "ratio": 1.5141,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(203,178,158), rgb(202,193,176))",
+        "y": "linear-gradient(180deg, rgb(145,113,101), rgb(187,167,153))"
+      },
+      "fit": null
+    },
+    "ba4096fdab543812": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(232,226,223), rgb(197,180,165))",
+        "y": "linear-gradient(180deg, rgb(209,196,185), rgb(218,206,197))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": -9.72,
+        "shiftY": 0
+      }
+    },
+    "6efe73889703734b": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(195,188,184), rgb(175,169,165))",
+        "y": "linear-gradient(180deg, rgb(210,205,202), rgb(166,158,154))"
+      },
+      "fit": {
+        "scale": 1.171,
+        "shift": 8.54,
+        "shiftY": 0
+      }
+    },
+    "407be1c205917cdc": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(189,168,153), rgb(208,190,175))",
+        "y": "linear-gradient(180deg, rgb(205,186,172), rgb(185,160,142))"
+      },
+      "fit": null
+    },
+    "2848fb09158ec265": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(210,203,201), rgb(187,180,177))",
+        "y": "linear-gradient(180deg, rgb(219,213,211), rgb(172,164,160))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 1.94,
+        "shiftY": 0
+      }
+    },
+    "b851104b20a39d62": {
+      "w": 1538,
+      "h": 1023,
+      "widths": [
+        480,
+        960,
+        1538
+      ],
+      "ratio": 1.5034,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(162,156,153), rgb(174,168,164))",
+        "y": "linear-gradient(180deg, rgb(169,166,165), rgb(195,184,180))"
+      },
+      "fit": {
+        "scale": 1.116,
+        "shift": -5.12,
+        "shiftY": 0
+      }
+    },
+    "1dfd0239a86907ad": {
+      "w": 1446,
+      "h": 1087,
+      "widths": [
+        480,
+        960,
+        1446
+      ],
+      "ratio": 1.3303,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(164,137,117), rgb(150,128,103))",
+        "y": "linear-gradient(180deg, rgb(176,156,140), rgb(159,132,109))"
+      },
+      "fit": null
+    },
+    "3becf2cfa12e2f59": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(218,211,206), rgb(190,180,172))",
+        "y": "linear-gradient(180deg, rgb(218,211,206), rgb(180,164,151))"
+      },
+      "fit": null
+    },
+    "04515cf33686fc82": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(225,217,213), rgb(202,192,186))",
+        "y": "linear-gradient(180deg, rgb(222,216,213), rgb(194,179,169))"
+      },
+      "fit": null
+    },
+    "ae3b42eb7df1e436": {
+      "w": 1452,
+      "h": 1083,
+      "widths": [
+        480,
+        960,
+        1452
+      ],
+      "ratio": 1.3407,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(189,148,112), rgb(181,176,174))",
+        "y": "linear-gradient(180deg, rgb(172,167,166), rgb(178,146,119))"
+      },
+      "fit": null
+    },
+    "be6c29c067ac7fca": {
+      "w": 1536,
+      "h": 1024,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1.5,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(182,172,163), rgb(177,167,158))",
+        "y": "linear-gradient(180deg, rgb(187,177,168), rgb(197,184,173))"
+      },
+      "fit": {
+        "scale": 1.026,
+        "shift": -0.21,
+        "shiftY": 0
+      }
+    },
+    "597b959e951f1d3f": {
+      "w": 1536,
+      "h": 1024,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1.5,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(201,185,173), rgb(175,157,144))",
+        "y": "linear-gradient(180deg, rgb(205,189,177), rgb(182,161,146))"
+      },
+      "fit": {
+        "scale": 1.125,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "060318ac6fb29fb0": {
+      "w": 1083,
+      "h": 1452,
+      "widths": [
+        480,
+        960,
+        1083
+      ],
+      "ratio": 0.7459,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,222,219), rgb(196,187,181))",
+        "y": "linear-gradient(180deg, rgb(216,207,201), rgb(179,164,153))"
+      },
+      "fit": null
+    },
+    "ec006c750243b09d": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(187,182,160), rgb(175,150,128))",
+        "y": "linear-gradient(180deg, rgb(177,153,130), rgb(197,172,153))"
+      },
+      "fit": null
+    },
+    "3d8afd253ad0eadb": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(185,156,115), rgb(169,146,126))",
+        "y": "linear-gradient(180deg, rgb(195,170,148), rgb(188,158,127))"
+      },
+      "fit": null
+    },
+    "7a9160718e72208a": {
+      "w": 1083,
+      "h": 1452,
+      "widths": [
+        480,
+        960,
+        1083
+      ],
+      "ratio": 0.7459,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(219,211,207), rgb(194,185,177))",
+        "y": "linear-gradient(180deg, rgb(210,201,194), rgb(175,156,141))"
+      },
+      "fit": null
+    },
+    "a73e0fd82ca915ae": {
+      "w": 1538,
+      "h": 1023,
+      "widths": [
+        480,
+        960,
+        1538
+      ],
+      "ratio": 1.5034,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(167,160,150), rgb(175,168,159))",
+        "y": "linear-gradient(180deg, rgb(174,169,162), rgb(197,185,177))"
+      },
+      "fit": {
+        "scale": 1.127,
+        "shift": -0.7,
+        "shiftY": 0
+      }
+    },
+    "54d5081070a7f31e": {
+      "w": 2730,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(224,207,197), rgb(190,157,133))",
+        "y": "linear-gradient(180deg, rgb(204,180,163), rgb(194,172,160))"
+      },
+      "fit": null
+    },
+    "81d3fce23dccc7d5": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(233,225,218), rgb(184,174,165))",
+        "y": "linear-gradient(180deg, rgb(222,213,203), rgb(187,177,169))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0.56,
+        "shiftY": 0
+      }
+    },
+    "979ac17fce6e6a5c": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(201,179,157), rgb(217,214,213))",
+        "y": "linear-gradient(180deg, rgb(221,217,217), rgb(201,180,159))"
+      },
+      "fit": {
+        "scale": 1.509,
+        "shift": 25.47,
+        "shiftY": -6.63
+      }
+    },
+    "7b00e9d2e8a4cbaf": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,220,211), rgb(181,173,164))",
+        "y": "linear-gradient(180deg, rgb(222,214,205), rgb(180,171,162))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 3.05,
+        "shiftY": 0
+      }
+    },
+    "ebf08c848d37a266": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(214,201,187), rgb(174,151,132))",
+        "y": "linear-gradient(180deg, rgb(205,190,176), rgb(194,171,151))"
+      },
+      "fit": {
+        "scale": 1.021,
+        "shift": 1.06,
+        "shiftY": 0
+      }
+    },
+    "f22c3dc5b132d900": {
+      "w": 2913,
+      "h": 1625,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7926,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(224,215,207), rgb(195,183,176))",
+        "y": "linear-gradient(180deg, rgb(235,223,214), rgb(178,169,164))"
+      },
+      "fit": {
+        "scale": 1.344,
+        "shift": -0.56,
+        "shiftY": 0
+      }
+    },
+    "21e9a215eed3b33c": {
+      "w": 1769,
+      "h": 1603,
+      "widths": [
+        480,
+        960,
+        1600,
+        1769
+      ],
+      "ratio": 1.1036,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(216,207,199), rgb(198,189,182))",
+        "y": "linear-gradient(180deg, rgb(225,216,207), rgb(169,160,154))"
+      },
+      "fit": null
+    },
+    "ea21180a5e97a397": {
+      "w": 2947,
+      "h": 1647,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7893,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(222,217,207), rgb(190,182,173))",
+        "y": "linear-gradient(180deg, rgb(230,222,213), rgb(173,166,158))"
+      },
+      "fit": {
+        "scale": 1.148,
+        "shift": -0.48,
+        "shiftY": 0
+      }
+    },
+    "096bbf117de85c3f": {
+      "w": 2856,
+      "h": 2415,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.1826,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(185,152,123), rgb(195,187,179))",
+        "y": "linear-gradient(180deg, rgb(220,206,193), rgb(162,125,93))"
+      },
+      "fit": null
+    },
+    "4971c1f2351fc3ba": {
+      "w": 2875,
+      "h": 1606,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7902,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(222,215,207), rgb(191,182,174))",
+        "y": "linear-gradient(180deg, rgb(231,222,213), rgb(174,166,159))"
+      },
+      "fit": {
+        "scale": 1.176,
+        "shift": -0.25,
+        "shiftY": 0
+      }
+    },
+    "13aaad50afdd40c2": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(217,218,220), rgb(176,149,124))",
+        "y": "linear-gradient(180deg, rgb(195,175,157), rgb(187,166,147))"
+      },
+      "fit": {
+        "scale": 1.188,
+        "shift": -9.41,
+        "shiftY": 0
+      }
+    },
+    "f11eadb9737b62a8": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(194,174,158), rgb(207,182,160))",
+        "y": "linear-gradient(180deg, rgb(201,180,161), rgb(191,168,149))"
+      },
+      "fit": null
+    },
+    "25ab8daca0409e0f": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(211,174,139), rgb(216,197,180))",
+        "y": "linear-gradient(180deg, rgb(208,187,169), rgb(200,174,152))"
+      },
+      "fit": null
+    },
+    "116b5a6656bc26da": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(240,235,227), rgb(199,191,181))",
+        "y": "linear-gradient(180deg, rgb(230,223,214), rgb(198,188,177))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0.28,
+        "shiftY": 0
+      }
+    },
+    "b0fdba7d08748895": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(237,229,219), rgb(191,181,170))",
+        "y": "linear-gradient(180deg, rgb(226,217,207), rgb(188,176,164))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "a11360eb0fdc92c9": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(223,219,216), rgb(219,215,213))",
+        "y": "linear-gradient(180deg, rgb(220,215,211), rgb(221,218,216))"
+      },
+      "fit": {
+        "scale": 1.159,
+        "shift": 0.24,
+        "shiftY": 0
+      }
+    },
+    "08e9f60251598035": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(201,195,190), rgb(203,171,139))",
+        "y": "linear-gradient(180deg, rgb(204,178,153), rgb(179,151,124))"
+      },
+      "fit": {
+        "scale": 1.143,
+        "shift": -3.81,
+        "shiftY": 0
+      }
+    },
+    "ea85b0c3cf8ede84": {
+      "w": 2400,
+      "h": 1792,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3393,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(233,230,228), rgb(217,212,205))",
+        "y": "linear-gradient(180deg, rgb(218,214,209), rgb(236,232,229))"
+      },
+      "fit": null
+    },
+    "f375f599cc91ebd6": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(215,199,186), rgb(185,174,165))",
+        "y": "linear-gradient(180deg, rgb(222,214,207), rgb(180,164,149))"
+      },
+      "fit": null
+    },
+    "bc972ea39608bee8": {
+      "w": 1600,
+      "h": 893,
+      "widths": [
+        480,
+        960,
+        1600
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(145,125,111), rgb(141,112,90))",
+        "y": "linear-gradient(180deg, rgb(209,202,192), rgb(175,140,108))"
+      },
+      "fit": null
+    },
+    "6ca761841b14ce71": {
+      "w": 2648,
+      "h": 1489,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7784,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(236,229,219), rgb(190,175,156))",
+        "y": "linear-gradient(180deg, rgb(233,225,212), rgb(198,190,180))"
+      },
+      "fit": {
+        "scale": 1.017,
+        "shift": 0.64,
+        "shiftY": 0
+      }
+    },
+    "be6a8226660497a2": {
+      "w": 2840,
+      "h": 1597,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7783,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(178,162,145), rgb(218,211,200))",
+        "y": "linear-gradient(180deg, rgb(226,218,207), rgb(195,188,179))"
+      },
+      "fit": null
+    },
+    "fbe6e410758b0b66": {
+      "w": 2706,
+      "h": 1523,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(179,160,142), rgb(220,211,198))",
+        "y": "linear-gradient(180deg, rgb(219,211,197), rgb(212,198,183))"
+      },
+      "fit": {
+        "scale": 1.013,
+        "shift": -0.63,
+        "shiftY": 0
+      }
+    },
+    "6301d0dfd206c748": {
+      "w": 1600,
+      "h": 900,
+      "widths": [
+        480,
+        960,
+        1600
+      ],
+      "ratio": 1.7778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(156,139,117), rgb(215,202,178))",
+        "y": "linear-gradient(180deg, rgb(196,178,168), rgb(203,176,161))"
+      },
+      "fit": null
+    },
+    "7580c6f6c5e805ab": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(138,121,108), rgb(180,157,136))",
+        "y": "linear-gradient(180deg, rgb(213,206,198), rgb(170,147,129))"
+      },
+      "fit": null
+    },
+    "9478734a69492bb9": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(200,190,180), rgb(215,205,195))",
+        "y": "linear-gradient(180deg, rgb(215,210,202), rgb(183,151,122))"
+      },
+      "fit": null
+    },
+    "bddedad7c0bce1dd": {
+      "w": 2043,
+      "h": 1534,
+      "widths": [
+        480,
+        960,
+        1600,
+        2043
+      ],
+      "ratio": 1.3318,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(208,191,175), rgb(221,208,197))",
+        "y": "linear-gradient(180deg, rgb(232,218,203), rgb(209,199,190))"
+      },
+      "fit": null
+    },
+    "40c944057ad803a4": {
+      "w": 3678,
+      "h": 2759,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3331,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(205,189,173), rgb(231,219,209))",
+        "y": "linear-gradient(180deg, rgb(235,221,207), rgb(212,200,191))"
+      },
+      "fit": null
+    },
+    "9aed5bcbc472a61c": {
+      "w": 1628,
+      "h": 1222,
+      "widths": [
+        480,
+        960,
+        1600,
+        1628
+      ],
+      "ratio": 1.3322,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(97,68,52), rgb(92,60,41))",
+        "y": "linear-gradient(180deg, rgb(148,105,80), rgb(103,66,43))"
+      },
+      "fit": null
+    },
+    "0c6f4e8a00f61d77": {
+      "w": 4844,
+      "h": 3228,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        3200
+      ],
+      "ratio": 1.5006,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(192,164,142), rgb(219,204,191))",
+        "y": "linear-gradient(180deg, rgb(202,180,163), rgb(181,154,133))"
+      },
+      "fit": null
+    },
+    "792aebb5c32468b9": {
+      "w": 3429,
+      "h": 1929,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7776,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(167,156,142), rgb(199,189,176))",
+        "y": "linear-gradient(180deg, rgb(220,207,190), rgb(177,168,158))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": -0.28,
+        "shiftY": 0
+      }
+    },
+    "dbc4ea86f8d8c8af": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(211,200,190), rgb(218,206,193))",
+        "y": "linear-gradient(180deg, rgb(223,216,209), rgb(191,159,130))"
+      },
+      "fit": null
+    },
+    "44d481390475c66f": {
+      "w": 3528,
+      "h": 2647,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3328,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(203,184,164), rgb(229,215,202))",
+        "y": "linear-gradient(180deg, rgb(243,231,217), rgb(210,197,186))"
+      },
+      "fit": null
+    },
+    "a267b1b57ee8297e": {
+      "w": 3573,
+      "h": 2009,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7785,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(169,158,143), rgb(175,168,157))",
+        "y": "linear-gradient(180deg, rgb(208,196,179), rgb(166,159,149))"
+      },
+      "fit": {
+        "scale": 1.334,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "2371e7b5976267c7": {
+      "w": 3584,
+      "h": 2687,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3338,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(212,197,182), rgb(226,215,204))",
+        "y": "linear-gradient(180deg, rgb(237,227,216), rgb(210,200,192))"
+      },
+      "fit": null
+    },
+    "85926813ae15eb9f": {
+      "w": 3044,
+      "h": 2283,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(205,190,172), rgb(236,228,218))",
+        "y": "linear-gradient(180deg, rgb(232,222,211), rgb(217,204,190))"
+      },
+      "fit": null
+    },
+    "ca3986e2a324e985": {
+      "w": 1812,
+      "h": 1359,
+      "widths": [
+        480,
+        960,
+        1600,
+        1812
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(179,166,152), rgb(157,135,113))",
+        "y": "linear-gradient(180deg, rgb(153,144,132), rgb(233,219,208))"
+      },
+      "fit": null
+    },
+    "620389c3a8f697de": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(166,144,124), rgb(156,133,109))",
+        "y": "linear-gradient(180deg, rgb(194,180,169), rgb(163,134,108))"
+      },
+      "fit": null
+    },
+    "e0e39b2d3e53ff66": {
+      "w": 2731,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(134,122,114), rgb(166,153,144))",
+        "y": "linear-gradient(180deg, rgb(141,123,114), rgb(157,147,141))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0.28,
+        "shiftY": 0
+      }
+    },
+    "ce36fead1031e77b": {
+      "w": 3806,
+      "h": 2144,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        3200
+      ],
+      "ratio": 1.7752,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(151,118,93), rgb(228,214,197))",
+        "y": "linear-gradient(180deg, rgb(164,135,112), rgb(207,185,164))"
+      },
+      "fit": null
+    },
+    "fbdeb48b51d1cbab": {
+      "w": 2731,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(163,150,140), rgb(180,169,161))",
+        "y": "linear-gradient(180deg, rgb(153,136,126), rgb(211,202,193))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 2.5,
+        "shiftY": 0
+      }
+    },
+    "c2d36cc58f18afff": {
+      "w": 4815,
+      "h": 2709,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7774,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(185,169,161), rgb(192,179,173))",
+        "y": "linear-gradient(180deg, rgb(173,156,149), rgb(225,211,203))"
+      },
+      "fit": {
+        "scale": 1.188,
+        "shift": -0.5,
+        "shiftY": 0
+      }
+    },
+    "b9fbf8008e58b94e": {
+      "w": 5556,
+      "h": 3125,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7779,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(176,162,155), rgb(197,188,182))",
+        "y": "linear-gradient(180deg, rgb(170,156,149), rgb(216,204,197))"
+      },
+      "fit": {
+        "scale": 1.283,
+        "shift": -0.27,
+        "shiftY": 0
+      }
+    },
+    "265d40df6e8eaeb4": {
+      "w": 2565,
+      "h": 1443,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7775,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(105,92,71), rgb(176,152,132))",
+        "y": "linear-gradient(180deg, rgb(181,162,142), rgb(170,144,120))"
+      },
+      "fit": {
+        "scale": 1.071,
+        "shift": -3.57,
+        "shiftY": 0
+      }
+    },
+    "4ecc956645379f92": {
+      "w": 2731,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.778,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(162,168,171), rgb(188,153,115))",
+        "y": "linear-gradient(180deg, rgb(197,176,152), rgb(190,158,121))"
+      },
+      "fit": {
+        "scale": 1.034,
+        "shift": -1.72,
+        "shiftY": 0
+      }
+    },
+    "cafd576a0965d432": {
+      "w": 3496,
+      "h": 1966,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7782,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(184,172,161), rgb(208,199,191))",
+        "y": "linear-gradient(180deg, rgb(225,213,202), rgb(163,155,147))"
+      },
+      "fit": {
+        "scale": 1.071,
+        "shift": 2.23,
+        "shiftY": 0
+      }
+    },
+    "6b546010276a109f": {
+      "w": 2416,
+      "h": 1358,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7791,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(181,169,160), rgb(185,171,160))",
+        "y": "linear-gradient(180deg, rgb(225,208,194), rgb(155,145,138))"
+      },
+      "fit": {
+        "scale": 1.03,
+        "shift": -1.07,
+        "shiftY": 0
+      }
+    },
+    "5de4fa707f1fbec5": {
+      "w": 2425,
+      "h": 1364,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7779,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(229,213,205), rgb(243,232,227))",
+        "y": "linear-gradient(180deg, rgb(246,229,221), rgb(197,186,178))"
+      },
+      "fit": null
+    },
+    "c9416f6435097278": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(208,190,175), rgb(192,175,161))",
+        "y": "linear-gradient(180deg, rgb(214,203,194), rgb(145,117,96))"
+      },
+      "fit": null
+    },
+    "35fe94c99bea0d51": {
+      "w": 2390,
+      "h": 1792,
+      "widths": [
+        480,
+        960,
+        1600,
+        2390
+      ],
+      "ratio": 1.3337,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(192,178,164), rgb(155,138,122))",
+        "y": "linear-gradient(180deg, rgb(180,158,135), rgb(151,141,133))"
+      },
+      "fit": null
+    },
+    "dd944f45a1bea0c9": {
+      "w": 2390,
+      "h": 1792,
+      "widths": [
+        480,
+        960,
+        1600,
+        2390
+      ],
+      "ratio": 1.3337,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(196,183,170), rgb(160,144,128))",
+        "y": "linear-gradient(180deg, rgb(184,162,140), rgb(167,159,150))"
+      },
+      "fit": null
+    },
+    "215e9f36077cf1b2": {
+      "w": 2400,
+      "h": 1792,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.3393,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(135,128,116), rgb(162,153,140))",
+        "y": "linear-gradient(180deg, rgb(184,169,151), rgb(139,129,116))"
+      },
+      "fit": null
+    },
+    "e6863164e994e4d0": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        2752
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(159,135,112), rgb(156,136,118))",
+        "y": "linear-gradient(180deg, rgb(197,183,170), rgb(177,149,123))"
+      },
+      "fit": null
+    },
+    "0995db87269bce97": {
+      "w": 1569,
+      "h": 1003,
+      "widths": [
+        480,
+        960,
+        1569
+      ],
+      "ratio": 1.5643,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,213,207), rgb(174,158,150))",
+        "y": "linear-gradient(180deg, rgb(213,197,187), rgb(183,165,158))"
+      },
+      "fit": {
+        "scale": 1.173,
+        "shift": -0.98,
+        "shiftY": 0
+      }
+    },
+    "3e670dda50023d07": {
+      "w": 1604,
+      "h": 981,
+      "widths": [
+        480,
+        960,
+        1600,
+        1604
+      ],
+      "ratio": 1.6351,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(219,205,200), rgb(182,166,159))",
+        "y": "linear-gradient(180deg, rgb(214,200,194), rgb(177,160,155))"
+      },
+      "fit": {
+        "scale": 1.2,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "6562bd006c55e026": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(219,204,196), rgb(179,163,155))",
+        "y": "linear-gradient(180deg, rgb(187,172,162), rgb(169,127,96))"
+      },
+      "fit": null
+    },
+    "c7346c1a26f1e627": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(170,157,146), rgb(195,198,201))",
+        "y": "linear-gradient(180deg, rgb(199,202,205), rgb(165,154,145))"
+      },
+      "fit": null
+    },
+    "0a3f547ce26510a9": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(198,175,156), rgb(166,147,133))",
+        "y": "linear-gradient(180deg, rgb(194,180,171), rgb(169,133,104))"
+      },
+      "fit": null
+    },
+    "5c6bfb09cbef5743": {
+      "w": 1422,
+      "h": 1106,
+      "widths": [
+        480,
+        960,
+        1422
+      ],
+      "ratio": 1.2857,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(230,224,222), rgb(215,209,207))",
+        "y": "linear-gradient(180deg, rgb(228,222,220), rgb(201,189,183))"
+      },
+      "fit": null
+    },
+    "c29f97c5c7d66189": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(192,197,201), rgb(153,110,79))",
+        "y": "linear-gradient(180deg, rgb(161,127,102), rgb(154,121,98))"
+      },
+      "fit": {
+        "scale": 1.132,
+        "shift": -6.6,
+        "shiftY": 0
+      }
+    },
+    "fc4dbfcee557f144": {
+      "w": 1517,
+      "h": 1037,
+      "widths": [
+        480,
+        960,
+        1517
+      ],
+      "ratio": 1.4629,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(229,229,229), rgb(212,210,210))",
+        "y": "linear-gradient(180deg, rgb(228,227,228), rgb(195,182,176))"
+      },
+      "fit": {
+        "scale": 1.097,
+        "shift": 1.83,
+        "shiftY": 0
+      }
+    },
+    "1c16c9e529938b1b": {
+      "w": 4122,
+      "h": 2366,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7422,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(227,219,214), rgb(205,196,189))",
+        "y": "linear-gradient(180deg, rgb(220,211,204), rgb(183,167,154))"
+      },
+      "fit": {
+        "scale": 1.137,
+        "shift": 2.61,
+        "shiftY": 0
+      }
+    },
+    "9a5aa5f67a86ee53": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(203,163,130), rgb(180,114,63))",
+        "y": "linear-gradient(180deg, rgb(199,172,143), rgb(169,112,68))"
+      },
+      "fit": null
+    },
+    "b2ca593523f0c9a8": {
+      "w": 1154,
+      "h": 1363,
+      "widths": [
+        480,
+        960,
+        1154
+      ],
+      "ratio": 0.8467,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(235,235,234), rgb(195,193,190))",
+        "y": "linear-gradient(180deg, rgb(222,220,217), rgb(175,166,158))"
+      },
+      "fit": null
+    },
+    "f863790dae5fa9cc": {
+      "w": 1589,
+      "h": 990,
+      "widths": [
+        480,
+        960,
+        1589
+      ],
+      "ratio": 1.6051,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(231,231,231), rgb(202,200,200))",
+        "y": "linear-gradient(180deg, rgb(222,222,223), rgb(183,172,167))"
+      },
+      "fit": {
+        "scale": 1.096,
+        "shift": 2.51,
+        "shiftY": 0
+      }
+    },
+    "3f5d1edaa7de5011": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(178,178,188), rgb(140,97,66))",
+        "y": "linear-gradient(180deg, rgb(148,112,87), rgb(147,112,88))"
+      },
+      "fit": {
+        "scale": 1.081,
+        "shift": 4.05,
+        "shiftY": 0
+      }
+    },
+    "cf7d8b5b636aa326": {
+      "w": 1188,
+      "h": 1324,
+      "widths": [
+        480,
+        960,
+        1188
+      ],
+      "ratio": 0.8973,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(228,226,225), rgb(196,193,190))",
+        "y": "linear-gradient(180deg, rgb(225,222,220), rgb(179,169,160))"
+      },
+      "fit": null
+    },
+    "b19b0bfe6ab63932": {
+      "w": 4294,
+      "h": 2416,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        3200
+      ],
+      "ratio": 1.7773,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(214,204,195), rgb(173,153,128))",
+        "y": "linear-gradient(180deg, rgb(200,191,184), rgb(186,165,146))"
+      },
+      "fit": null
+    },
+    "feee13296d237e34": {
+      "w": 3377,
+      "h": 1884,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7925,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(198,199,203), rgb(170,168,167))",
+        "y": "linear-gradient(180deg, rgb(184,181,178), rgb(205,205,210))"
+      },
+      "fit": {
+        "scale": 1.182,
+        "shift": -9.11,
+        "shiftY": 0
+      }
+    },
+    "eb7d9187628abe73": {
+      "w": 1670,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1670
+      ],
+      "ratio": 1.7747,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(145,101,71), rgb(165,171,188))",
+        "y": "linear-gradient(180deg, rgb(151,115,93), rgb(150,116,95))"
+      },
+      "fit": {
+        "scale": 1.081,
+        "shift": -4.05,
+        "shiftY": 0
+      }
+    },
+    "ae86abc4bd7a20cc": {
+      "w": 1679,
+      "h": 937,
+      "widths": [
+        480,
+        960,
+        1600,
+        1679
+      ],
+      "ratio": 1.7919,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(221,220,221), rgb(207,206,206))",
+        "y": "linear-gradient(180deg, rgb(212,210,208), rgb(220,219,221))"
+      },
+      "fit": {
+        "scale": 1.311,
+        "shift": -0.82,
+        "shiftY": 0
+      }
+    },
+    "12943f69cab86f75": {
+      "w": 1671,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1671
+      ],
+      "ratio": 1.7758,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(207,192,170), rgb(166,143,125))",
+        "y": "linear-gradient(180deg, rgb(192,176,160), rgb(169,141,123))"
+      },
+      "fit": null
+    },
+    "552d897a081c8d1e": {
+      "w": 1679,
+      "h": 937,
+      "widths": [
+        480,
+        960,
+        1600,
+        1679
+      ],
+      "ratio": 1.7919,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(165,160,154), rgb(192,186,183))",
+        "y": "linear-gradient(180deg, rgb(204,199,198), rgb(166,160,152))"
+      },
+      "fit": {
+        "scale": 1.091,
+        "shift": 4.55,
+        "shiftY": 0
+      }
+    },
+    "d3bd78cdc84dba5a": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(215,211,208), rgb(192,186,183))",
+        "y": "linear-gradient(180deg, rgb(224,218,215), rgb(169,162,156))"
+      },
+      "fit": {
+        "scale": 1.165,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "79a45b3b306de8e0": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(226,222,219), rgb(197,190,185))",
+        "y": "linear-gradient(180deg, rgb(228,221,217), rgb(179,172,167))"
+      },
+      "fit": {
+        "scale": 1.121,
+        "shift": 0.47,
+        "shiftY": 0
+      }
+    },
+    "5570115a62e2c190": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(215,197,183), rgb(182,158,136))",
+        "y": "linear-gradient(180deg, rgb(172,141,110), rgb(185,153,122))"
+      },
+      "fit": null
+    },
+    "92707c9292198c31": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(216,216,216), rgb(197,195,194))",
+        "y": "linear-gradient(180deg, rgb(223,221,220), rgb(172,169,169))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 0.56,
+        "shiftY": 0
+      }
+    },
+    "dc33777acc73e68e": {
+      "w": 1448,
+      "h": 1086,
+      "widths": [
+        480,
+        960,
+        1448
+      ],
+      "ratio": 1.3333,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(198,190,179), rgb(179,165,148))",
+        "y": "linear-gradient(180deg, rgb(186,164,138), rgb(171,150,124))"
+      },
+      "fit": null
+    },
+    "1406a665ed249fc7": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(198,167,141), rgb(178,159,147))",
+        "y": "linear-gradient(180deg, rgb(192,176,164), rgb(174,136,106))"
+      },
+      "fit": null
+    },
+    "3274be7c5e19c600": {
+      "w": 1486,
+      "h": 1058,
+      "widths": [
+        480,
+        960,
+        1486
+      ],
+      "ratio": 1.4045,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(210,207,207), rgb(209,206,206))",
+        "y": "linear-gradient(180deg, rgb(230,228,227), rgb(173,169,170))"
+      },
+      "fit": {
+        "scale": 1.081,
+        "shift": 4.05,
+        "shiftY": -1.31
+      }
+    },
+    "c0f424a992c1b798": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(213,213,214), rgb(194,193,193))",
+        "y": "linear-gradient(180deg, rgb(222,221,219), rgb(170,169,170))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": 1.39,
+        "shiftY": 0
+      }
+    },
+    "7960eaaf92c8f182": {
+      "w": 1431,
+      "h": 1099,
+      "widths": [
+        480,
+        960,
+        1431
+      ],
+      "ratio": 1.3021,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(202,201,204), rgb(196,195,197))",
+        "y": "linear-gradient(180deg, rgb(234,235,236), rgb(176,174,176))"
+      },
+      "fit": null
+    },
+    "f8026cc3c1c3b616": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(173,175,177), rgb(107,68,41))",
+        "y": "linear-gradient(180deg, rgb(132,103,83), rgb(160,126,102))"
+      },
+      "fit": {
+        "scale": 1.182,
+        "shift": -9.11,
+        "shiftY": 0
+      }
+    },
+    "58c37eb3e3d2c382": {
+      "w": 1656,
+      "h": 950,
+      "widths": [
+        480,
+        960,
+        1600,
+        1656
+      ],
+      "ratio": 1.7432,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(227,227,228), rgb(186,186,185))",
+        "y": "linear-gradient(180deg, rgb(226,227,227), rgb(185,180,177))"
+      },
+      "fit": {
+        "scale": 1.137,
+        "shift": 0.71,
+        "shiftY": 0
+      }
+    },
+    "7acfab726bf01ee7": {
+      "w": 1604,
+      "h": 981,
+      "widths": [
+        480,
+        960,
+        1600,
+        1604
+      ],
+      "ratio": 1.6351,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(223,223,223), rgb(180,179,177))",
+        "y": "linear-gradient(180deg, rgb(228,228,228), rgb(181,175,171))"
+      },
+      "fit": {
+        "scale": 1.121,
+        "shift": 0,
+        "shiftY": 0
+      }
+    },
+    "8c542499ca2e45b8": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(156,186,207), rgb(164,119,86))",
+        "y": "linear-gradient(180deg, rgb(154,171,181), rgb(160,129,107))"
+      },
+      "fit": null
+    },
+    "89962244dbbac697": {
+      "w": 1677,
+      "h": 938,
+      "widths": [
+        480,
+        960,
+        1600,
+        1677
+      ],
+      "ratio": 1.7878,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(156,152,151), rgb(191,187,187))",
+        "y": "linear-gradient(180deg, rgb(224,221,222), rgb(168,164,163))"
+      },
+      "fit": {
+        "scale": 1.143,
+        "shift": 0.48,
+        "shiftY": 0
+      }
+    },
+    "a7e9014208369fd3": {
+      "w": 3500,
+      "h": 2194,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        3200
+      ],
+      "ratio": 1.5953,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(192,181,171), rgb(169,154,142))",
+        "y": "linear-gradient(180deg, rgb(185,170,157), rgb(153,141,132))"
+      },
+      "fit": {
+        "scale": 1.034,
+        "shift": -0.86,
+        "shiftY": 0
+      }
+    },
+    "d4647edd56bac28d": {
+      "w": 1721,
+      "h": 914,
+      "widths": [
+        480,
+        960,
+        1600,
+        1721
+      ],
+      "ratio": 1.8829,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(195,196,202), rgb(158,158,162))",
+        "y": "linear-gradient(180deg, rgb(205,207,214), rgb(154,153,155))"
+      },
+      "fit": {
+        "scale": 1.057,
+        "shift": 1.54,
+        "shiftY": 0
+      }
+    },
+    "010dc9caea500911": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(172,136,108), rgb(165,161,159))",
+        "y": "linear-gradient(180deg, rgb(178,173,171), rgb(153,124,102))"
+      },
+      "fit": {
+        "scale": 1.333,
+        "shift": -8.88,
+        "shiftY": 0
+      }
+    },
+    "afe15c9414a2a721": {
+      "w": 1536,
+      "h": 1024,
+      "widths": [
+        480,
+        960,
+        1536
+      ],
+      "ratio": 1.5,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(211,189,166), rgb(159,122,90))",
+        "y": "linear-gradient(180deg, rgb(202,177,153), rgb(190,157,130))"
+      },
+      "fit": null
+    },
+    "d8ff6eabdaa51af4": {
+      "w": 1779,
+      "h": 993,
+      "widths": [
+        480,
+        960,
+        1600,
+        1779
+      ],
+      "ratio": 1.7915,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(120,105,92), rgb(123,104,87))",
+        "y": "linear-gradient(180deg, rgb(151,137,123), rgb(112,88,68))"
+      },
+      "fit": null
+    },
+    "d52121b580dab294": {
+      "w": 1645,
+      "h": 956,
+      "widths": [
+        480,
+        960,
+        1600,
+        1645
+      ],
+      "ratio": 1.7207,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(235,232,232), rgb(223,218,217))",
+        "y": "linear-gradient(180deg, rgb(231,227,227), rgb(200,182,174))"
+      },
+      "fit": {
+        "scale": 1.194,
+        "shift": -0.25,
+        "shiftY": 0
+      }
+    },
+    "d061b48579d0a343": {
+      "w": 1591,
+      "h": 988,
+      "widths": [
+        480,
+        960,
+        1591
+      ],
+      "ratio": 1.6103,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(230,229,229), rgb(206,202,201))",
+        "y": "linear-gradient(180deg, rgb(222,220,219), rgb(190,183,179))"
+      },
+      "fit": {
+        "scale": 1.208,
+        "shift": 1.51,
+        "shiftY": 0
+      }
+    },
+    "c23265296e361a0e": {
+      "w": 1672,
+      "h": 941,
+      "widths": [
+        480,
+        960,
+        1600,
+        1672
+      ],
+      "ratio": 1.7768,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(157,151,134), rgb(172,157,144))",
+        "y": "linear-gradient(180deg, rgb(156,143,122), rgb(165,146,132))"
+      },
+      "fit": {
+        "scale": 1.017,
+        "shift": 0.85,
+        "shiftY": 0
+      }
+    },
+    "d6ba2964b1e49cd4": {
+      "w": 1450,
+      "h": 1085,
+      "widths": [
+        480,
+        960,
+        1450
+      ],
+      "ratio": 1.3364,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(176,135,101), rgb(148,109,81))",
+        "y": "linear-gradient(180deg, rgb(206,197,184), rgb(153,106,71))"
+      },
+      "fit": null
+    },
+    "a81cde893b3fef19": {
+      "w": 1994,
+      "h": 2397,
+      "widths": [
+        480,
+        960,
+        1600,
+        1994
+      ],
+      "ratio": 0.8319,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(164,146,139), rgb(205,188,181))",
+        "y": "linear-gradient(180deg, rgb(229,214,206), rgb(178,160,153))"
+      },
+      "fit": null
+    },
+    "a5b5c79d8163ec7d": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(193,177,161), rgb(208,201,197))",
+        "y": "linear-gradient(180deg, rgb(209,200,193), rgb(179,165,152))"
+      },
+      "fit": {
+        "scale": 8.276,
+        "shift": 363.79,
+        "shiftY": -257.94
+      }
+    },
+    "df8a00ae815b4b86": {
+      "w": 2752,
+      "h": 1536,
+      "widths": [
+        480,
+        960,
+        1600,
+        2400,
+        2752
+      ],
+      "ratio": 1.7917,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(201,181,166), rgb(161,141,127))",
+        "y": "linear-gradient(180deg, rgb(204,189,177), rgb(163,137,118))"
+      },
+      "fit": null
+    },
+    "ce8be3562455ca3c": {
+      "w": 1806,
+      "h": 2415,
+      "widths": [
+        480,
+        960,
+        1600,
+        1806
+      ],
+      "ratio": 0.7478,
+      "edge": {
+        "x": "linear-gradient(90deg, rgb(185,167,160), rgb(212,197,193))",
+        "y": "linear-gradient(180deg, rgb(225,210,203), rgb(185,168,161))"
+      },
+      "fit": null
+    }
+  },
+  "items": [
+    {
+      "code": "DH-102",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "Queen Bed",
+      "folder": "doheny/bedroom/queen-bed",
+      "description": "Doheny Queen Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1600,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/b3b17f4b6f977877/1600.webp",
+        "front": "https://media.talastudio.net/img/08087c3b724a2fbd/1600.webp",
+        "perspective": "https://media.talastudio.net/img/50d0ffaf69074aaa/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-101",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "King Bed",
+      "folder": "doheny/bedroom/king-bed",
+      "description": "Doheny King Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2010,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/08087c3b724a2fbd/1600.webp",
+        "perspective": "https://media.talastudio.net/img/50d0ffaf69074aaa/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-103",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – Night Table",
+      "name": "Night Table",
+      "folder": "doheny/bedroom/night-table",
+      "description": "Doheny Night Table in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        450,
+        450,
+        450
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/cb8c19519d6a81be/1600.webp",
+        "front": "https://media.talastudio.net/img/34162cfabfede11a/1600.webp",
+        "perspective": "https://media.talastudio.net/img/a05486b0cce21599/1600.webp",
+        "detail": "https://media.talastudio.net/img/544a89458dffb8a1/1600.webp"
+      }
+    },
+    {
+      "code": "DH-104",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – 6 Drawer Dresser",
+      "name": "6 Drawer Dresser",
+      "folder": "doheny/bedroom/6-drawer-dresser",
+      "description": "Doheny 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        1400,
+        570,
+        700
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/ef973a2b22870115/1600.webp",
+        "front": "https://media.talastudio.net/img/abe55c3c4f54aad7/1600.webp",
+        "perspective": "https://media.talastudio.net/img/2f112d40fa2b6d4e/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-105",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – Tall Boy",
+      "name": "Tall Boy",
+      "folder": "doheny/bedroom/tall-boy",
+      "description": "Doheny Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        950,
+        450,
+        1200
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/b81fc6030b4e841b/1600.webp",
+        "perspective": "https://media.talastudio.net/img/df7acdb65162c51f/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-106",
+      "collection": "Doheny",
+      "room": "bedroom",
+      "category": "Bedroom – Mirror",
+      "name": "Mirror",
+      "folder": "doheny/bedroom/mirror",
+      "description": "Doheny Mirror with a solid mindi/mahogany frame.",
+      "specification": [
+        "Frame: solid mindi/mahogany",
+        "Glass: 5 mm mirror with safety film backing",
+        "Back: 6 mm plywood",
+        "Hanging: French cleat"
+      ],
+      "size": [
+        1200,
+        550,
+        25
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/856142de1933ae65/1600.webp",
+        "perspective": "https://media.talastudio.net/img/9a9486124100a3c8/1600.webp",
+        "detail": "https://media.talastudio.net/img/dbc0ca5c74576632/1600.webp"
+      }
+    },
+    {
+      "code": "DH-201",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Sofa",
+      "name": "7 Foot Sofa",
+      "folder": "doheny/living/7-foot-sofa",
+      "description": "Doheny Sofa with timber arms, upholstered in bouclé.",
+      "specification": [
+        "Frame: plywood and hardwood, timber arms",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        2130,
+        950,
+        900
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/bb93210a953e1454/1600.webp",
+        "front": "https://media.talastudio.net/img/98924aa187cb4739/1600.webp",
+        "perspective": "https://media.talastudio.net/img/82517e04136f3e7c/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-205",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Arm Chair",
+      "name": "Arm Chair",
+      "folder": "doheny/living/arm-chair",
+      "description": "Doheny Armchair with timber arms, upholstered in bouclé.",
+      "specification": [
+        "Frame: plywood and hardwood, timber arms",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        900,
+        800,
+        900
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/43e18db5150e19e1/1600.webp",
+        "front": "https://media.talastudio.net/img/d36ef17adb14f4e4/1600.webp",
+        "perspective": "https://media.talastudio.net/img/69827b492c24051c/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-210",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Side Table",
+      "name": "Side Table",
+      "folder": "doheny/living/side-table",
+      "description": "Doheny Side Table in solid mindi/mahogany with a textured tempered glass top.",
+      "specification": [
+        "Body: solid mindi/mahogany",
+        "Top: 9 mm textured tempered glass",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        500,
+        500,
+        500
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/95bd4eccd8892691/1600.webp",
+        "front": "https://media.talastudio.net/img/be4ff5f879035b39/1536.webp",
+        "perspective": "https://media.talastudio.net/img/439c7248710034ae/1536.webp",
+        "detail": "https://media.talastudio.net/img/59831d652ace7019/1536.webp"
+      }
+    },
+    {
+      "code": "DH-209",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Coffee Table",
+      "name": "Coffee Table",
+      "folder": "doheny/living/coffee-table",
+      "description": "Doheny Coffee Table in solid mindi/mahogany with a textured tempered glass top.",
+      "specification": [
+        "Body: solid mindi/mahogany",
+        "Top: 9 mm textured tempered glass",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1250,
+        600,
+        400
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/2e227ce40721f2e3/1600.webp",
+        "front": "https://media.talastudio.net/img/a9dbdc2bbe204da0/1600.webp",
+        "perspective": "https://media.talastudio.net/img/b660b97bbe451579/1600.webp",
+        "detail": "https://media.talastudio.net/img/7398623fbb08959a/1394.webp"
+      }
+    },
+    {
+      "code": "DH-213",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – TV Unit",
+      "name": "TV Console",
+      "folder": "doheny/living/tv-console",
+      "description": "Doheny TV Console, a low console in solid mindi/mahogany with a veneered top.",
+      "specification": [
+        "Body: solid mindi/mahogany",
+        "Top: veneer over panel",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1250,
+        400,
+        400
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/309755f9cd7d9288/1600.webp",
+        "front": "https://media.talastudio.net/img/575e752247fa0b33/1600.webp",
+        "perspective": "https://media.talastudio.net/img/d5eff2f2ba5522c4/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-107",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Desk Table 2 Drawers",
+      "name": "Desk Table 2 Drawers",
+      "folder": "doheny/living/desk-table-2-drawers",
+      "description": "Doheny Desk Table, a two-drawer console desk in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        1400,
+        450,
+        750
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/37bbccc386623b83/1600.webp",
+        "front": "https://media.talastudio.net/img/f7f89b2f53fcf7bf/1600.webp",
+        "perspective": "https://media.talastudio.net/img/e344befa1a0c7d06/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "DH-211",
+      "collection": "Doheny",
+      "room": "living",
+      "category": "Living – Console Table",
+      "name": "Console Table",
+      "folder": "doheny/living/console-table",
+      "description": "Doheny Console Table in solid mindi/mahogany with a veneered top.",
+      "specification": [
+        "Body: solid mindi/mahogany",
+        "Top: veneer over panel",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1250,
+        400,
+        800
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/33e9e80f6a76cc52/1600.webp",
+        "front": "https://media.talastudio.net/img/9871843833c813db/1600.webp",
+        "perspective": "https://media.talastudio.net/img/2ad3d88f25be814f/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "CA-102",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "Queen Bed",
+      "folder": "calabasas/bedroom/queen-bed",
+      "description": "Calabasas Queen Bed in mindi/mahogany solids and veneers, with an upholstered headboard and a leather cord-wrapped top rail.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Top rail: wrapped in tan leather cord",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1965,
+        2080,
+        1030
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/689eb7818f563956/1600.webp",
+        "front": "https://media.talastudio.net/img/d732b3a1fd71a7e0/1600.webp",
+        "perspective": "https://media.talastudio.net/img/4378b4e6d37abbdc/1600.webp",
+        "detail": "https://media.talastudio.net/img/a87d682e6dff22fd/1600.webp"
+      }
+    },
+    {
+      "code": "CA-101",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "King Bed",
+      "folder": "calabasas/bedroom/king-bed",
+      "description": "Calabasas King Bed in mindi/mahogany solids and veneers, with an upholstered headboard and a leather cord-wrapped top rail.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Top rail: wrapped in tan leather cord",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2010,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/d732b3a1fd71a7e0/1600.webp",
+        "perspective": "https://media.talastudio.net/img/4378b4e6d37abbdc/1600.webp",
+        "detail": "https://media.talastudio.net/img/a87d682e6dff22fd/1600.webp"
+      }
+    },
+    {
+      "code": "CA-103",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – Night Table",
+      "name": "Night Table",
+      "folder": "calabasas/bedroom/night-table",
+      "description": "Calabasas Night Table in mindi/mahogany solids and veneers, with two drawers and hand-cast brass, teak and leather cord pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers, 20 mm case panels with softly rounded edges",
+        "Top: recessed tray with raised side and back rails",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: 150 mm hand cast brass with tan leather cord wrap and teak end rings"
+      ],
+      "size": [
+        500,
+        450,
+        450
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/6d4ca44816fd8817/1600.webp",
+        "front": "https://media.talastudio.net/img/1296e93f619c7646/1600.webp",
+        "perspective": "https://media.talastudio.net/img/49005217c4549af5/1600.webp",
+        "detail": "https://media.talastudio.net/img/eb12ee957cdc6084/1600.webp"
+      }
+    },
+    {
+      "code": "CA-104",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – 6 Drawer Dresser",
+      "name": "6 Drawer Dresser",
+      "folder": "calabasas/bedroom/6-drawer-dresser",
+      "description": "Calabasas 6-Drawer Dresser in mindi/mahogany solids and veneers, with hand-cast brass, teak and leather cord pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: hand cast brass with tan leather cord wrap and teak end rings"
+      ],
+      "size": [
+        1190,
+        560,
+        700
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/3286ffccfba31a26/1600.webp",
+        "front": "https://media.talastudio.net/img/8a93263a9ea65a04/1600.webp",
+        "perspective": "https://media.talastudio.net/img/ada37ab2cb8ccdf9/1600.webp",
+        "detail": "https://media.talastudio.net/img/543c73fefeeed4e8/1600.webp"
+      }
+    },
+    {
+      "code": "CA-105",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – Tall Boy",
+      "name": "Tall Boy",
+      "folder": "calabasas/bedroom/tall-boy",
+      "description": "Calabasas Tall Boy, a chest of drawers in mindi/mahogany solids and veneers, with hand-cast brass, teak and leather cord pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: hand cast brass with tan leather cord wrap and teak end rings"
+      ],
+      "size": [
+        600,
+        500,
+        1100
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/4e31d28f017e437c/1600.webp",
+        "front": "https://media.talastudio.net/img/cdb555b5de83266b/1600.webp",
+        "perspective": "https://media.talastudio.net/img/e5bab62df0689be3/1600.webp",
+        "detail": "https://media.talastudio.net/img/93c406399e12acfd/1600.webp"
+      }
+    },
+    {
+      "code": "CA-106",
+      "collection": "Calabasas",
+      "room": "bedroom",
+      "category": "Bedroom – Mirror",
+      "name": "Mirror",
+      "folder": "calabasas/bedroom/mirror",
+      "description": "Calabasas Mirror with a solid mindi/mahogany frame and leather cord-wrapped detail.",
+      "specification": [
+        "Frame: solid mindi/mahogany with tan leather cord wrap",
+        "Glass: 5 mm mirror with safety film backing",
+        "Back: 6 mm plywood",
+        "Hanging: French cleat"
+      ],
+      "size": [
+        1000,
+        50,
+        550
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/7d363f65a06d5c96/1600.webp",
+        "perspective": "https://media.talastudio.net/img/127b56b8536cb901/1600.webp",
+        "detail": "https://media.talastudio.net/img/dda6f12ad4c76040/1600.webp"
+      }
+    },
+    {
+      "code": "CA-201",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – Sofa",
+      "name": "Sofa",
+      "folder": "calabasas/living/sofa",
+      "description": "Calabasas Sofa on a timber base, upholstered in bouclé.",
+      "specification": [
+        "Frame: plywood and hardwood, timber base",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        2000,
+        800,
+        760
+      ],
+      "finishes": [],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/93c3a1b33fe4af8d/1366.webp",
+        "front": "https://media.talastudio.net/img/1979f32a2759ea73/1600.webp",
+        "perspective": "https://media.talastudio.net/img/7bbc552b579ce055/1600.webp",
+        "detail": "https://media.talastudio.net/img/ba4096fdab543812/1600.webp"
+      }
+    },
+    {
+      "code": "CA-205",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – Armchair",
+      "name": "Arm Chair",
+      "folder": "calabasas/living/arm-chair",
+      "description": "Calabasas Armchair on a timber base, upholstered in bouclé.",
+      "specification": [
+        "Frame: plywood and hardwood, timber base",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        900,
+        800,
+        685
+      ],
+      "finishes": [],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/cee19d427ad2553b/1393.webp",
+        "front": "https://media.talastudio.net/img/2848fb09158ec265/1600.webp",
+        "perspective": "https://media.talastudio.net/img/6efe73889703734b/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "CA-210",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – Side Table",
+      "name": "Side Table",
+      "folder": "calabasas/living/side-table",
+      "description": "Calabasas Side Table in mindi/mahogany solids and veneers, with a woven natural rattan lower shelf.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Shelf: woven natural rattan",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        650,
+        410,
+        435
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/407be1c205917cdc/1448.webp",
+        "front": "https://media.talastudio.net/img/a73e0fd82ca915ae/1538.webp",
+        "perspective": "https://media.talastudio.net/img/b851104b20a39d62/1538.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "CA-209",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – Coffee Table",
+      "name": "Coffee Table",
+      "folder": "calabasas/living/coffee-table",
+      "description": "Calabasas Coffee Table in mindi/mahogany solids and veneers, with a woven natural rattan lower shelf.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Shelf: woven natural rattan",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1300,
+        600,
+        450
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/1dfd0239a86907ad/1446.webp",
+        "front": "https://media.talastudio.net/img/3becf2cfa12e2f59/1448.webp",
+        "perspective": "https://media.talastudio.net/img/04515cf33686fc82/1448.webp",
+        "detail": "https://media.talastudio.net/img/ae3b42eb7df1e436/1452.webp"
+      }
+    },
+    {
+      "code": "CA-213",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – TV Console",
+      "name": "TV Console",
+      "folder": "calabasas/living/tv-console",
+      "description": "Calabasas TV Console in mindi/mahogany solids and veneers.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1400,
+        460,
+        600
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/3d8afd253ad0eadb/1448.webp",
+        "front": "https://media.talastudio.net/img/be6c29c067ac7fca/1536.webp",
+        "perspective": "https://media.talastudio.net/img/597b959e951f1d3f/1536.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "CA-215",
+      "collection": "Calabasas",
+      "room": "living",
+      "category": "Living – Armoire",
+      "name": "Open Cabinet",
+      "folder": "calabasas/living/open-cabinet",
+      "description": "Calabasas Open Cabinet, an open armoire in mindi/mahogany solids and veneers.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1215,
+        460,
+        1700
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/ec006c750243b09d/1448.webp",
+        "front": "https://media.talastudio.net/img/060318ac6fb29fb0/1083.webp",
+        "perspective": "https://media.talastudio.net/img/7a9160718e72208a/1083.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "PA-102",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "Queen Bed",
+      "folder": "palisades/bedroom/queen-bed",
+      "description": "Palisades Queen Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1710,
+        2130,
+        1120
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/54d5081070a7f31e/1600.webp",
+        "front": "https://media.talastudio.net/img/81d3fce23dccc7d5/1600.webp",
+        "perspective": "https://media.talastudio.net/img/7b00e9d2e8a4cbaf/1600.webp",
+        "detail": "https://media.talastudio.net/img/979ac17fce6e6a5c/1600.webp"
+      }
+    },
+    {
+      "code": "PA-101",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "King Bed",
+      "folder": "palisades/bedroom/king-bed",
+      "description": "Palisades King Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2010,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/81d3fce23dccc7d5/1600.webp",
+        "perspective": "https://media.talastudio.net/img/7b00e9d2e8a4cbaf/1600.webp",
+        "detail": "https://media.talastudio.net/img/979ac17fce6e6a5c/1600.webp"
+      }
+    },
+    {
+      "code": "PA-103",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – Night Table",
+      "name": "Night Table",
+      "folder": "palisades/bedroom/night-table",
+      "description": "Palisades Night Table in mindi/mahogany solids and veneers, finished with a brushed bronze pull.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        450,
+        450,
+        455
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/ebf08c848d37a266/1600.webp",
+        "front": "https://media.talastudio.net/img/21e9a215eed3b33c/1600.webp",
+        "perspective": "https://media.talastudio.net/img/f22c3dc5b132d900/1600.webp",
+        "detail": "https://media.talastudio.net/img/096bbf117de85c3f/1600.webp"
+      }
+    },
+    {
+      "code": "PA-104",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – 6 Drawer Dresser",
+      "name": "6 Drawer Dresser",
+      "folder": "palisades/bedroom/6-drawer-dresser",
+      "description": "Palisades 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        1485,
+        470,
+        810
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/f11eadb9737b62a8/1600.webp",
+        "front": "https://media.talastudio.net/img/ea21180a5e97a397/1600.webp",
+        "perspective": "https://media.talastudio.net/img/4971c1f2351fc3ba/1600.webp",
+        "detail": "https://media.talastudio.net/img/13aaad50afdd40c2/1600.webp"
+      }
+    },
+    {
+      "code": "PA-105",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – Tall Boy",
+      "name": "Tall Boy",
+      "folder": "palisades/bedroom/tall-boy",
+      "description": "Palisades Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, finished with brushed bronze pulls.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: aluminum, brushed bronze finish"
+      ],
+      "size": [
+        495,
+        450,
+        1060
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Brushed Bronze",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/25ab8daca0409e0f/1600.webp",
+        "front": "https://media.talastudio.net/img/116b5a6656bc26da/1600.webp",
+        "perspective": "https://media.talastudio.net/img/b0fdba7d08748895/1600.webp",
+        "detail": "https://media.talastudio.net/img/08e9f60251598035/1600.webp"
+      }
+    },
+    {
+      "code": "PA-106",
+      "collection": "Palisades",
+      "room": "bedroom",
+      "category": "Bedroom – Mirror",
+      "name": "Mirror",
+      "folder": "palisades/bedroom/mirror",
+      "description": "Palisades Mirror with a solid mindi/mahogany frame.",
+      "specification": [
+        "Frame: solid mindi/mahogany",
+        "Glass: 5 mm mirror with safety film backing",
+        "Back: 6 mm plywood",
+        "Hanging: French cleat"
+      ],
+      "size": [
+        1000,
+        25,
+        550
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/a11360eb0fdc92c9/1600.webp",
+        "perspective": "https://media.talastudio.net/img/ea85b0c3cf8ede84/1600.webp",
+        "detail": "https://media.talastudio.net/img/f375f599cc91ebd6/1600.webp"
+      }
+    },
+    {
+      "code": "BW-102",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "Queen Bed",
+      "folder": "beechwood/bedroom/queen-bed",
+      "description": "Beechwood Queen Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1740,
+        2090,
+        1025
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/bc972ea39608bee8/1600.webp",
+        "front": "https://media.talastudio.net/img/6ca761841b14ce71/1600.webp",
+        "perspective": "https://media.talastudio.net/img/be6a8226660497a2/1600.webp",
+        "detail": "https://media.talastudio.net/img/fbe6e410758b0b66/1600.webp"
+      }
+    },
+    {
+      "code": "BW-101",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "King Bed",
+      "folder": "beechwood/bedroom/king-bed",
+      "description": "Beechwood King Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2010,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/6301d0dfd206c748/1600.webp",
+        "front": "https://media.talastudio.net/img/6ca761841b14ce71/1600.webp",
+        "perspective": "https://media.talastudio.net/img/be6a8226660497a2/1600.webp",
+        "detail": "https://media.talastudio.net/img/fbe6e410758b0b66/1600.webp"
+      }
+    },
+    {
+      "code": "BW-103",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – Night Table",
+      "name": "Night Table",
+      "folder": "beechwood/bedroom/night-table",
+      "description": "Beechwood Night Table in mindi/mahogany solids and veneers, with a milled drawer pull and johar wood accent.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: milled handle with johar wood accent"
+      ],
+      "size": [
+        550,
+        500,
+        500
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Johar Wood",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/7580c6f6c5e805ab/1600.webp",
+        "front": "https://media.talastudio.net/img/40c944057ad803a4/1600.webp",
+        "perspective": "https://media.talastudio.net/img/bddedad7c0bce1dd/1600.webp",
+        "detail": "https://media.talastudio.net/img/9aed5bcbc472a61c/1600.webp"
+      }
+    },
+    {
+      "code": "BW-104",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – 6 Drawer Dresser",
+      "name": "6 Drawer Dresser",
+      "folder": "beechwood/bedroom/6-drawer-dresser",
+      "description": "Beechwood 6-Drawer Dresser in mindi/mahogany solids and veneers, with milled pulls and johar wood accents.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: milled handles with johar wood accent"
+      ],
+      "size": [
+        1185,
+        600,
+        700
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Johar Wood",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/9478734a69492bb9/1600.webp",
+        "front": "https://media.talastudio.net/img/792aebb5c32468b9/1600.webp",
+        "perspective": "https://media.talastudio.net/img/a267b1b57ee8297e/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "BW-105",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – Tall Boy",
+      "name": "Tall Boy",
+      "folder": "beechwood/bedroom/tall-boy",
+      "description": "Beechwood Tall Boy, a four-drawer chest in mindi/mahogany solids and veneers, with milled pulls and johar wood accents.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: milled handles with johar wood accent"
+      ],
+      "size": [
+        600,
+        500,
+        1100
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Johar Wood",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/dbc4ea86f8d8c8af/1600.webp",
+        "front": "https://media.talastudio.net/img/44d481390475c66f/1600.webp",
+        "perspective": "https://media.talastudio.net/img/2371e7b5976267c7/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "BW-106",
+      "collection": "Beechwood",
+      "room": "bedroom",
+      "category": "Bedroom – Mirror",
+      "name": "Mirror",
+      "folder": "beechwood/bedroom/mirror",
+      "description": "Beechwood Mirror with a solid mindi/mahogany frame.",
+      "specification": [
+        "Frame: solid mindi/mahogany",
+        "Glass: 5 mm mirror with safety film backing",
+        "Back: 6 mm plywood",
+        "Hanging: French cleat"
+      ],
+      "size": [
+        900,
+        80,
+        550
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/85926813ae15eb9f/1600.webp",
+        "perspective": null,
+        "detail": "https://media.talastudio.net/img/ca3986e2a324e985/1600.webp"
+      }
+    },
+    {
+      "code": "BW-301",
+      "collection": "Beechwood",
+      "room": "dining",
+      "category": "Dining – Dining Table",
+      "name": "Dining Table",
+      "folder": "beechwood/dining/dining-table",
+      "description": "Beechwood Dining Table, a rectangular table in mindi/mahogany solids and veneers.",
+      "specification": [
+        "Top: mindi/mahogany solids and veneers",
+        "Base: solid mindi/mahogany",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2100,
+        800,
+        750
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/620389c3a8f697de/1448.webp",
+        "front": "https://media.talastudio.net/img/e0e39b2d3e53ff66/1600.webp",
+        "perspective": "https://media.talastudio.net/img/fbdeb48b51d1cbab/1600.webp",
+        "detail": null
+      }
+    },
+    {
+      "code": "BW-319",
+      "collection": "Beechwood",
+      "room": "dining",
+      "category": "Dining – Buffet",
+      "name": "Buffet",
+      "folder": "beechwood/dining/buffet",
+      "description": "Beechwood Buffet in mindi/mahogany solids and veneers, with four doors inset with rattan webbing.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Doors: solid timber with rattan webbing inserts, soft close concealed hinges",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1800,
+        600,
+        900
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/265d40df6e8eaeb4/1600.webp",
+        "front": "https://media.talastudio.net/img/c2d36cc58f18afff/1600.webp",
+        "perspective": "https://media.talastudio.net/img/b9fbf8008e58b94e/1600.webp",
+        "detail": "https://media.talastudio.net/img/4ecc956645379f92/1600.webp"
+      }
+    },
+    {
+      "code": "BW-901",
+      "collection": "Beechwood",
+      "room": "dining",
+      "category": "Dining – Mirror",
+      "name": "Mirror",
+      "folder": "beechwood/dining/mirror",
+      "description": "Beechwood Dining Mirror with a solid mindi/mahogany frame.",
+      "specification": [
+        "Frame: solid mindi/mahogany",
+        "Glass: 5 mm mirror with safety film backing",
+        "Back: 6 mm plywood",
+        "Hanging: French cleat"
+      ],
+      "size": [
+        1200,
+        50,
+        600
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/cafd576a0965d432/1600.webp",
+        "perspective": "https://media.talastudio.net/img/6b546010276a109f/1600.webp",
+        "detail": "https://media.talastudio.net/img/5de4fa707f1fbec5/1600.webp"
+      }
+    },
+    {
+      "code": "BW-316",
+      "collection": "Beechwood",
+      "room": "dining",
+      "category": "Dining – Dining Chair",
+      "name": "Dining Chair",
+      "folder": "beechwood/dining/dining-chair",
+      "description": "Beechwood Dining Chair, a low-arm chair in solid mindi/mahogany with a woven loom seat.",
+      "specification": [
+        "Frame: solid mindi/mahogany, low arms",
+        "Seat: woven loom"
+      ],
+      "size": [
+        550,
+        620,
+        860
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/c9416f6435097278/1600.webp",
+        "front": "https://media.talastudio.net/img/35fe94c99bea0d51/1600.webp",
+        "perspective": "https://media.talastudio.net/img/dd944f45a1bea0c9/1600.webp",
+        "detail": "https://media.talastudio.net/img/215e9f36077cf1b2/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-102",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "Queen Bed",
+      "folder": "zuma/bedroom/queen-bed",
+      "description": "Zuma Queen Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        1700,
+        2115,
+        1020
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/0a3f547ce26510a9/1600.webp",
+        "front": "https://media.talastudio.net/img/0995db87269bce97/1569.webp",
+        "perspective": "https://media.talastudio.net/img/3e670dda50023d07/1600.webp",
+        "detail": "https://media.talastudio.net/img/c7346c1a26f1e627/1448.webp"
+      }
+    },
+    {
+      "code": "ZA-101",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – Bed",
+      "name": "King Bed",
+      "folder": "zuma/bedroom/king-bed",
+      "description": "Zuma King Bed with an upholstered headboard and a timber bed box.",
+      "specification": [
+        "Headboard: solid mindi/mahogany frame, FR foam, fabric upholstery (see fabric options)",
+        "Bed box: solid timber and plywood",
+        "Deck: metal with steamed beech slats",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2010,
+        2130,
+        1050
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/0995db87269bce97/1569.webp",
+        "perspective": "https://media.talastudio.net/img/3e670dda50023d07/1600.webp",
+        "detail": "https://media.talastudio.net/img/c7346c1a26f1e627/1448.webp"
+      }
+    },
+    {
+      "code": "ZA-103",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – Night Table",
+      "name": "Night Table",
+      "folder": "zuma/bedroom/night-table",
+      "description": "Zuma Night Table in mindi/mahogany solids and veneers, finished with a hand-cast brass pull in antique brass.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        650,
+        450,
+        525
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/6562bd006c55e026/1600.webp",
+        "front": "https://media.talastudio.net/img/5c6bfb09cbef5743/1422.webp",
+        "perspective": "https://media.talastudio.net/img/fc4dbfcee557f144/1517.webp",
+        "detail": "https://media.talastudio.net/img/c29f97c5c7d66189/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-104",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – 6 Drawer Dresser",
+      "name": "6 Drawer Dresser",
+      "folder": "zuma/bedroom/6-drawer-dresser",
+      "description": "Zuma 6-Drawer Dresser in mindi/mahogany solids and veneers, finished with hand-cast brass pulls in antique brass.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        1505,
+        550,
+        755
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/9a5aa5f67a86ee53/1600.webp",
+        "front": "https://media.talastudio.net/img/1c16c9e529938b1b/1600.webp",
+        "perspective": "https://media.talastudio.net/img/f863790dae5fa9cc/1589.webp",
+        "detail": "https://media.talastudio.net/img/3f5d1edaa7de5011/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-105",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – Tall Boy",
+      "name": "Tall Boy",
+      "folder": "zuma/bedroom/tall-boy",
+      "description": "Zuma Tall Boy, a five-drawer chest in mindi/mahogany solids and veneers, finished with hand-cast brass pulls in antique brass.",
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pulls: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        800,
+        500,
+        1200
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/b2ca593523f0c9a8/1154.webp",
+        "perspective": "https://media.talastudio.net/img/cf7d8b5b636aa326/1188.webp",
+        "detail": "https://media.talastudio.net/img/eb7d9187628abe73/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-106",
+      "collection": "Zuma",
+      "room": "bedroom",
+      "category": "Bedroom – Mirror",
+      "name": "Mirror",
+      "folder": "zuma/bedroom/mirror",
+      "description": "Zuma Mirror in Venetian antique mirror glass.",
+      "specification": [
+        "Glass: Venetian antique mirror",
+        "Back: plywood"
+      ],
+      "size": [
+        1000,
+        35,
+        600
+      ],
+      "finishes": [],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/ae86abc4bd7a20cc/1600.webp",
+        "perspective": "https://media.talastudio.net/img/feee13296d237e34/1600.webp",
+        "detail": "https://media.talastudio.net/img/552d897a081c8d1e/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-201",
+      "collection": "Zuma",
+      "room": "living",
+      "category": "Living – Sofa",
+      "name": "Sofa",
+      "folder": "zuma/living/sofa",
+      "description": null,
+      "specification": [
+        "Frame: plywood and hardwood, timber arms",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        2000,
+        850,
+        840
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/12943f69cab86f75/1600.webp",
+        "front": "https://media.talastudio.net/img/79a45b3b306de8e0/1600.webp",
+        "perspective": "https://media.talastudio.net/img/d3bd78cdc84dba5a/1600.webp",
+        "detail": "https://media.talastudio.net/img/dc33777acc73e68e/1448.webp"
+      }
+    },
+    {
+      "code": "ZA-205",
+      "collection": "Zuma",
+      "room": "living",
+      "category": "Living – Arm Chair",
+      "name": "Arm Chair",
+      "folder": "zuma/living/arm-chair",
+      "description": null,
+      "specification": [
+        "Frame: plywood and hardwood, timber arms",
+        "Foam: HR foam meeting CAL TB-117 and EN 1021",
+        "Fabric: shown in bouclé, see fabric options"
+      ],
+      "size": [
+        850,
+        850,
+        840
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/5570115a62e2c190/1600.webp",
+        "front": "https://media.talastudio.net/img/92707c9292198c31/1600.webp",
+        "perspective": "https://media.talastudio.net/img/c0f424a992c1b798/1600.webp",
+        "detail": "https://media.talastudio.net/img/dc33777acc73e68e/1448.webp"
+      }
+    },
+    {
+      "code": "ZA-210",
+      "collection": "Zuma",
+      "room": "living",
+      "category": "Living – Side Table",
+      "name": "Side Table",
+      "folder": "zuma/living/side-table",
+      "description": null,
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        550,
+        550,
+        505
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/1406a665ed249fc7/1600.webp",
+        "front": "https://media.talastudio.net/img/3274be7c5e19c600/1486.webp",
+        "perspective": "https://media.talastudio.net/img/7960eaaf92c8f182/1431.webp",
+        "detail": "https://media.talastudio.net/img/f8026cc3c1c3b616/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-209",
+      "collection": "Zuma",
+      "room": "living",
+      "category": "Living – Coffee Table",
+      "name": "Coffee Table",
+      "folder": "zuma/living/coffee-table",
+      "description": null,
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        1400,
+        650,
+        380
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/1406a665ed249fc7/1600.webp",
+        "front": "https://media.talastudio.net/img/58c37eb3e3d2c382/1600.webp",
+        "perspective": "https://media.talastudio.net/img/7acfab726bf01ee7/1600.webp",
+        "detail": "https://media.talastudio.net/img/8c542499ca2e45b8/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-301",
+      "collection": "Zuma",
+      "room": "dining",
+      "category": "Dining – Dining Table",
+      "name": "Dining Table",
+      "folder": "zuma/dining/dining-table",
+      "description": null,
+      "specification": [
+        "Top: mindi/mahogany solids and veneers",
+        "Base: solid mindi/mahogany",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Packing: to ISTA 1A standard"
+      ],
+      "size": [
+        2100,
+        1000,
+        750
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/afe15c9414a2a721/1536.webp",
+        "front": "https://media.talastudio.net/img/d4647edd56bac28d/1600.webp",
+        "perspective": "https://media.talastudio.net/img/89962244dbbac697/1600.webp",
+        "detail": "https://media.talastudio.net/img/010dc9caea500911/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-319",
+      "collection": "Zuma",
+      "room": "dining",
+      "category": "Dining – Buffet",
+      "name": "Buffet",
+      "folder": "zuma/dining/buffet",
+      "description": null,
+      "specification": [
+        "Body: mindi/mahogany solids and veneers",
+        "Panels: MDF, LVL or plywood, E0 / TSCA Title VI",
+        "Finish: PU sealer with hard NC topcoat",
+        "Drawers: 12 mm LVL or plywood boxes, soft close ball bearing side mount glides",
+        "Packing: to ISTA 1A standard",
+        "Pull: hand cast brass, antique brass finish"
+      ],
+      "size": [
+        1460,
+        500,
+        750
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": {
+        "name": "Antique Brass",
+        "swatch": null
+      },
+      "photos": {
+        "room": "https://media.talastudio.net/img/d8ff6eabdaa51af4/1600.webp",
+        "front": "https://media.talastudio.net/img/d52121b580dab294/1600.webp",
+        "perspective": "https://media.talastudio.net/img/d061b48579d0a343/1591.webp",
+        "detail": "https://media.talastudio.net/img/d6ba2964b1e49cd4/1450.webp"
+      }
+    },
+    {
+      "code": "ZA-901",
+      "collection": "Zuma",
+      "room": "dining",
+      "category": "Dining – Mirror",
+      "name": "Mirror",
+      "folder": "zuma/dining/mirror",
+      "description": "Zuma Dining Mirror in Venetian antique mirror glass.",
+      "specification": [
+        "Glass: Venetian antique mirror",
+        "Back: plywood"
+      ],
+      "size": [
+        1000,
+        35,
+        600
+      ],
+      "finishes": [],
+      "handle": null,
+      "photos": {
+        "room": null,
+        "front": "https://media.talastudio.net/img/ae86abc4bd7a20cc/1600.webp",
+        "perspective": "https://media.talastudio.net/img/feee13296d237e34/1600.webp",
+        "detail": "https://media.talastudio.net/img/552d897a081c8d1e/1600.webp"
+      }
+    },
+    {
+      "code": "ZA-316",
+      "collection": "Zuma",
+      "room": "dining",
+      "category": "Dining – Dining Chair",
+      "name": "Dining Chair",
+      "folder": "zuma/dining/dining-chair",
+      "description": "Zuma Dining Chair, a low-arm chair in solid mindi/mahogany with an upholstered seat and a woven loom back.",
+      "specification": [
+        "Frame: solid mindi/mahogany, low arms",
+        "Seat: upholstered",
+        "Back: woven loom",
+        "Foam: meets CAL TB-117 and EN 1021",
+        "Fabric: see fabric options"
+      ],
+      "size": [
+        525,
+        580,
+        870
+      ],
+      "finishes": [
+        {
+          "name": "Pacific Sand",
+          "swatch": "https://media.talastudio.net/img/5ffc6a1036349631/250.webp"
+        },
+        {
+          "name": "Driftwood",
+          "swatch": "https://media.talastudio.net/img/d793ab78848542b4/344.webp"
+        },
+        {
+          "name": "Smoked Oak",
+          "swatch": "https://media.talastudio.net/img/1a12d9f4ac3e319d/318.webp"
+        },
+        {
+          "name": "Ember",
+          "swatch": "https://media.talastudio.net/img/64e66a597ab445d3/363.webp"
+        }
+      ],
+      "handle": null,
+      "photos": {
+        "room": "https://media.talastudio.net/img/c23265296e361a0e/1600.webp",
+        "front": "https://media.talastudio.net/img/ce8be3562455ca3c/1600.webp",
+        "perspective": "https://media.talastudio.net/img/a81cde893b3fef19/1600.webp",
+        "detail": "https://media.talastudio.net/img/a5b5c79d8163ec7d/1600.webp"
+      }
+    }
+  ],
+  "heroes": {
+    "doheny/bedroom": "https://media.talastudio.net/img/a679e13a628c0f11/1448.webp",
+    "doheny/living": "https://media.talastudio.net/img/eae71556663b83f3/1600.webp",
+    "calabasas/bedroom": "https://media.talastudio.net/img/c74abffd4567677c/1600.webp",
+    "calabasas/living": "https://media.talastudio.net/img/50a0084c239c9d72/1600.webp",
+    "palisades/bedroom": "https://media.talastudio.net/img/0c6f4e8a00f61d77/1600.webp",
+    "beechwood/bedroom": "https://media.talastudio.net/img/ce36fead1031e77b/1600.webp",
+    "beechwood/dining": "https://media.talastudio.net/img/e6863164e994e4d0/1600.webp",
+    "zuma/bedroom": "https://media.talastudio.net/img/b19b0bfe6ab63932/1600.webp",
+    "zuma/living": "https://media.talastudio.net/img/a7e9014208369fd3/1600.webp",
+    "zuma/dining": "https://media.talastudio.net/img/df8a00ae815b4b86/1600.webp"
+  },
+  "report": [],
+  "problems": []
+}
