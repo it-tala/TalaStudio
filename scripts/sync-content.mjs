@@ -36,6 +36,7 @@ const DRY = args.has('--dry');
 
 // Widths stored per use: photos and room shots for cards, slides and the viewer; swatches are small
 const PHOTO_WIDTHS = [480, 960, 1600, 2400];
+const HERO_WIDTHS = [...PHOTO_WIDTHS, 3200]; // LP 1 fills the whole screen on the landing page: sharp on large and retina screens
 const SWATCH_WIDTHS = [160, 480];
 const DISPLAY_WIDTH = 1600; // the width a picture's src names (srcset offers the others)
 const QUALITY = 80;
@@ -251,6 +252,7 @@ const uses = new Map(); // link -> Set of widths
 const need = (l, widths) => { if (!l) return; const s = uses.get(l) ?? new Set(); widths.forEach((w) => s.add(w)); uses.set(l, s); };
 for (const it of items) {
   Object.values(it.links).forEach((l) => need(l, PHOTO_WIDTHS));
+  need(it.links.hero, HERO_WIDTHS);
   [...it.finishes, it.handle].forEach((f) => need(f?.link, SWATCH_WIDTHS));
 }
 
@@ -349,6 +351,7 @@ console.log(`sync-content: ${items.length} items, ${uses.size} albums, storage $
 for (const line of report) console.log(`  ${line}`);
 if (!report.length) console.log('  no item changed');
 if (changes.downloaded.length) console.log(`  ${changes.downloaded.length} picture(s) new or changed`);
+for (const d of changes.downloaded) console.log(`    ${d}`);
 for (const b of changes.broken) console.log(`  ! broken link: ${b}`);
 for (const p of problems) console.log(`  ! ${p}`);
 if (unused.length) console.log(`  ${unused.length} stored picture(s) no longer used${args.has('--prune') ? ', deleting' : ' (--prune deletes them)'}`);

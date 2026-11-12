@@ -7,6 +7,9 @@
 // from that section (a room picked there) switches the picture here.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 // That name is a link down to the collections section, which already shows that collection's room.
+// The covers start at their display width (1600); once the page is up each switches to the stored width that fills this
+// screen sharply (up to 3200 on large and retina screens).
+import { srcsetOf } from '../lib/content';
 interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; pos?: string; edge?: string | null }[] }
 const { slides } = Astro.props;
 ---
@@ -21,6 +24,7 @@ const { slides } = Astro.props;
     style={[i === 0 && `--img:url(${s.src})`, s.pos && `--pos:${s.pos}`].filter(Boolean).join(';') || undefined}
     data-bg={i === 0 ? undefined : s.src}
     data-src={s.src}
+    data-set={srcsetOf(s.src)}
     data-room={s.room}
     data-name={s.name.replace(/ collection$/, '')}
     data-edge={s.edge ?? undefined}
@@ -43,13 +47,22 @@ const { slides } = Astro.props;
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
     const names = [...hero.querySelectorAll<HTMLElement>('.hero-names a')];
-    if (slides.length < 2) return;
+    // The stored width that covers this screen: a cover is cropped to the screen, so a wide photo needs about 1.6x the
+    // height in width; two device pixels per CSS pixel at most
+    const sharp = (s: HTMLElement) => {
+      const set = (s.dataset.set ?? '').split(', ').map((c) => c.split(' ')).filter((c) => c.length === 2)
+        .map(([url, w]) => ({ url, w: parseInt(w) })).sort((a, b) => a.w - b.w);
+      if (!set.length) return s.dataset.bg ?? s.dataset.src;
+      const r = hero.getBoundingClientRect();
+      const need = Math.max(r.width, r.height * 1.6) * Math.min(devicePixelRatio || 1, 2);
+      return (set.find((c) => c.w >= need) ?? set[set.length - 1]).url;
+    };
     // A cover is only switched in once its picture is decoded, so it never fades in half-drawn
     const ready = new Map<HTMLElement, Promise<void>>();
     const load = (s: HTMLElement) => {
       if (!ready.has(s)) {
-        const src = s.dataset.bg;
-        if (!src) ready.set(s, Promise.resolve());
+        const src = sharp(s);
+        if (!src || src === s.dataset.src && !s.dataset.bg) ready.set(s, Promise.resolve());
         else {
           const img = new Image();
           img.src = src;
@@ -58,6 +71,11 @@ const { slides } = Astro.props;
       }
       return ready.get(s)!;
     };
+    if (slides.length < 2) {
+      // One cover: only its sharper picture to swap in
+      if (slides[0]) addEventListener('load', () => load(slides[0]), { once: true });
+      return;
+    }
     const loadAll = () => slides.forEach(load);
     if (document.readyState === 'complete') loadAll(); else addEventListener('load', loadAll, { once: true });
 
