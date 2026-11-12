@@ -9,17 +9,17 @@
 /* The cover picture sits in ::before (as --img), the shading in ::after */
 .hero-full .slide { overflow: hidden; }
 .hero-full .slide::before { content: ''; position: absolute; inset: 0; background: var(--img, none) center var(--pos, center) / cover no-repeat; }
-.hero-full .media::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.28) 100%), linear-gradient(90deg, rgba(0,0,0,.22) 0%, rgba(0,0,0,0) 50%); }
-/* The first picture carries the page copy (bottom left): a deeper shade there so the white text reads on a light room */
-.hero-full .slide:first-of-type::after { background: linear-gradient(0deg, rgba(24,19,15,.72) 0%, rgba(24,19,15,.45) 28%, rgba(24,19,15,0) 58%), linear-gradient(90deg, rgba(24,19,15,.5) 0%, rgba(24,19,15,.2) 32%, rgba(24,19,15,0) 55%); }
+.hero-full .media::after { content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, .05); }
+/* Only a 5% veil, the same on every picture, so the room shows as photographed (user, 12 Nov 2026). The words on it
+   carry their own text-shadow, and the collection name an outline */
 /* Copy sits on the left, on the same edge as the header logo at every screen width */
 .hero-full .inner { position: relative; z-index: 1; width: 100%; padding: 48px clamp(20px, 4vw, 72px) 28px; display: flex; flex-direction: column; justify-content: flex-end; }
-.hero-full .eyebrow { font-size: 14px; letter-spacing: .26em; color: var(--on-dark); opacity: .9; margin-bottom: 8px; text-shadow: 0 1px 8px rgba(0,0,0,.35); }
+.hero-full .eyebrow { font-size: 14px; letter-spacing: .26em; color: var(--on-dark); opacity: .95; margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,.5), 0 1px 12px rgba(0,0,0,.45); }
 /* Kept compact so the copy covers as little of the picture as it can */
-.hero-full h1 { font-size: clamp(34px, 2.4vw + 1rem, 54px); line-height: 1.1; max-width: 20ch; margin-bottom: 10px; text-shadow: 0 1px 12px rgba(0,0,0,.35); }
+.hero-full h1 { font-size: clamp(34px, 2.4vw + 1rem, 54px); line-height: 1.1; max-width: 20ch; margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,.45), 0 2px 20px rgba(0,0,0,.5); }
 .hero-full .hero-stack span { display: block; }
-.hero-full p.text { font-size: 20px; line-height: 1.5; max-width: 42ch; opacity: .95; margin-bottom: 16px; text-shadow: 0 1px 8px rgba(0,0,0,.4); }
-.hero-full .btn { padding: .6rem 1.3rem; font-size: .8rem; }
+.hero-full p.text { font-size: 20px; line-height: 1.5; max-width: 42ch; opacity: 1; margin-bottom: 16px; text-shadow: 0 1px 2px rgba(0,0,0,.55), 0 1px 14px rgba(0,0,0,.5); }
+.hero-full .btn { padding: .6rem 1.3rem; font-size: .8rem; box-shadow: 0 2px 14px rgba(0,0,0,.25); }
 @media (max-width: 700px) { .hero-full { height: auto; min-height: 70svh; } .hero-full .inner { padding: 72px 20px 48px; } }
 /* Hero slideshow: covers stacked, the current one shown. No animation: pictures, copy and names switch at once.
    Small dots bottom-right. */
@@ -52,17 +52,18 @@
 .hero-arrow.next { right: 20px; }
 .hero-arrow:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; }
 .hero-dots button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; background: none; cursor: pointer; }
-.hero-dots button::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--on-dark); opacity: .75; }
+.hero-dots button::before { content: ''; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--on-dark); opacity: .85; box-shadow: 0 0 0 .5px rgba(0,0,0,.25), 0 1px 4px rgba(0,0,0,.4); }
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
 /* The collection's name under the dots, cross-fading with its picture */
 .hero-names { position: absolute; z-index: 2; right: 52px; bottom: 18px; display: grid; justify-items: end; pointer-events: none; }
-.hero-names a { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 16px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #ece2d2; text-shadow: 0 1px 12px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; }
-.hero-names a.on { opacity: .5; }
+.hero-names a { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 16px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #f3ece2; -webkit-text-stroke: 1px rgba(20, 16, 12, .55); paint-order: stroke fill; text-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 2px 16px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; }
+/* Clear on the picture: a thin dark outline behind the letters instead of shading the picture */
+.hero-names a.on { opacity: .92; }
 /* The shown name is a link down to the collections section; a hover brings it up to full strength */
 .hero-names a { text-decoration: none; pointer-events: none; }
 .hero-names a.on { pointer-events: auto; cursor: pointer; }
-.hero-names a.on:hover, .hero-names a.on:focus-visible { opacity: .9; }
+.hero-names a.on:hover, .hero-names a.on:focus-visible { opacity: 1; }
 .hero-names a:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 4px; }
 @media (max-width: 700px) { .hero-names { right: 16px; bottom: 12px; } .hero-names a { font-size: 30px; } }
 @media (max-width: 700px) { .hero-dots { right: 12px; bottom: 56px; } .hero-arrow, .fs-arrow { width: 44px; height: 44px; font-size: 32px; } .hero-arrow.prev, .fs-arrow.prev { left: 10px; } .hero-arrow.next, .fs-arrow.next { right: 10px; } }

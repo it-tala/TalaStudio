@@ -39,7 +39,10 @@ const PHOTO_WIDTHS = [480, 960, 1600, 2400];
 const HERO_WIDTHS = [...PHOTO_WIDTHS, 3200]; // LP 1 fills the whole screen on the landing page: sharp on large and retina screens
 const SWATCH_WIDTHS = [160, 480];
 const DISPLAY_WIDTH = 1600; // the width a picture's src names (srcset offers the others)
-const QUALITY = 80;
+// Highest lossy WebP, with the sharper colour conversion: detail as photographed, files left large (user, 12 Nov 2026).
+// Changing it gives every picture a new name (the hash includes it) and the next run converts them all again.
+const ENCODING = 'webp-q100';
+const WEBP = { quality: 100, smartSubsample: true, effort: 5 };
 
 if (args.has('--if-missing') && existsSync(OUT)) process.exit(0);
 
@@ -270,8 +273,8 @@ await pool([...uses.keys()], 6, async (l) => {
     return;
   }
   const widths = [...uses.get(l)].sort((a, b) => a - b);
-  // Same photo as last time, stored at every width it needs now: nothing to download
-  const old = before && before.id === photo.id && assets[before.hash];
+  // Same photo as last time, stored in the current encoding at every width it needs now: nothing to download
+  const old = before && before.id === photo.id && assets[before.hash]?.enc === ENCODING && assets[before.hash];
   if (old && wanted(widths, old.w).every((w) => old.widths.includes(w))) {
     links[l] = before;
     return;
@@ -279,20 +282,20 @@ await pool([...uses.keys()], 6, async (l) => {
   const r = await fetchRetry(`${photo.url}=d`);
   if (!r.ok) { changes.broken.push(`${l} (download HTTP ${r.status})`); if (before) links[l] = before; return; }
   const original = Buffer.from(await r.arrayBuffer());
-  const hash = createHash('sha256').update(original).digest('hex').slice(0, 16);
+  const hash = createHash('sha256').update(original).update(ENCODING).digest('hex').slice(0, 16);
   const meta = await sharp(original).metadata();
   const fit = wanted(widths, meta.width);
   const have = assets[hash]?.widths ?? [];
   const todo = fit.filter((w) => !have.includes(w));
   if (!DRY) {
     for (const w of todo) {
-      const webp = await sharp(original).rotate().resize({ width: w, withoutEnlargement: true }).webp({ quality: QUALITY }).toBuffer();
+      const webp = await sharp(original).rotate().resize({ width: w, withoutEnlargement: true }).webp(WEBP).toBuffer();
       await store.put(`img/${hash}/${w}.webp`, webp, 'image/webp', IMMUTABLE);
     }
   }
   const edge = await edgeOf(original).catch(() => null);
   assets[hash] = {
-    w: meta.width, h: meta.height, widths: [...new Set([...have, ...fit])].sort((a, b) => a - b),
+    enc: ENCODING, w: meta.width, h: meta.height, widths: [...new Set([...have, ...fit])].sort((a, b) => a - b),
     ratio: +(meta.width / meta.height).toFixed(4),
     edge: edge ? { x: edge.x, y: edge.y } : null,
     fit: await fitOf(original).catch(() => null),

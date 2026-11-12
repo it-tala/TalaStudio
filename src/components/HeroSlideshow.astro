@@ -42,6 +42,7 @@ const { slides } = Astro.props;
 )}
 
 <script>
+  import { preload, prefer } from '../lib/preload';
   // The arrows and dots switch pictures; nothing advances by itself.
   document.querySelectorAll<HTMLElement>('.hero-full').forEach((hero) => {
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
@@ -71,13 +72,12 @@ const { slides } = Astro.props;
       }
       return ready.get(s)!;
     };
-    if (slides.length < 2) {
-      // One cover: only its sharper picture to swap in
-      if (slides[0]) addEventListener('load', () => load(slides[0]), { once: true });
-      return;
-    }
-    const loadAll = () => slides.forEach(load);
-    if (document.readyState === 'complete') loadAll(); else addEventListener('load', loadAll, { once: true });
+    // In the background with the page's other pictures (lib/preload): first the cover's sharper picture and the next
+    // four (and the one before, for the left arrow), the rest later. Using the hero moves its covers ahead again.
+    slides.forEach((s, i) => preload(`hero:${i}`, 'hero', i <= 4 || i === slides.length - 1 ? 0 : 3, () => load(s)));
+    if (slides.length < 2) return;
+    hero.addEventListener('pointerenter', () => prefer('hero'));
+    hero.addEventListener('focusin', () => prefer('hero'));
 
     let cur = 0;
     let want = 0;

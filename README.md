@@ -130,7 +130,7 @@ The collection items and their pictures come from the [WEBSITE TRACKER tab](http
 
 1. It reads the tab as CSV. The sheet must stay shared as "anyone with the link can view".
 2. It opens each Google Photos album link the site uses and takes the album's first photo. A photo already uploaded (same album, same first photo) is not downloaded again.
-3. A new or changed photo is converted to WebP at 480, 960, 1600 and 2400 px wide (never enlarged), analysed once (edge colours, card fit), and uploaded to Cloudflare R2 as `img/<content hash>/<width>.webp`, cached for a year.
+3. A new or changed photo is converted to WebP (quality 100) at 480, 960, 1600 and 2400 px wide, landing page covers (LP 1) also at 3200 (never enlarged), analysed once (edge colours, card fit), and uploaded to Cloudflare R2 as `img/<content hash>/<width>.webp`, cached for a year.
 4. It prints what changed since the last run (`+` new item, `~` changed fields, `-` removed item, `!` broken link or row left off), then writes `src/data/content.json` (not in git), which the pages read.
 
 The record of the last run, `manifest.json`, sits in the bucket beside the pictures, so every build and every machine shares it.
