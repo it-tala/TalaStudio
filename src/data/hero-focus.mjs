@@ -1,9 +1,7 @@
-// Where each landing page hero is cut, per collection room (`<collection slug>/<room>`). Plain JS: the content pipeline
-// (scripts/sync-content.mjs) reads it to cut the phone pictures, the site to place the picture on screen.
+// Where each landing page hero's phone picture is cut, per collection room (`<collection slug>/<room>`). Plain JS: the
+// content pipeline (scripts/sync-content.mjs) reads it to cut the phone pictures, the site to place a cover that has
+// none. On a landscape screen the hero shows the whole 16:9 picture, so nothing is cut there.
 //
-//   x, y      object-position of the 16:9 picture on a landscape screen, in % (50 = centred). The hero fills the screen
-//             (object-fit: cover, user 13 Nov 2026), so a screen wider than 16:9 loses a little top and bottom, a squarer
-//             one a little of the sides: this keeps the piece in view.
 //   portrait  the middle of the 9:16 phone picture cut from the 16:9 master, in % of its width (0 = left edge).
 //             Left out: the pipeline finds the busiest part of the picture itself (sharp's attention crop) and stores it.
 //             Changing it cuts the phone pictures again on the next sync (new file names; the old ones stay).
