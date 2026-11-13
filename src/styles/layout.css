@@ -3,17 +3,23 @@
 .wide { width: min(1340px, 100% - 40px); margin-inline: auto; }
 
 /* Hero: copy bottom-left over the image */
-/* The hero fills the screen under the header and the picture covers it (user, 13 Nov 2026; this replaces "never cropped"
-   of 12 Nov): a screen wider than 16:9 loses a little top and bottom, a squarer one a little of the sides. Where the
-   cut falls is set per collection room in src/data/hero-focus.mjs (--x, --y). An upright screen shows the 9:16 phone
-   picture (HeroSlideshow.astro); a cover without one keeps its focus point in view (--px). */
+/* The hero fills the screen under the header and every picture shows whole in it (user, 13 Nov 2026, evening; the
+   "cover" of that afternoon cut 20–30% off the top and bottom in a real browser window, which is much wider than 16:9
+   once the tabs, address bar and header are taken off). The space beside (or above and below) the picture shows a
+   blurred, enlarged copy of the same picture (.fill, the same file, so nothing more is downloaded), so the room seems
+   to run on to the screen's edges. An upright screen shows the 9:16 phone picture filling it (HeroSlideshow.astro;
+   where it is cut: src/data/hero-focus.mjs); a cover without one keeps its focus point in view (--px). */
 .hero-full { position: relative; display: flex; width: 100%; height: calc(100svh / var(--z) - 4.5rem); min-height: 22rem; color: var(--on-dark); background: var(--bg-dark); overflow: hidden; }
 .hero-full .media { position: absolute; inset: 0; background: linear-gradient(160deg, #4a3f35, #1d1a17 70%) center / cover no-repeat; }
 /* The cover picture is an <img> in a <picture>; until it is drawn the cover shows its own edge colours (--band).
    The shading sits in ::after */
 .hero-full .slide { overflow: hidden; background: var(--band, var(--bg-dark)); }
-.hero-full .slide img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: var(--x, 50%) var(--y, 50%); }
-@media (orientation: portrait) { .hero-full .slide img { object-position: var(--px, 50%) 50%; } }
+.hero-full .slide img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: contain; }
+.hero-full .slide .fill img { object-fit: cover; filter: blur(28px) saturate(1.05); transform: scale(1.12); }
+@media (orientation: portrait) {
+  .hero-full .slide img { object-fit: cover; object-position: var(--px, 50%) 50%; }
+  .hero-full .slide .fill { display: none; }
+}
 .hero-full .media::after { content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, .05); }
 /* Only a 5% veil, the same on every picture, so the room shows as photographed (user, 12 Nov 2026). The words on it
    carry their own text-shadow, and the collection name an outline */

@@ -60,6 +60,12 @@ export const srcsetOf = (src: string | null | undefined, format: Format = 'webp'
   return a && src && formatsOf(src).includes(format) ? a.widths.map((w) => `${atWidth(src, w, format)} ${w}w`).join(', ') : undefined;
 };
 
+// The width a landing page hero picture is drawn at, for its sizes (HeroSlideshow and the preload in index.astro use
+// the same, so the preloaded file is the one shown): whole (contain) in a hero as tall as the screen under the 81 px
+// header, so the screen's width or 16:9 of that height, whichever is less. The phone picture fills the screen's width.
+export const HERO_SIZES = 'min(100vw, calc((100svh - 81px) * 1.7778))';
+export const HERO_PORTRAIT_SIZES = '100vw';
+
 // The 9:16 phone picture of a landing page hero: srcset per format (null when it has none)
 export const portraitOf = (src: string | null | undefined): Partial<Record<Format, string>> | null => {
   const hash = src?.match(HASHED)?.[1];

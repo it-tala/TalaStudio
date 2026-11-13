@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
 import { edgeBackground, photoRatio } from '../lib/edge';
-import { content, pictureId, srcsetOf, portraitOf, avifHashes } from '../lib/content';
+import { content, pictureId, srcsetOf, portraitOf, avifHashes, HERO_SIZES, HERO_PORTRAIT_SIZES } from '../lib/content';
 import { focusOf } from '../data/hero-focus.mjs';
 import Picture from '../components/Picture.astro';
 import { showSection } from '../data/sections';
@@ -22,7 +22,7 @@ const roomOrder = ['bedroom', 'living', 'dining', 'other'];
 const roomLabel = (r: string) => (r === 'other' ? 'Collection' : `${r[0].toUpperCase()}${r.slice(1)} collection`);
 // Hero: one slide per room that has a real room shot (LP 1 LINK), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
-// Each fills the screen; where the screen cuts it comes from src/data/hero-focus.mjs (focus).
+// Each shows whole on a landscape screen; where the phone picture is cut comes from src/data/hero-focus.mjs (focus).
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const withRoomShot = all.filter((c) => c.hero_is_room);
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
@@ -103,8 +103,8 @@ const materials = [
   description="TalaStudio designs bedroom, living and dining furniture in Jepara, Indonesia and sells it by the container to retailers, buying groups and distributors."
 >
   <Fragment slot="head">
-    {firstPortrait && <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait} imagesizes="100vw" media="(orientation: portrait)" fetchpriority="high" />}
-    {firstAvif && <link rel="preload" as="image" type="image/avif" imagesrcset={firstAvif} imagesizes="100vw" media={firstPortrait ? '(orientation: landscape)' : undefined} fetchpriority="high" />}
+    {firstPortrait && <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait} imagesizes={HERO_PORTRAIT_SIZES} media="(orientation: portrait)" fetchpriority="high" />}
+    {firstAvif && <link rel="preload" as="image" type="image/avif" imagesrcset={firstAvif} imagesizes={HERO_SIZES} media={firstPortrait ? '(orientation: landscape)' : undefined} fetchpriority="high" />}
   </Fragment>
   <!-- 1. Hero -->
   <section class="hero-full">
