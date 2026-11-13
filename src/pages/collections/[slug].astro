@@ -1,4 +1,5 @@
 ---
+import Picture from '../../components/Picture.astro';
 import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
@@ -32,7 +33,7 @@ const finishes = [...new Set(pieces.flatMap((p) => p.finishes ?? []))];
   image={hero ?? undefined}
 >
   <section class="hero dark">
-    {hero ? <img src={versioned(hero)} style={fit && `object-position:center ${fit.pos}`} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
+    {hero ? <Picture src={versioned(hero)} sizes="100vw" style={fit && `object-position:center ${fit.pos}`} alt={`${collection.name} collection${collection.room === 'other' ? '' : ', ' + collection.room} render`} /> : <Ph label={`${collection.name} hero render`} wide watermark />}
     <div class="wrap over fade">
       <p class="eyebrow">{collection.room === 'other' ? 'Collection' : `${collection.room} collection`}</p>
       <h1>{collection.name}</h1>

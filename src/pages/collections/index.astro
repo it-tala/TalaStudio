@@ -1,4 +1,5 @@
 ---
+import Picture from '../../components/Picture.astro';
 import Base from '../../layouts/Base.astro';
 import Ph from '../../components/Ph.astro';
 import CtaBand from '../../components/CtaBand.astro';
@@ -58,7 +59,7 @@ const groups = [...new Set(all.map((c) => c.name))].map((name) => ({
         <div class="cs-track" tabindex="0">
           {rows.map((c) => (
             <a class="cs-slide" href={`/collections/${c.slug}`}>
-              {imageUrl(c.hero_image_path) && <img src={imageUrl(c.hero_image_path)!} alt={`${c.name} collection, ${roomLabel(c.room).toLowerCase()} render`} loading="lazy" draggable="false" />}
+              {imageUrl(c.hero_image_path) && <Picture src={imageUrl(c.hero_image_path)!} sizes="(max-width: 700px) 80vw, 40vw" alt={`${c.name} collection, ${roomLabel(c.room).toLowerCase()} render`} loading="lazy" draggable="false" />}
               <div class="cs-body">
                 <small>{name} collection</small>
                 <h3>{roomLabel(c.room)}</h3>

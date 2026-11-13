@@ -8,7 +8,8 @@ import { edgeBackground, cardFit, photoRatio } from '../lib/edge';
 import { swatch, finishSlug } from '../data/finishes';
 import { itemSpec } from '../data/item-codes';
 import { groupItems } from '../lib/items';
-import { atWidth, srcsetOf } from '../lib/content';
+import { atWidth, srcsetOf, formatsOf } from '../lib/content';
+import Picture from './Picture.astro';
 // link: "View the collection" under the cards. only: show just these items (by name); the rest stay on the collection page.
 interface Props { collection: Collection; link?: boolean; only?: string[] }
 const { collection, link = true, only } = Astro.props;
@@ -48,6 +49,14 @@ const items = await Promise.all(groupItems(collection).filter((it) => (!only || 
 const viewerSrcs = [...new Set(items.flatMap((it) => Object.values(it.photos).flat().concat(it.srcs)))];
 const squareBg = Object.fromEntries(await Promise.all(viewerSrcs.map(async (s) => [s, await edgeBackground(s, 1)])));
 const id = `cat-${collection.slug}`;
+// The blurred bands round a card photo: its 480 copy, AVIF where the browser shows it (the same file as the card's own
+// 480 picture, so it is fetched once)
+const fillOf = (src: string) => formatsOf(src).includes('avif')
+  ? `image-set(url("${atWidth(src, 480, 'avif')}") type("image/avif"), url("${atWidth(src, 480)}") type("image/webp"))`
+  : `url(${atWidth(src, 480)})`;
+// The card picture's sources for each finish's first photo, so a swatch click can switch the <picture> (AVIF and WebP)
+const setsOf = (it: { photos: Record<string, string[]>; srcs: string[] }) => JSON.stringify(Object.fromEntries(
+  [...new Set([it.srcs[0], ...Object.values(it.photos).map((p) => p[0])])].map((s) => [s, { avif: srcsetOf(s, 'avif'), webp: srcsetOf(s, 'webp') }])));
 // Under each card: the finish shown, then the item's code number from the line sheet; its size on the line below
 const finishLine = (parts: string[], code: string | null) => [...parts, code].filter(Boolean).join(' · ');
 const specOf = (it: { name: string; folder: string }) => itemSpec(collection.name, collection.room, it.name, it.folder);
@@ -68,10 +77,10 @@ const specData = (it: { name: string; folder: string }) => {
     </div>
     <ul class="cat-grid">
       {items.map((it) => (
-        <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-spec={specData(it) || undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)}>
+        <li class="cat-item" data-name={it.name} data-code={codeOf(it) ?? undefined} data-desc={specOf(it)?.description ?? undefined} data-spec={specData(it) || undefined} data-srcs={JSON.stringify(it.srcs)} data-photos={JSON.stringify(it.photos)} data-sets={setsOf(it)}>
           <button type="button" class="cat-card" aria-haspopup="dialog" aria-label={`View ${it.name}`}>
-            <span class:list={['frame', 'edge-fill', { 'fill-wide': it.band.wide, 'fill-tall': it.band.tall }]} style={[it.bg && `background:${it.bg}`, `--fill:url(${atWidth(it.srcs[0], 480)})`, `--band:${it.band.size}%`, it.fit && `--fs:${it.fit.scale};--fx:${it.fit.shift}`].filter(Boolean).join(';')}>
-              <img src={it.srcs[0]} srcset={srcsetOf(it.srcs[0])} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 25vw" alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% ${it.fit.shiftY}%` : undefined} />
+            <span class:list={['frame', 'edge-fill', { 'fill-wide': it.band.wide, 'fill-tall': it.band.tall }]} data-fill={atWidth(it.srcs[0], 480)} style={[it.bg && `background:${it.bg}`, `--fill:${fillOf(it.srcs[0])}`, `--band:${it.band.size}%`, it.fit && `--fs:${it.fit.scale};--fx:${it.fit.shift}`].filter(Boolean).join(';')}>
+              <Picture src={it.srcs[0]} sizes="(max-width: 600px) 100vw, (max-width: 1000px) 50vw, 25vw" alt={`${collection.name} ${it.name}`} loading="lazy" style={it.fit ? `scale:${it.fit.scale};translate:${it.fit.shift}% ${it.fit.shiftY}%` : undefined} />
             </span>
           </button>
           {woods.length > 0 && (
@@ -98,6 +107,7 @@ const specData = (it: { name: string; folder: string }) => {
 
 <script>
   import { openViewer } from '../lib/viewer';
+  import { best } from '../lib/picture';
 
   document.querySelectorAll<HTMLElement>('.cat').forEach((sec) => {
     const bgs: Record<string, string | null> = JSON.parse(sec.dataset.bgs ?? '{}');
@@ -115,9 +125,13 @@ const specData = (it: { name: string; folder: string }) => {
       li.querySelectorAll<HTMLButtonElement>('.sw').forEach((sw) => sw.addEventListener('click', () => {
         sw.parentElement!.querySelectorAll('.sw').forEach((o) => o.setAttribute('aria-pressed', String(o === sw)));
         const f = finish(li);
-        if (img.src !== new URL(f.srcs[0], location.href).href) img.removeAttribute('srcset');
+        // The card's <picture>: the new photo's AVIF source and WebP srcset (none when the page does not list them)
+        const set: { avif?: string; webp?: string } | undefined = JSON.parse(li.dataset.sets ?? '{}')[f.srcs[0]];
+        const source = img.parentElement!.matches('picture') ? img.parentElement!.querySelector('source') : null;
+        if (source) { if (set?.avif) source.srcset = set.avif; else source.remove(); }
+        if (set?.webp) img.srcset = set.webp; else img.removeAttribute('srcset');
         img.src = f.srcs[0];
-        img.parentElement!.style.setProperty('--fill', `url(${f.srcs[0]})`);
+        img.closest<HTMLElement>('.frame')!.style.setProperty('--fill', `url(${best(f.srcs[0])})`);
         img.alt = `${sec.dataset.collection} ${li.dataset.name}, ${f.labels.join(', ')}`;
         views.textContent = [...f.labels, f.soon ? 'photo soon' : li.dataset.code].filter(Boolean).join(' · ');
       }));
@@ -159,7 +173,7 @@ const specData = (it: { name: string; folder: string }) => {
       <p class="spec-coll" style="--coll-fs:${collSize.toFixed(2)}cqw">${esc(s.collection)}</p>
       <div class="spec-main">
         <h4>${esc(s.name)}</h4>
-        ${photos.length ? `<div class="spec-photos n${Math.min(photos.length, 3)}">${photos.slice(0, 3).map((p, i) => `<img src="${esc(p)}" alt="${esc(`${s.collection} ${s.name}, view ${i + 1}`)}">`).join('')}</div>` : ''}
+        ${photos.length ? `<div class="spec-photos n${Math.min(photos.length, 3)}">${photos.slice(0, 3).map((p, i) => `<img src="${esc(best(p))}" alt="${esc(`${s.collection} ${s.name}, view ${i + 1}`)}">`).join('')}</div>` : ''}
         <div class="spec-cols">
           <div>
             <p class="spec-head">Specification</p>
@@ -167,7 +181,7 @@ const specData = (it: { name: string; folder: string }) => {
             ${dims.length ? `<p class="spec-dim-head">Dimensions</p><dl class="spec-dims">${dims.map(([k, v]) => `<dt>${esc(k!)}</dt><dd>${esc(v!)}</dd>`).join('')}</dl>` : ''}
           </div>
           <div>
-            ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(f.swatch!)})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}
+            ${swatches.length ? `<ul class="spec-sw">${swatches.map((f) => `<li><span style="background-image:url(${esc(best(f.swatch!))})"></span>${esc(f.name)}</li>`).join('')}</ul>` : ''}
             ${s.notes.length ? `<p class="spec-notes-head">Notes</p><ul class="spec-notes">${s.notes.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
           </div>
         </div>

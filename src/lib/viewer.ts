@@ -17,6 +17,7 @@ export type ViewerOptions = {
 };
 
 import { followHint } from './hint';
+import { best } from './picture';
 
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, props: Partial<HTMLElementTagNameMap[K]> = {}) => Object.assign(document.createElement(tag), props);
 const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -130,7 +131,7 @@ export function openViewer(opts: ViewerOptions) {
     const slide = el('div', { className: 'cat-slide' });
     // The spec page is a 1:1 page: it gets a square frame, not the 16:9 photo frame
     const square = el('div', { className: s.html || /\/spec[^/]*$/i.test(s.src) ? 'cat-sq cat-spec' : 'cat-sq' });
-    const img = s.html ? el('div', { className: 'spec-wrap', innerHTML: s.html }) : el('img', { src: s.src, alt: s.alt });
+    const img = s.html ? el('div', { className: 'spec-wrap', innerHTML: s.html }) : el('img', { src: best(s.src), alt: s.alt });
     if (s.html) img.setAttribute('aria-label', s.alt);
     // A photo that is not 16:9 leaves black space at its sides or top and bottom (.cat-box .cat-sq)
     square.append(img);
@@ -149,7 +150,7 @@ export function openViewer(opts: ViewerOptions) {
   thumbs.replaceChildren(...opts.slides.map((s, i) => {
     const t = el('button', { type: 'button', ariaLabel: `Show ${s.name ?? (s.html ? 'specification' : `picture ${i + 1}`)}` });
     // The spec page's thumbnail: its front photo, labelled
-    if (s.src) t.append(el('img', { src: s.src, alt: '' }));
+    if (s.src) t.append(el('img', { src: best(s.src), alt: '' }));
     if (s.html) { t.classList.add('cat-thumb-spec'); t.append(el('span', { textContent: 'Spec' })); }
     t.addEventListener('click', () => go(i));
     return t;

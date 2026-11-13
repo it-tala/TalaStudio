@@ -1,3 +1,4 @@
+import { avifReady, best } from './picture';
 // The page's pictures load in the background once the page itself is up, a few at a time and most wanted first, so a
 // picture is already there when a visitor scrolls, swipes or clicks to it, without a loading moment (user, 12 Nov 2026).
 // Each job has a tier (lower first); the home page uses:
@@ -45,12 +46,13 @@ export const imgJob = (img: HTMLImageElement) => () => {
   img.loading = 'eager';
   return img.decode();
 };
-// A picture shown later by script (the viewer, a background): fetched into the browser cache at that exact address
-export const urlJob = (url: string) => () => {
+// A picture shown later by script or CSS (the viewer, a card's blurred bands): fetched into the browser cache at the
+// address that will be shown (its AVIF copy where there is one and the browser shows it, lib/picture)
+export const urlJob = (url: string) => () => avifReady.then(() => {
   const img = new Image();
-  img.src = url;
+  img.src = best(url);
   return img.decode();
-};
+});
 
 const slow = () => {
   const c = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;

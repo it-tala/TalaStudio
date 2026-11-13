@@ -130,7 +130,8 @@ The collection items and their pictures come from the [WEBSITE TRACKER tab](http
 
 1. It reads the tab as CSV. The sheet must stay shared as "anyone with the link can view".
 2. It opens each Google Photos album link the site uses and takes the album's first photo. A photo already uploaded (same album, same first photo) is not downloaded again.
-3. A new or changed photo is converted to WebP (quality 100) at 480, 960, 1600 and 2400 px wide, landing page covers (LP 1) also at 3200 (never enlarged), analysed once (edge colours, card fit), and uploaded to Cloudflare R2 as `img/<content hash>/<width>.webp`, cached for a year.
+3. A new or changed photo is converted to AVIF (4:4:4, quality 68; landing page covers 80) and WebP (quality 90, for browsers without AVIF), sRGB with its colour profile, at 480, 960, 1600 and 2400 px wide; landing page covers (LP 1) at 960 to 3840 (never enlarged). Each cover also gets a 9:16 phone picture cut from it (750 and 1215 px), centred where `src/data/hero-focus.mjs` says or, if it says nothing, on the busiest part of the picture; a phone picture in the column LP 1 MOBILE LINK (when the sheet has it) is used instead. Pictures are analysed once (edge colours, card fit) and uploaded to Cloudflare R2 as `img/<content hash>/<width>.avif|.webp` (phone cuts `p<x>-<width>`), cached for a year. A run that stops half way picks up where it was: files already in R2 are not encoded again.
+   AVIF is slow to encode (about 11 s for a 3840 px cover): after a change of encoding, run `npm run sync` on a PC first rather than leaving the whole conversion to a Cloudflare build.
 4. It prints what changed since the last run (`+` new item, `~` changed fields, `-` removed item, `!` broken link or row left off), then writes `src/data/content.json` (not in git), which the pages read.
 
 The record of the last run, `manifest.json`, sits in the bucket beside the pictures, so every build and every machine shares it.
