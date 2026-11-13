@@ -1,37 +1,69 @@
 ---
 // Hero background: one cover per collection behind the hero copy, switched with a short crossfade.
-// The first cover loads with the page; the rest load once it is up. A click on the right half of a cover moves to the
-// next one, on the left half to the previous one, like the picture viewer (without script the cover is a plain link
-// to its collection page). The pictures only change with clicks, arrows and dots, never by themselves. Each change sends a
-// hero-slide event (detail.href = the collection page) that the home collections section follows, and a coll-room event
-// from that section (a room picked there) switches the picture here.
+// A click on the right half of a cover moves to the next one, on the left half to the previous one, like the picture
+// viewer (without script the cover is a plain link to its collection page). The pictures only change with clicks, arrows
+// and dots, never by themselves. Each change sends a hero-slide event (detail.href = the collection page) that the home
+// collections section follows, and a coll-room event from that section (a room picked there) switches the picture here.
 // The page's own hero copy sits on the first cover only; the other covers show just their collection's name, bottom right.
 // That name is a link down to the collections section, which already shows that collection's room.
-// The covers start at their display width (1600); once the page is up each switches to the stored width that fills this
-// screen sharply (up to 3200 on large and retina screens).
-// Each picture keeps its own shape: it shows whole in the hero's 16:9 frame, and one of another shape gets bands beside
-// it in its own edge colours (--band), see .hero-full in layout.css.
-import { srcsetOf } from '../lib/content';
-interface Props { slides: { src: string; label: string; name: string; href: string; room: string; text: string; edge?: string | null; band?: string | null }[] }
+//
+// Each cover is a <picture> that fills the screen under the header (object-fit: cover, user 13 Nov 2026; it replaces
+// "never cropped" of 12 Nov): on a phone or any upright screen the 9:16 phone picture (cut from the 16:9 master by the
+// content pipeline, or the team's own from LP 1 MOBILE LINK), else the 16:9 master; AVIF first, WebP for the rest, and
+// the browser picks the width this screen needs (sizes 100vw). Where the cut falls on screen: hero-focus.mjs.
+// The first cover is a normal high-priority picture, preloaded from the page head (index.astro), so it is fetched once,
+// at the right size. The others carry their sources as data-srcset and are only fetched in the background once the page
+// is up (lib/preload); a cover is switched in only once its picture is decoded. Until then a cover shows its own edge
+// colours (--band).
+import { srcsetOf, portraitOf } from '../lib/content';
+interface Props {
+  slides: { src: string; label: string; name: string; href: string; room: string; text: string; edge?: string | null; band?: string | null;
+    focus?: { x?: number; y?: number; portrait?: number } }[];
+}
 const { slides } = Astro.props;
+const SIZES = '100vw';
+// The first cover's sources are live; the others wait in data-srcset until the script loads them
+const set = (i: number, v: string | undefined) => (!v ? {} : i === 0 ? { srcset: v } : { 'data-srcset': v });
 ---
 {slides.length === 0 && <div class="media"></div>}
-{slides.map((s, i) => (
-  <a
-    class:list={['media', 'slide', { on: i === 0 }]}
-    href={s.href}
-    aria-label={`${s.name}: ${s.label}`}
-    aria-hidden={i === 0 ? undefined : 'true'}
-    tabindex={i === 0 ? undefined : -1}
-    style={[i === 0 && `--img:url(${s.src})`, s.band && `--band:${s.band}`].filter(Boolean).join(';') || undefined}
-    data-bg={i === 0 ? undefined : s.src}
-    data-src={s.src}
-    data-set={srcsetOf(s.src)}
-    data-room={s.room}
-    data-name={s.name.replace(/ collection$/, '')}
-    data-edge={s.edge ?? undefined}
-  ></a>
-))}
+{slides.map((s, i) => {
+  const avif = srcsetOf(s.src, 'avif');
+  const webp = srcsetOf(s.src, 'webp');
+  const p = portraitOf(s.src);
+  const f = s.focus ?? {};
+  // Where the 16:9 picture sits when the screen cuts it; on an upright screen without a phone picture, its focus point
+  const style = [s.band && `--band:${s.band}`, f.x != null && `--x:${f.x}%`, f.y != null && `--y:${f.y}%`,
+    !p && (f.portrait ?? f.x) != null && `--px:${f.portrait ?? f.x}%`].filter(Boolean).join(';') || undefined;
+  return (
+    <a
+      class:list={['media', 'slide', { on: i === 0 }]}
+      href={s.href}
+      aria-label={`${s.name}: ${s.label}`}
+      aria-hidden={i === 0 ? undefined : 'true'}
+      tabindex={i === 0 ? undefined : -1}
+      style={style}
+      data-room={s.room}
+      data-name={s.name.replace(/ collection$/, '')}
+      data-edge={s.edge ?? undefined}
+    >
+      <picture>
+        {p?.avif && <source media="(orientation: portrait)" type="image/avif" sizes={SIZES} {...set(i, p.avif)} />}
+        {p?.webp && <source media="(orientation: portrait)" type="image/webp" sizes={SIZES} {...set(i, p.webp)} />}
+        {avif && <source type="image/avif" sizes={SIZES} {...set(i, avif)} />}
+        <img
+          {...(i === 0 ? { src: s.src } : { 'data-src': s.src })}
+          {...set(i, webp)}
+          sizes={webp && SIZES}
+          alt=""
+          draggable="false"
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : undefined}
+          decoding={i === 0 ? undefined : 'async'}
+        />
+      </picture>
+    </a>
+  );
+})}
 {slides.length > 1 && (
   <button type="button" class="hero-arrow prev" aria-label="Previous picture">‹</button>
   <button type="button" class="hero-arrow next" aria-label="Next picture">›</button>
@@ -50,33 +82,25 @@ const { slides } = Astro.props;
     const slides = [...hero.querySelectorAll<HTMLElement>('.slide')];
     const dots = [...hero.querySelectorAll<HTMLButtonElement>('.hero-dots button')];
     const names = [...hero.querySelectorAll<HTMLElement>('.hero-names a')];
-    // The stored width that fills this screen: a cover shows whole, so never wider than the hero; two device pixels
-    // per CSS pixel at most
-    const sharp = (s: HTMLElement) => {
-      const set = (s.dataset.set ?? '').split(', ').map((c) => c.split(' ')).filter((c) => c.length === 2)
-        .map(([url, w]) => ({ url, w: parseInt(w) })).sort((a, b) => a.w - b.w);
-      if (!set.length) return s.dataset.bg ?? s.dataset.src;
-      const r = hero.getBoundingClientRect();
-      const need = r.width * Math.min(devicePixelRatio || 1, 2);
-      return (set.find((c) => c.w >= need) ?? set[set.length - 1]).url;
-    };
-    // A cover is only switched in once its picture is decoded, so it never fades in half-drawn
+    // A cover's sources go live (the <source>s first, so the <img> picks among them), and it is only switched in once
+    // its picture is decoded, so it never fades in half-drawn
     const ready = new Map<HTMLElement, Promise<void>>();
     const load = (s: HTMLElement) => {
       if (!ready.has(s)) {
-        const src = sharp(s);
-        if (!src || src === s.dataset.src && !s.dataset.bg) ready.set(s, Promise.resolve());
+        const img = s.querySelector('img');
+        if (!img) ready.set(s, Promise.resolve());
         else {
-          const img = new Image();
-          img.src = src;
-          ready.set(s, img.decode().catch(() => {}).then(() => { s.style.setProperty('--img', `url(${src})`); delete s.dataset.bg; }));
+          s.querySelectorAll<HTMLElement>('[data-srcset]').forEach((e) => { e.setAttribute('srcset', e.dataset.srcset!); delete e.dataset.srcset; });
+          if (img.dataset.src) { img.src = img.dataset.src; delete img.dataset.src; }
+          img.loading = 'eager';
+          ready.set(s, img.decode().catch(() => {}));
         }
       }
       return ready.get(s)!;
     };
-    // In the background with the page's other pictures (lib/preload): first the cover's sharper picture and the next
-    // four (and the one before, for the left arrow), the rest later. Using the hero moves its covers ahead again.
-    slides.forEach((s, i) => preload(`hero:${i}`, 'hero', i <= 4 || i === slides.length - 1 ? 0 : 3, () => load(s)));
+    // In the background with the page's other pictures (lib/preload): first the next four covers (and the one before,
+    // for the left arrow), the rest later. Using the hero moves its covers ahead again.
+    slides.forEach((s, i) => { if (i > 0) preload(`hero:${i}`, 'hero', i <= 4 || i === slides.length - 1 ? 0 : 3, () => load(s)); });
     if (slides.length < 2) return;
     hero.addEventListener('pointerenter', () => prefer('hero'));
     hero.addEventListener('focusin', () => prefer('hero'));

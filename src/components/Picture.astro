@@ -1,0 +1,18 @@
+---
+// A content pipeline picture as <picture>: AVIF first, WebP for browsers without it (the <img> and its srcset), every
+// stored width offered. A picture from anywhere else (public/) comes out as a plain <img>.
+// The <picture> takes no box of its own (display: contents in global.css), so the <img> is laid out and styled exactly
+// as it was before it had a wrapper. Extra attributes (style, draggable, data-*) go on the <img>.
+import { srcsetOf } from '../lib/content';
+import type { HTMLAttributes } from 'astro/types';
+type Props = HTMLAttributes<'img'> & { src: string; alt: string; sizes?: string };
+const { src, sizes, ...img } = Astro.props;
+const avif = srcsetOf(src, 'avif');
+const webp = srcsetOf(src, 'webp');
+---
+{avif ? (
+  <picture>
+    <source type="image/avif" srcset={avif} sizes={sizes} />
+    <img src={src} srcset={webp} sizes={webp && sizes} {...img} />
+  </picture>
+) : <img src={src} srcset={webp} sizes={webp && sizes} {...img} />}

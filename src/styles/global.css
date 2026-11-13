@@ -37,6 +37,8 @@ h2 { font-size: clamp(2rem, 4.5vw, 3.4rem); }
 h3 { font-size: 1.6rem; }
 a { color: inherit; }
 img { max-width: 100%; display: block; }
+/* A <picture> (AVIF with WebP fallback, components/Picture.astro) takes no box: its <img> is laid out as if alone */
+picture { display: contents; }
 .wrap { width: min(1240px, 100% - 2.5rem); margin-inline: auto; }
 .section { padding-block: clamp(4rem, 9vw, 8rem); }
 .dark { background: var(--bg-dark); color: var(--on-dark); --text-soft: color-mix(in srgb, var(--on-dark) 65%, transparent); --line: rgba(236, 229, 217, .2); }

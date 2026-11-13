@@ -5,7 +5,9 @@ import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
 import { edgeBackground, photoRatio } from '../lib/edge';
-import { pictureId, srcsetOf } from '../lib/content';
+import { content, pictureId, srcsetOf, portraitOf, avifHashes } from '../lib/content';
+import { focusOf } from '../data/hero-focus.mjs';
+import Picture from '../components/Picture.astro';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
@@ -20,7 +22,8 @@ const roomOrder = ['bedroom', 'living', 'dining', 'other'];
 const roomLabel = (r: string) => (r === 'other' ? 'Collection' : `${r[0].toUpperCase()}${r.slice(1)} collection`);
 // Hero: one slide per room that has a real room shot (LP 1 LINK), rooms of the same collection side by side
 // (Doheny bedroom, then Doheny living); a room that only borrows a product photo as its cover is skipped.
-// A click opens all these room shots in the picture viewer, from the one clicked, each linking to its collection page.
+// Each fills the screen; where the screen cuts it comes from src/data/hero-focus.mjs (focus).
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const withRoomShot = all.filter((c) => c.hero_is_room);
 const nameOrder = [...new Set(withRoomShot.map((c) => c.name))];
 const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.indexOf(x.name) - nameOrder.indexOf(y.name))
@@ -33,9 +36,16 @@ const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.
     text: c.description ?? `A ${c.room === 'other' ? '' : c.room + ' '}collection, drawn, engineered and costed in our Jepara studio.`,
     // Colour round the picture when the viewer shows it whole in its square
     edge: await edgeBackground(imageUrl(c.hero_image_path)!, 1),
-    // Colour for the bands beside a picture that is not 16:9: the hero shows every picture whole, never cropped
+    // The picture's own edge colours, shown in the cover until the picture is drawn
     band: await edgeBackground(imageUrl(c.hero_image_path)!, 16 / 9),
+    focus: focusOf(`${slugify(c.name)}/${c.room}`),
   })));
+// The first cover, fetched from the head before the page is read: the 9:16 phone picture on an upright screen, else the
+// 16:9 master, as AVIF (a browser without AVIF skips these and takes the <img>'s WebP). The same srcset and sizes as the
+// <picture> in HeroSlideshow, so the browser takes the preloaded file and fetches nothing twice.
+const first = heroSlides[0]?.src;
+const firstAvif = first ? srcsetOf(first, 'avif') : undefined;
+const firstPortrait = first ? portraitOf(first)?.avif : undefined;
 // One panel per collection room, grouped as on the collections page: each collection in list order (Doheny first),
 // inside it bedroom → living → dining. Only one panel shows at a time; the arrows under its items switch rooms.
 // Rooms without any item are left out.
@@ -92,6 +102,10 @@ const materials = [
   title="TalaStudio | Studio designed, shipped at scale"
   description="TalaStudio designs bedroom, living and dining furniture in Jepara, Indonesia and sells it by the container to retailers, buying groups and distributors."
 >
+  <Fragment slot="head">
+    {firstPortrait && <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait} imagesizes="100vw" media="(orientation: portrait)" fetchpriority="high" />}
+    {firstAvif && <link rel="preload" as="image" type="image/avif" imagesrcset={firstAvif} imagesizes="100vw" media={firstPortrait ? '(orientation: landscape)' : undefined} fetchpriority="high" />}
+  </Fragment>
   <!-- 1. Hero -->
   <section class="hero-full">
     <HeroSlideshow slides={heroSlides} />
@@ -101,6 +115,8 @@ const materials = [
       <p class="text">{story.promise}</p>
     </div>
   </section>
+  <!-- The pictures with an AVIF copy, for the pictures built by script (viewer, spec page, loading ahead): lib/picture.ts -->
+  <script type="application/json" id="avif-set" set:html={JSON.stringify(avifHashes(Object.keys(content.assets).map((h) => `/img/${h}/0.webp`)))} />
 
   <!-- 3. Shop by space (overlay tiles) -->
   {showSection.home.byRoom && (
@@ -155,7 +171,7 @@ const materials = [
                 <div class="fs-track" tabindex="0" aria-label="Scroll sideways for each piece">
                   {slidesOf(rooms).map((p, i) => (
                     <figure class:list={['fs-slide', { whole: p.bg }]} data-room={p.c.slug} data-item={p.name || undefined} style={p.bg ? `background:${p.bg}` : undefined}>
-                      <img src={p.src} srcset={srcsetOf(p.src)} sizes="(max-width: 1000px) 100vw, 60vw" alt={`${p.c.name} ${p.name || roomName(p.c).toLowerCase()}`} loading={i === 0 && n === 0 ? 'eager' : 'lazy'} />
+                      <Picture src={p.src} sizes="(max-width: 1000px) 100vw, 60vw" alt={`${p.c.name} ${p.name || roomName(p.c).toLowerCase()}`} loading="lazy" />
                       <figcaption>{p.name || roomName(p.c)}<span aria-hidden="true">|</span>{p.c.name}</figcaption>
                     </figure>
                   ))}
@@ -369,7 +385,7 @@ const materials = [
       p.querySelectorAll<HTMLLIElement>('.cat-item').forEach((li) => {
         const img = li.querySelector<HTMLImageElement>('.cat-card img');
         if (img) preload(`card:${img.src}`, g, on ? 2 : 3, imgJob(img));
-        const fill = li.querySelector<HTMLElement>('.edge-fill')?.style.getPropertyValue('--fill').match(/url\((.+)\)/)?.[1];
+        const fill = li.querySelector<HTMLElement>('.edge-fill')?.dataset.fill;
         if (fill) preload(`url:${fill}`, g, on ? 2 : 3, urlJob(fill));
         const photos: string[] = [...JSON.parse(li.dataset.srcs ?? '[]'), ...Object.values(JSON.parse(li.dataset.photos ?? '{}') as Record<string, string[]>).flat()];
         photos.forEach((u) => preload(`url:${u}`, g, 4, urlJob(u)));
