@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Save to TalaStudio</title>
+<style>
+  * { box-sizing: border-box; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { width: 340px; margin: 0; padding: 14px; background: #fbf8f3; color: #1f2a24; font-size: 13px; }
+  h1 { font-size: 15px; margin: 0 0 10px; }
+  label { display: block; font-weight: 600; margin: 8px 0 4px; }
+  input[type=email], input[type=password] { width: 100%; padding: 7px 9px; border: 1px solid #cfc6b8; border-radius: 8px; font-size: 13px; }
+  button { padding: 8px 12px; border: 0; border-radius: 9px; background: #1f2a24; color: #f4efe6; font-weight: 600; cursor: pointer; font-size: 13px; }
+  button.ghost { background: transparent; color: #1f2a24; border: 1px solid #cfc6b8; }
+  button:disabled { opacity: .5; }
+  .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .muted { color: #6b6b6b; font-size: 12px; }
+  .err { color: #a12a1a; font-size: 12px; min-height: 16px; margin-top: 8px; }
+  .toggle { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-weight: 400; }
+  ul { list-style: none; margin: 8px 0 0; padding: 0; max-height: 220px; overflow: auto; border-top: 1px solid #e5ddd0; }
+  li { padding: 6px 0; border-bottom: 1px solid #e5ddd0; font-size: 12px; }
+  li .p { word-break: break-all; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+  <h1>Save to TalaStudio</h1>
+
+  <form id="signin" hidden>
+    <div class="muted">Use your TalaStudio login.</div>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+    <div class="row"><button type="submit">Sign in</button></div>
+    <div class="err" id="signinErr"></div>
+  </form>
+
+  <section id="main" hidden>
+    <div class="row"><span>Signed in as <b id="who"></b></span><button class="ghost" id="signout" type="button">Sign out</button></div>
+    <label class="toggle"><input type="checkbox" id="hover"> Show the Save button when hovering over images</label>
+    <div class="muted" style="margin-top:6px">Or right-click any image → <b>Save image to TalaStudio</b>.</div>
+    <div class="row"><span class="muted" id="count"></span><button class="ghost" id="reload" type="button">Refresh item list</button></div>
+    <div class="err" id="mainErr"></div>
+    <label>Recently saved</label>
+    <ul id="recent"><li class="muted">Loading…</li></ul>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>

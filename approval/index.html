@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>TalaStudio image review</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1d1d1f; background: #fff; }
+  header { display: flex; align-items: center; gap: 16px; padding: 10px 16px; border-bottom: 1px solid #d2d2d7; }
+  header h1 { font-size: 14px; font-weight: 600; margin: 0; flex: 1; }
+  .muted { color: #6e6e73; }
+  button { font: inherit; padding: 4px 10px; border: 1px solid #c7c7cc; border-radius: 6px; background: #fff; color: #1d1d1f; cursor: pointer; }
+  button:hover { background: #f5f5f7; }
+  button.primary { background: #1d1d1f; color: #fff; border-color: #1d1d1f; }
+  button.danger { color: #b3261e; }
+  button:disabled { opacity: .4; cursor: default; }
+  nav { display: flex; gap: 4px; padding: 8px 16px; border-bottom: 1px solid #d2d2d7; }
+  nav button { border: 0; border-radius: 6px; }
+  nav button.on { background: #e8e8ed; font-weight: 600; }
+  #login { max-width: 280px; margin: 80px auto; }
+  #login h1 { font-size: 16px; margin: 0 0 12px; }
+  #login label { display: block; margin: 8px 0 3px; font-weight: 600; }
+  #login input { width: 100%; padding: 6px 8px; border: 1px solid #c7c7cc; border-radius: 6px; font: inherit; }
+  #login button { margin-top: 12px; width: 100%; }
+  .err { color: #b3261e; min-height: 18px; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-weight: 600; color: #6e6e73; padding: 6px 10px; border-bottom: 1px solid #d2d2d7; position: sticky; top: 0; background: #fff; }
+  td { padding: 6px 10px; border-bottom: 1px solid #ececf0; vertical-align: middle; }
+  td.thumb { width: 84px; }
+  .th { width: 72px; height: 72px; border: 1px solid #d2d2d7; background: #f5f5f7 url() center/cover; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6e6e73; cursor: zoom-in; overflow: hidden; }
+  .th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  td.act { white-space: nowrap; text-align: right; }
+  td.act button { margin-left: 4px; }
+  .flag { display: inline-block; padding: 0 6px; border: 1px solid #c7c7cc; border-radius: 4px; margin-right: 4px; font-size: 12px; }
+  #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; align-items: center; justify-content: center; cursor: zoom-out; }
+  #lightbox img { max-width: 94vw; max-height: 94vh; }
+  #msg { padding: 8px 16px; min-height: 34px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div id="login" hidden>
+  <h1>TalaStudio image review</h1>
+  <form id="loginForm">
+    <label for="email">Email</label><input id="email" type="email" autocomplete="username" required>
+    <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required>
+    <button class="primary" type="submit">Sign in</button>
+    <div class="err" id="loginErr"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header><h1>TalaStudio image review</h1><span class="muted" id="who"></span><button id="signout">Sign out</button></header>
+  <nav id="tabs"></nav>
+  <div id="msg" class="muted"></div>
+  <table>
+    <thead><tr><th></th><th>Item</th><th>View</th><th>Finish</th><th>Saved by</th><th>Saved</th><th>Size</th><th>Notes</th><th></th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</div>
+<div id="lightbox"><img alt=""></div>
+
+<script>
+const CFG = {
+  url: 'https://rxgtoezweunfrcafqofp.supabase.co',
+  key: 'sb_publishable_hTC0xxrdbnm_c3t6Bu2U1Q_ScktVPLn',
+  bucket: 'talastudio-masters',
+};
+const $ = (id) => document.getElementById(id);
+const TABS = [['inbox', 'Inbox'], ['approved', 'Approved'], ['rejected', 'Rejected']];
+let status = 'inbox', canApprove = false;
+
+// ---------- session ----------
+const getSession = () => { try { return JSON.parse(localStorage.getItem('ts_review_session')); } catch { return null; } };
+const setSession = (s) => s ? localStorage.setItem('ts_review_session', JSON.stringify(s)) : localStorage.removeItem('ts_review_session');
+const toSession = (j) => ({ access_token: j.access_token, refresh_token: j.refresh_token,
+  expires_at: Math.floor(Date.now() / 1000) + (j.expires_in || 3600), email: j.user && j.user.email });
+
+async function post(path, body, token) {
+  const h = { apikey: CFG.key, 'Content-Type': 'application/json' };
+  if (token) h.Authorization = 'Bearer ' + token;
+  const r = await fetch(CFG.url + path, { method: 'POST', headers: h, body: JSON.stringify(body) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.error_description || j.msg || j.message || ('Error ' + r.status)); e.status = r.status; throw e; }
+  return j;
+}
+async function token() {
+  const s = getSession();
+  if (!s) throw new Error('Not signed in');
+  if (s.expires_at - 60 > Date.now() / 1000) return s.access_token;
+  try { const n = toSession(await post('/auth/v1/token?grant_type=refresh_token', { refresh_token: s.refresh_token })); n.email = n.email || s.email; setSession(n); return n.access_token; }
+  catch { setSession(null); show(); throw new Error('Session expired. Sign in again.'); }
+}
+const rpc = async (name, args) => post('/rest/v1/rpc/' + name, args || {}, await token());
+
+// ---------- UI ----------
+function show() {
+  const s = getSession();
+  $('login').hidden = !!s; $('app').hidden = !s;
+  if (s) { $('who').textContent = s.email || ''; load(); } else { $('email').focus(); }
+}
+$('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); $('loginErr').textContent = '';
+  try {
+    const j = await post('/auth/v1/token?grant_type=password', { email: $('email').value.trim(), password: $('password').value });
+    setSession(toSession(j)); $('password').value = ''; show();
+  } catch (err) { $('loginErr').textContent = err.message; }
+});
+$('signout').addEventListener('click', () => { setSession(null); show(); });
+$('lightbox').addEventListener('click', () => { $('lightbox').style.display = 'none'; });
+
+const el = (tag, props, ...kids) => { const n = Object.assign(document.createElement(tag), props || {}); kids.forEach((k) => n.append(k)); return n; };
+const fmtBytes = (b) => b == null ? '' : b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.round(b / 1024) + ' KB';
+const fmtDate = (d) => d ? new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : '';
+const say = (t, bad) => { $('msg').textContent = t || ''; $('msg').style.color = bad ? '#b3261e' : ''; };
+
+async function signedUrl(path) {
+  const enc = path.split('/').map(encodeURIComponent).join('/');
+  const j = await post(`/storage/v1/object/sign/${CFG.bucket}/${enc}`, { expiresIn: 3600 }, await token());
+  return CFG.url + '/storage/v1' + j.signedURL;
+}
+
+async function load() {
+  say('Loading...');
+  try {
+    const d = await rpc('ts_review_list', { p_status: status, p_limit: 200 });
+    canApprove = d.can_approve;
+    $('who').textContent = (d.me || '') + (canApprove ? ' (approver)' : ' (view only)');
+    const tabs = $('tabs'); tabs.replaceChildren();
+    TABS.forEach(([k, label]) => {
+      const b = el('button', { textContent: `${label} ${(d.counts && d.counts[k]) || 0}`, className: k === status ? 'on' : '' });
+      b.onclick = () => { status = k; load(); }; tabs.append(b);
+    });
+    const rows = $('rows'); rows.replaceChildren();
+    d.items.forEach((a) => rows.append(row(a)));
+    say(d.items.length ? '' : 'Nothing here.');
+  } catch (e) { say(e.message, true); }
+}
+
+function row(a) {
+  const th = el('div', { className: 'th', textContent: '...' });
+  const isTiff = /tiff?$/i.test(a.storage_path);
+  if (isTiff) th.textContent = 'TIFF';
+  else signedUrl(a.storage_path).then((u) => {
+    const img = el('img', { alt: a.storage_path, loading: 'lazy' }); img.src = u;
+    th.replaceChildren(img); th.onclick = () => { $('lightbox').firstElementChild.src = u; $('lightbox').style.display = 'flex'; };
+  }).catch(() => { th.textContent = 'no preview'; });
+
+  const item = el('td', null, el('b', { textContent: a.product_code || '(collection)' }), ' ', a.product_name || a.collection_slug,
+    el('div', { className: 'muted', textContent: a.storage_path }));
+  const flags = el('td', { className: 'muted' });
+  if (a.status === 'approved') {
+    if (a.approved_for_web) flags.append(el('span', { className: 'flag', textContent: 'web' }));
+    if (a.approved_for_social) flags.append(el('span', { className: 'flag', textContent: 'social' }));
+    flags.append((a.approved_by || '') + ' ' + fmtDate(a.approved_at));
+  }
+  const notes = el('td', { textContent: a.notes || '' });
+  const act = el('td', { className: 'act' });
+  if (canApprove) {
+    const run = async (action, web, social, note) => {
+      say('Saving...');
+      try { await rpc('ts_review_set', { p_id: a.id, p_action: action, p_web: web, p_social: social, p_note: note || null }); await load(); }
+      catch (e) { say(e.message, true); }
+    };
+    if (a.status === 'inbox') {
+      const w = el('button', { textContent: 'Web' }), s = el('button', { textContent: 'Social' });
+      const both = el('button', { className: 'primary', textContent: 'Web + social' });
+      const rej = el('button', { className: 'danger', textContent: 'Reject' });
+      w.onclick = () => run('approve', true, false); s.onclick = () => run('approve', false, true);
+      both.onclick = () => run('approve', true, true);
+      rej.onclick = () => { const n = prompt('Reason for rejecting (optional)'); if (n !== null) run('reject', false, false, n); };
+      act.append(w, s, both, rej);
+    } else {
+      const back = el('button', { textContent: 'Back to inbox' }); back.onclick = () => run('reopen'); act.append(back);
+    }
+  }
+  return el('tr', null, el('td', { className: 'thumb' }, th), item,
+    el('td', { textContent: a.view }), el('td', { textContent: a.finish || '' }),
+    el('td', { textContent: a.uploaded_email || '' }), el('td', { textContent: fmtDate(a.created_at) }),
+    el('td', { textContent: fmtBytes(a.bytes) + (a.width ? `\n${a.width}x${a.height}` : ''), style: 'white-space:pre' }),
+    status === 'approved' ? flags : notes, act);
+}
+show();
+</script>
+</body>
+</html>
