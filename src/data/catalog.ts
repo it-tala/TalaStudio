@@ -6,8 +6,8 @@
 // The PDF below is a copy: replace it when the Canva design changes (Canva > Share > Download > PDF).
 export const canva = {
   design: 'DAHbah-Wr-U',
-  view: 'https://www.canva.com/d/7OMRtDLDHz9Y6vM',
-  embed: 'https://www.canva.com/d/7OMRtDLDHz9Y6vM',
+  view: 'https://www.canva.com/design/DAHbah-Wr-U/4dIYHoVMhNmoPRfUCRtx8g/view',
+  embed: 'https://www.canva.com/design/DAHbah-Wr-U/4dIYHoVMhNmoPRfUCRtx8g/view?embed',
 };
 
 export const catalog = {
