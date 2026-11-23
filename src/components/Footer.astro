@@ -26,12 +26,14 @@ import { catalog } from '../data/catalog';
   @media (max-width: 520px) {
     .cols { grid-template-columns: minmax(0, 1fr); }
   }
-  /* Download catalog button: a small button floating just above the Contact column on wide screens (out of the flow,
-     so the Contact heading stays level with the other columns); in the flow above the heading on tablet and phone */
-  .contact { position: relative; }
-  .dl { position: absolute; left: 0; bottom: calc(100% + .9rem); display: inline-block; padding: .45rem .9rem; font-size: .7rem; letter-spacing: .08em; white-space: nowrap; color: #fff; opacity: 1; }
-  .dl:hover { opacity: 1; }
-  @media (max-width: 1000px) { .dl { position: static; margin-bottom: 1rem; } }
+  /* Catalog row above the columns: text on the left, download button on the right; stacked on phones */
+  .catrow { display: flex; align-items: center; justify-content: space-between; gap: 1rem 2rem; flex-wrap: wrap; padding-bottom: 2rem; margin-bottom: 2.5rem; border-bottom: 1px solid rgba(236, 229, 217, .15); }
+  .catrow h4 { margin-bottom: .35rem; }
+  .catrow p { margin: 0; text-transform: none; letter-spacing: .01em; opacity: .75; }
+  .dl { display: inline-block; padding: .6rem 1.2rem; font-size: .75rem; letter-spacing: .1em; white-space: nowrap; color: #fff; opacity: 1; }
+  .dl:hover, .dl:focus-visible { opacity: 1; }
+  .dl:focus:not(:focus-visible) { outline: none; }
+  @media (max-width: 520px) { .catrow { padding-bottom: 1.75rem; margin-bottom: 2rem; } .dl { width: 100%; text-align: center; } }
   h4 { font: 500 .8rem Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; opacity: .6; margin-bottom: 1rem; }
   ul { list-style: none; padding: 0; display: grid; gap: .5rem; }
   a { text-decoration: none; opacity: .85; overflow-wrap: anywhere; }
@@ -40,6 +42,10 @@ import { catalog } from '../data/catalog';
 </style>
 <footer>
   <div class="wrap">
+    <div class="catrow">
+      <div><h4>Buyer catalog</h4><p>Every collection with its item codes and dimensions.</p></div>
+      <a class="btn dl" href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a>
+    </div>
     <div class="cols">
       <div><h4>TalaStudio</h4><p>Furniture designed, engineered and costed in one place. Jepara, Indonesia.</p></div>
       <div><h4>Explore</h4><ul>
@@ -52,7 +58,7 @@ import { catalog } from '../data/catalog';
         <li><a href="/sourcing-from-indonesia">Sourcing from Indonesia</a></li>
         {pageOn('/partner-with-us') && <li><a href="/partner-with-us">Partner with us</a></li>}
         <li><a href="/buyer-dashboard">Buyer dashboard demo</a></li></ul></div>
-      <div class="contact"><a class="btn dl" href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a><h4>Contact</h4><ul>
+      <div><h4>Contact</h4><ul>
         <li><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></li>
         {pageOn('/request-catalog') && <li><a href="/request-catalog">Request catalog</a></li>}
         <li><a href="/contact">Book a showroom visit</a></li>
