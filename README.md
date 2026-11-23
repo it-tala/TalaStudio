@@ -81,7 +81,7 @@ There is no product page screenshot: V1 shows collections only, and product page
 ### How mobile differs from desktop
 
 - **Header:** the logo and a three-line menu button only. The menu holds all links and the Request catalog button.
-- **Catalog:** the home page has a "Flip through the catalog" section that embeds the live Canva design (`canva` in `src/data/catalog.ts`, must be a public view or embed link), so it follows every edit in Canva. The footer (above the Contact column) has a Download catalog button for `public/catalog/TalaStudio-Buyer-Catalog.pdf`, which is a copy: replace the file (same name) after the Canva design changes. Each download is logged by the visitor tracker.
+- **Catalog:** the home page has a "Flip through the catalog" section that embeds the live Canva design (`canva` in `src/data/catalog.ts`, must be a public view or embed link), so it follows every edit in Canva. The footer has a Download catalog button at the bottom of the Contact column for `public/catalog/TalaStudio-Buyer-Catalog.pdf`, which is a copy: replace the file (same name) after the Canva design changes. Each download is logged by the visitor tracker.
 - **Proof strip** (the dark band of four points under the hero): hidden on phones.
 - **Home collections:** the three featured collections (living, then dining when it exists, then bedroom) swipe sideways instead of stacking. "Materials" and "By space" do the same.
 - **Collections page:** each room is a sideways strip. Cards are about 78% of the screen wide, so the next one shows at the edge. The grid is no longer used there.
