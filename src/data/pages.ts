@@ -31,7 +31,7 @@ export type StoryBlock = {
   // stacked beside it)
   gallery?: { row?: StoryFigure[]; wide?: StoryFigure; mosaic?: StoryFigure };
   top?: boolean;          // text and photo line up at the top instead of the middle
-  link?: { href: string; label: string; catalog?: boolean }; // catalog: the button downloads the catalog PDF instead
+  link?: { href: string; label: string };
 };
 
 // Labelled rows of text, then people with a photo
@@ -170,8 +170,7 @@ export const pages: Page[] = [
         title: 'Well-designed, on-trend furniture, built right and shipped direct by the container, at scale.',
         figure: { shots: [{ name: 'finished-piece', label: 'Finished piece', hint: 'A finished dining chair with a woven seat', ratio: '37 / 40' }], caption: 'Finished piece' },
         figureFirst: true,
-        // The request form is off (data/sections.ts), so the button downloads the catalog PDF. Take `catalog` out to go back to the form.
-        link: { href: '/request-catalog', label: 'Request catalog', catalog: true },
+        link: { href: '/request-catalog', label: 'Request catalog' },
       },
       {
         type: 'cta', title: 'Let’s build your next range.',

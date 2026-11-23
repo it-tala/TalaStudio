@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import { pageOn } from '../data/sections';
-import CatalogLink from '../components/CatalogLink.astro';
 ---
 <Base
   title="Page not found"
@@ -15,7 +14,6 @@ import CatalogLink from '../components/CatalogLink.astro';
       <div class="btns" style="margin-top:2rem">
         <a class="btn" href="/#collections">View collections</a>
         {pageOn('/request-catalog') && <a class="btn ghost" href="/request-catalog">Request catalog</a>}
-        <CatalogLink class="btn ghost" />
       </div>
     </div>
   </section>

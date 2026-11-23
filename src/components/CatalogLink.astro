@@ -1,8 +1,0 @@
----
-// Button or link that downloads the buyer catalog PDF (data/catalog.ts). `data-catalog` lets VisitTracker log the download.
-// Header and Footer write the same link out themselves, so their own (scoped) link styles apply.
-import { catalog } from '../data/catalog';
-interface Props { class?: string; label?: string }
-const { class: cls, label = catalog.label } = Astro.props;
----
-<a class={cls} href={catalog.href} download={catalog.file} data-catalog>{label}</a>

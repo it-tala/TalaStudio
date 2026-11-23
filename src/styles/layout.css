@@ -135,7 +135,6 @@
 .coll-intro { max-width: 760px; margin: 0 auto clamp(56px, 7vw, 96px); padding-inline: 24px; text-align: center; }
 .coll-intro h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin-bottom: 16px; }
 .coll-intro p { color: var(--text-soft); line-height: 1.65; }
-.coll-intro .btn { margin-top: 28px; }
 .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 40px; padding-inline: 24px; max-width: 1048px; }
 .chip { border: 1px solid var(--line); color: var(--text-soft); padding: 9px 16px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; text-decoration: none; }
 .chip:hover { border-color: var(--text); color: var(--text); }

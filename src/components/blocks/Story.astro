@@ -4,7 +4,6 @@
 // Without a figure or gallery the copy takes the whole width.
 import Figure from './StoryFigure.astro';
 import Copy from './StoryCopy.astro';
-import CatalogLink from '../CatalogLink.astro';
 import { pageOn } from '../../data/sections';
 import type { StoryBlock } from '../../data/pages';
 
@@ -33,7 +32,7 @@ const { id, tone, num, title, copy = [], figure, figureFirst, aside, gallery, to
         <h2>{title}</h2>
         {copy.length > 0 && <Copy copy={copy} />}
         {aside && <Figure figure={aside} class="small" />}
-        {link && (link.catalog ? <CatalogLink class="btn" /> : pageOn(link.href) && <a class="btn" href={link.href}>{link.label}</a>)}
+        {link && pageOn(link.href) && <a class="btn" href={link.href}>{link.label}</a>}
       </div>
       {figure && !figureFirst && <Figure figure={figure} />}
     </div>
