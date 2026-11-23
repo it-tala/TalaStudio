@@ -10,6 +10,7 @@ import { focusOf } from '../data/hero-focus.mjs';
 import Picture from '../components/Picture.astro';
 import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
+import { canva } from '../data/catalog';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
 import { groupItems, itemRooms } from '../lib/items';
@@ -217,6 +218,19 @@ const materials = [
     ) : (
       <p class="coll-intro">First collections arrive soon.</p>
     )}
+  </section>
+
+  <!-- 5b. Catalog preview: the live Canva design, flipped page by page; follows every edit made in Canva -->
+  <section class="section alt" id="catalog">
+    <div class="coll-intro">
+      <p class="eyebrow">Catalog</p>
+      <h2>Flip through the catalog.</h2>
+      <p>Every collection with its item codes and dimensions, always the latest edition.</p>
+    </div>
+    <div class="cat-embed">
+      <iframe src={canva.embed} title="TalaStudio Buyer Catalog" loading="lazy" allowfullscreen allow="fullscreen"></iframe>
+    </div>
+    <p style="text-align:center;margin-top:1.25rem"><a class="link" href={canva.view} target="_blank" rel="noopener">Open full screen</a></p>
   </section>
 
   <!-- 6. Materials -->
