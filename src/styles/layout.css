@@ -10,8 +10,8 @@
    to run on to the screen's edges. An upright screen shows the 9:16 phone picture filling it (HeroSlideshow.astro;
    where it is cut: src/data/hero-focus.mjs); a cover without one keeps its focus point in view (--px). */
 /* The hero is as tall as the picture needs, never taller than the screen under the header (--hh). The picture is shown whole
-   in a box --pw wide, centred; a wide, short window leaves the blurred copy at the sides. Copy and controls stay inside
-   that box (--edge is the gap each side), so nothing straddles the seam. Upright screens: see the portrait block below. */
+   in a box --pw wide, centred; a wide, short window leaves the blurred copy at the sides. Arrows and dots stay inside
+   that box (--edge is the gap each side). The copy and collection name keep their place from main. */
 .hero-full { --hh: max(22rem, min(calc(100svh / var(--z) - 4.5rem), calc(100vw / var(--z) * 9 / 16))); --pw: min(calc(100vw / var(--z)), calc(var(--hh) * 16 / 9)); --edge: calc((100% - var(--pw)) / 2);
   position: relative; display: flex; width: 100%; height: var(--hh); color: var(--on-dark); background: var(--bg-dark); overflow: hidden; }
 .hero-full .media { position: absolute; inset: 0; background: linear-gradient(160deg, #4a3f35, #1d1a17 70%) center / cover no-repeat; }
@@ -20,15 +20,16 @@
 .hero-full .slide { overflow: hidden; background: var(--band, var(--bg-dark)); }
 .hero-full .slide img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: contain; }
 .hero-full .slide .fill img { object-fit: cover; filter: blur(28px) saturate(1.05); transform: scale(1.12); }
+/* Upright screens: the whole 16:9 picture too (contain, blurred copy above and below). The hero keeps room for the
+   copy, which stays exactly as on main (user, 23 Nov 2026: only the picture ratio changes, never the caption) */
 @media (orientation: portrait) {
-  .hero-full .slide img { object-fit: cover; object-position: var(--px, 50%) 50%; }
-  .hero-full .slide .fill { display: none; }
+  .hero-full { --hh: min(calc(100svh / var(--z) - 4.5rem), max(32rem, calc(100vw / var(--z) * 9 / 16))); }
 }
 .hero-full .media::after { content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, .05); }
 /* Only a 5% veil, the same on every picture, so the room shows as photographed (user, 12 Nov 2026). The words on it
    carry their own text-shadow, and the collection name an outline */
 /* Copy sits on the left, on the same edge as the header logo at every screen width */
-.hero-full .inner { position: relative; z-index: 1; width: 100%; padding: 48px calc(var(--edge) + clamp(20px, 4vw, 72px)) 28px; display: flex; flex-direction: column; justify-content: flex-end; }
+.hero-full .inner { position: relative; z-index: 1; width: 100%; padding: 48px clamp(20px, 4vw, 72px) 28px; display: flex; flex-direction: column; justify-content: flex-end; }
 .hero-full .eyebrow { font-size: 14px; letter-spacing: .26em; color: var(--on-dark); opacity: .95; margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,.5), 0 1px 12px rgba(0,0,0,.45); }
 /* Kept compact so the copy covers as little of the picture as it can */
 .hero-full h1 { font-size: clamp(34px, 2.4vw + 1rem, 54px); line-height: 1.1; max-width: 20ch; margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,.45), 0 2px 20px rgba(0,0,0,.5); }
@@ -71,7 +72,7 @@
 .hero-dots button[aria-current]::before { background: var(--on-dark); opacity: 1; }
 .hero-dots button:focus-visible { outline: 1px solid var(--on-dark); outline-offset: 2px; border-radius: 50%; }
 /* The collection's name under the dots, cross-fading with its picture */
-.hero-names { position: absolute; z-index: 2; right: calc(var(--edge) + 52px); bottom: 18px; display: grid; justify-items: end; pointer-events: none; }
+.hero-names { position: absolute; z-index: 2; right: 52px; bottom: 18px; display: grid; justify-items: end; pointer-events: none; }
 .hero-names a { grid-area: 1 / 1; font: 400 clamp(34px, 2.6vw + 16px, 64px)/1.2 'Cormorant Garamond', Georgia, serif; text-transform: capitalize; color: #f3ece2; -webkit-text-stroke: 1px rgba(20, 16, 12, .55); paint-order: stroke fill; text-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 2px 16px rgba(0, 0, 0, .35); white-space: nowrap; opacity: 0; }
 /* Clear on the picture: a thin dark outline behind the letters instead of shading the picture */
 .hero-names a.on { opacity: .92; }
@@ -100,22 +101,6 @@
   .hero-names { top: 20px; bottom: auto; right: 20px; }
   .hero-names a { font-size: 28px; text-shadow: 0 1px 14px rgba(0, 0, 0, .6); }
   .hero-names a.on { opacity: .85; }
-}
-/* Upright screens (phones, tablets): the whole 16:9 picture across the top, never cut, and the copy under it on the
-   dark page colour, so the hero is only as tall as picture plus copy. Arrows sit on the picture's sides, dots along its
-   foot, the collection name in its corner. */
-@media (orientation: portrait) {
-  .hero-full { --pic: calc(100vw / var(--z) * 9 / 16); display: block; height: auto; min-height: 0; }
-  .hero-full .slide { inset: 0 0 auto 0; height: auto; aspect-ratio: 16 / 9; }
-  .hero-full .slide img { object-fit: cover; object-position: 50% 50%; }
-  .hero-full > .inner { background: none; padding: calc(var(--pic) + 28px) 20px 40px; }
-  .hero-full.copy-off > .inner:not(.hero-alt) { visibility: visible; }
-  .hero-arrow { top: calc(var(--pic) / 2); bottom: auto; transform: translateY(-50%); width: 40px; height: 40px; font-size: 28px; }
-  .hero-arrow.prev { left: 10px; }
-  .hero-arrow.next { right: 10px; }
-  .hero-dots { top: calc(var(--pic) - 30px); bottom: auto; }
-  .hero-names { top: 12px; right: 14px; }
-  .hero-names a { font-size: clamp(22px, 3.4vw, 36px); }
 }
 
 
