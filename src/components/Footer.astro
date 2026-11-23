@@ -1,5 +1,6 @@
 ---
 import { pageOn } from '../data/sections';
+import { catalog } from '../data/catalog';
 ---
 <style>
   /* Same text style as the navbar links: Inter, 0.8rem, uppercase, 0.1em spacing, weight 400 */
@@ -25,6 +26,9 @@ import { pageOn } from '../data/sections';
   @media (max-width: 520px) {
     .cols { grid-template-columns: minmax(0, 1fr); }
   }
+  /* Download catalog button: top of the Contact column, the footer's right side */
+  .dl { display: inline-block; margin-bottom: 1.75rem; padding: .7rem 1.4rem; font-size: .8rem; letter-spacing: .1em; white-space: nowrap; color: #fff; opacity: 1; }
+  .dl:hover { opacity: 1; }
   h4 { font: 500 .8rem Inter, sans-serif; letter-spacing: .16em; text-transform: uppercase; opacity: .6; margin-bottom: 1rem; }
   ul { list-style: none; padding: 0; display: grid; gap: .5rem; }
   a { text-decoration: none; opacity: .85; overflow-wrap: anywhere; }
@@ -45,7 +49,7 @@ import { pageOn } from '../data/sections';
         <li><a href="/sourcing-from-indonesia">Sourcing from Indonesia</a></li>
         {pageOn('/partner-with-us') && <li><a href="/partner-with-us">Partner with us</a></li>}
         <li><a href="/buyer-dashboard">Buyer dashboard demo</a></li></ul></div>
-      <div><h4>Contact</h4><ul>
+      <div><a class="btn dl" href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a><h4>Contact</h4><ul>
         <li><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></li>
         {pageOn('/request-catalog') && <li><a href="/request-catalog">Request catalog</a></li>}
         <li><a href="/contact">Book a showroom visit</a></li>
