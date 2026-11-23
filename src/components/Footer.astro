@@ -1,5 +1,6 @@
 ---
 import { pageOn } from '../data/sections';
+import { catalog } from '../data/catalog';
 ---
 <style>
   /* Same text style as the navbar links: Inter, 0.8rem, uppercase, 0.1em spacing, weight 400 */
@@ -48,6 +49,7 @@ import { pageOn } from '../data/sections';
       <div><h4>Contact</h4><ul>
         <li><a href="mailto:hello@talastudio.net">hello@talastudio.net</a></li>
         {pageOn('/request-catalog') && <li><a href="/request-catalog">Request catalog</a></li>}
+        <li><a href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a></li>
         <li><a href="/contact">Book a showroom visit</a></li>
         <li><a href="/privacy-and-terms">Privacy and terms</a></li></ul></div>
     </div>

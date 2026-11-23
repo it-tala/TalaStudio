@@ -81,6 +81,7 @@ There is no product page screenshot: V1 shows collections only, and product page
 ### How mobile differs from desktop
 
 - **Header:** the logo and a three-line menu button only. The menu holds all links and the Request catalog button.
+- **Download catalog:** while the Request catalog form is off, the header, footer, home page (above the collections), How we work and 404 carry a Download catalog link to `public/catalog/TalaStudio-Buyer-Catalog.pdf`. To publish a new edition, replace that file and keep its name. Each download is logged by the visitor tracker as a visit to the PDF's address.
 - **Proof strip** (the dark band of four points under the hero): hidden on phones.
 - **Home collections:** the three featured collections (living, then dining when it exists, then bedroom) swipe sideways instead of stacking. "Materials" and "By space" do the same.
 - **Collections page:** each room is a sideways strip. Cards are about 78% of the screen wide, so the next one shows at the edge. The grid is no longer used there.
@@ -99,6 +100,7 @@ src/
   data/         sample-catalog.ts (preview), demo-dashboard.ts (sample buyer dashboard)
   content/      insights/*.md (articles)
 functions/api/catalog.ts   catalog form: spam check, save to Supabase, email David
+public/catalog/            the buyer catalog PDF; address and button label in src/data/catalog.ts
 public/                    favicon, robots.txt
 ```
 

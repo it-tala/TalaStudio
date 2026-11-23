@@ -4,6 +4,7 @@
 // A post or channel link (?s=<sources.code>, e.g. Evin's LinkedIn post) counts for every page of that visit only.
 // Supabase adds IP, country and browser from the request. Data: schema talastudio_visitor_tracker (Talastudio project).
 // Off without PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, and when the browser sends Global Privacy Control.
+// A click on a catalog download link (data-catalog) is logged as a visit to the PDF.
 // Dashboard: /tracker. Guide: docs/visitor-tracking.md
 ---
 <script>
@@ -43,7 +44,8 @@
     const referrer = document.referrer && new URL(document.referrer).host !== location.host ? document.referrer : null;
 
     // One row for the page, one per collection room seen on it. Seconds = time while the tab was visible.
-    type Row = { id: string; collection: string | null; section: boolean; seconds: number; sent: number };
+    // `path`: a file the visitor opened from this page (the catalog PDF), logged under its own address.
+    type Row = { id: string; collection: string | null; section: boolean; seconds: number; sent: number; path?: string };
     const page: Row = {
       id: crypto.randomUUID(), section: false, seconds: 0, sent: -1,
       collection: location.pathname.match(/^\/collections\/([^/]+)/)?.[1] ?? null,
@@ -58,8 +60,8 @@
         keepalive: true,
         headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          p_id: r.id, p_visitor: visitor, p_session: session, p_code: known, p_path: location.pathname,
-          p_collection: r.collection, p_section: r.section, p_seconds: r.seconds, p_referrer: r.section ? null : referrer,
+          p_id: r.id, p_visitor: visitor, p_session: session, p_code: known, p_path: r.path ?? location.pathname,
+          p_collection: r.collection, p_section: r.section, p_seconds: r.seconds, p_referrer: r.section || r.path ? null : referrer,
           p_source: post,
         }),
       }).catch(() => {});
@@ -77,6 +79,11 @@
     };
 
     send(page);
+    // Catalog download (links marked data-catalog): one row per click, so the dashboard's Pages list shows who took it.
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element | null)?.closest?.('a[data-catalog]') as HTMLAnchorElement | null;
+      if (a) send({ id: crypto.randomUUID(), collection: null, section: false, seconds: 0, sent: -1, path: new URL(a.href).pathname });
+    });
     setInterval(() => {
       if (document.visibilityState !== 'visible') return;
       page.seconds++;

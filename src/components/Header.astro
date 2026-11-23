@@ -1,5 +1,6 @@
 ---
 import { pageOn } from '../data/sections';
+import { catalog } from '../data/catalog';
 const nav = [
   ['How we work', '/how-we-work'],
   ['Who we are', '/who-we-are'],
@@ -42,11 +43,13 @@ const nav = [
     <a class="logo" href="/" aria-label="TalaStudio home"><i aria-hidden="true"></i>TalaStudio</a>
     <nav aria-label="Main">
       {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+      <a href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a>
     </nav>
     <details>
       <summary aria-label="Menu"><span></span><span></span><span></span></summary>
       <div class="menu">
         {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+        <a href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a>
       </div>
     </details>
   </div>

@@ -12,6 +12,7 @@ import { showSection } from '../data/sections';
 import CtaBand from '../components/CtaBand.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import ItemCatalog from '../components/ItemCatalog.astro';
+import CatalogLink from '../components/CatalogLink.astro';
 import { groupItems, itemRooms } from '../lib/items';
 import { versioned } from '../lib/version';
 
@@ -160,6 +161,7 @@ const materials = [
       <p class="eyebrow">Collections</p>
       <h2>A first look at the range.</h2>
       <p>Living and bedroom are ready to view, and dining follows. Each collection is drawn, engineered and costed in our Jepara studio. The full range is in the catalog.</p>
+      <CatalogLink class="btn" label="Download the catalog (PDF)" />
     </div>
     {groups.length > 0 ? (
       <div class="feat-grid room-panels">
