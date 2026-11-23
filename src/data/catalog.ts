@@ -1,5 +1,5 @@
 // The buyer catalog PDF, in public/catalog. To publish a new edition, replace the file and keep its name, so links
-// already sent to buyers stay valid. The link is in the footer (components/Footer.astro); mark any other link to it
+// already sent to buyers stay valid. The button is in the header (components/Header.astro); mark any other link to it
 // with `data-catalog` so VisitTracker logs the download.
 export const catalog = {
   href: '/catalog/TalaStudio-Buyer-Catalog.pdf',

@@ -1,5 +1,6 @@
 ---
 import { pageOn } from '../data/sections';
+import { catalog } from '../data/catalog';
 const nav = [
   ['How we work', '/how-we-work'],
   ['Who we are', '/who-we-are'],
@@ -32,21 +33,32 @@ const nav = [
   .menu { position: absolute; left: 0; right: 0; top: 100%; background: var(--bg); border-bottom: 1px solid var(--line); padding: 1.25rem 1.25rem 1.75rem; display: grid; gap: 1.1rem; }
   .menu a { text-decoration: none; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
 
+  /* Download catalog button: top right beside the links on wide screens, inside the menu on phones.
+     It sits outside <nav> so the link colours above do not apply to it. */
+  .right { display: flex; align-items: center; gap: clamp(1.6rem, 2.4vw, 3rem); }
+  .cat { display: none; padding: .7rem 1.4rem; font-size: .8rem; letter-spacing: .1em; white-space: nowrap; }
+  .menu .btn { justify-self: start; margin-top: .4rem; padding: .8rem 1.5rem; font-size: .85rem; letter-spacing: .1em; }
+
   @media (min-width: 1000px) {
     nav { display: flex; }
     details { display: none; }
+    .cat { display: inline-block; }
   }
 </style>
 <header>
   <div class="bar">
     <a class="logo" href="/" aria-label="TalaStudio home"><i aria-hidden="true"></i>TalaStudio</a>
-    <nav aria-label="Main">
-      {nav.map(([t, h]) => <a href={h}>{t}</a>)}
-    </nav>
+    <div class="right">
+      <nav aria-label="Main">
+        {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+      </nav>
+      <a class="btn cat" href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a>
+    </div>
     <details>
       <summary aria-label="Menu"><span></span><span></span><span></span></summary>
       <div class="menu">
         {nav.map(([t, h]) => <a href={h}>{t}</a>)}
+        <a class="btn" href={catalog.href} download={catalog.file} data-catalog>{catalog.label}</a>
       </div>
     </details>
   </div>
