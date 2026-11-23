@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 import { getCollections, imageUrl } from '../lib/supabase';
 import { story } from '../data/story';
 import { edgeBackground, photoRatio } from '../lib/edge';
-import { content, pictureId, srcsetOf, portraitOf, avifHashes, HERO_SIZES, HERO_PORTRAIT_SIZES } from '../lib/content';
+import { content, pictureId, srcsetOf, avifHashes, HERO_SIZES } from '../lib/content';
 import { focusOf } from '../data/hero-focus.mjs';
 import Picture from '../components/Picture.astro';
 import { showSection } from '../data/sections';
@@ -45,7 +45,6 @@ const heroSlides = await Promise.all([...withRoomShot].sort((x, y) => nameOrder.
 // <picture> in HeroSlideshow, so the browser takes the preloaded file and fetches nothing twice.
 const first = heroSlides[0]?.src;
 const firstAvif = first ? srcsetOf(first, 'avif') : undefined;
-const firstPortrait = first ? portraitOf(first)?.avif : undefined;
 // One panel per collection room, grouped as on the collections page: each collection in list order (Doheny first),
 // inside it bedroom → living → dining. Only one panel shows at a time; the arrows under its items switch rooms.
 // Rooms without any item are left out.
@@ -103,8 +102,7 @@ const materials = [
   description="TalaStudio designs bedroom, living and dining furniture in Jepara, Indonesia and sells it by the container to retailers, buying groups and distributors."
 >
   <Fragment slot="head">
-    {firstPortrait && <link rel="preload" as="image" type="image/avif" imagesrcset={firstPortrait} imagesizes={HERO_PORTRAIT_SIZES} media="(orientation: portrait)" fetchpriority="high" />}
-    {firstAvif && <link rel="preload" as="image" type="image/avif" imagesrcset={firstAvif} imagesizes={HERO_SIZES} media={firstPortrait ? '(orientation: landscape)' : undefined} fetchpriority="high" />}
+    {firstAvif && <link rel="preload" as="image" type="image/avif" imagesrcset={firstAvif} imagesizes={HERO_SIZES} fetchpriority="high" />}
   </Fragment>
   <!-- 1. Hero -->
   <section class="hero-full">

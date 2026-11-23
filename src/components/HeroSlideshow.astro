@@ -17,7 +17,7 @@
 // at the right size. The others carry their sources as data-srcset and are only fetched in the background once the page
 // is up (lib/preload); a cover is switched in only once its picture is decoded. Until then a cover shows its own edge
 // colours (--band).
-import { srcsetOf, portraitOf, HERO_SIZES, HERO_PORTRAIT_SIZES } from '../lib/content';
+import { srcsetOf, HERO_SIZES } from '../lib/content';
 interface Props {
   slides: { src: string; label: string; name: string; href: string; room: string; text: string; edge?: string | null; band?: string | null;
     focus?: { portrait?: number } }[];
@@ -30,15 +30,11 @@ const set = (i: number, v: string | undefined) => (!v ? {} : i === 0 ? { srcset:
 {slides.map((s, i) => {
   const avif = srcsetOf(s.src, 'avif');
   const webp = srcsetOf(s.src, 'webp');
-  const p = portraitOf(s.src);
-  const f = s.focus ?? {};
-  // On an upright screen without a phone picture, the 16:9 picture is cut round its focus point
-  const style = [s.band && `--band:${s.band}`, !p && f.portrait != null && `--px:${f.portrait}%`].filter(Boolean).join(';') || undefined;
+  // Every screen shows the whole 16:9 picture (the 9:16 phone cut is no longer used here)
+  const style = s.band ? `--band:${s.band}` : undefined;
   // The same <picture> twice: the blurred fill behind, the picture itself in front (one file, fetched once)
   const pic = (front: boolean) => (
     <picture>
-      {p?.avif && <source media="(orientation: portrait)" type="image/avif" sizes={HERO_PORTRAIT_SIZES} {...set(i, p.avif)} />}
-      {p?.webp && <source media="(orientation: portrait)" type="image/webp" sizes={HERO_PORTRAIT_SIZES} {...set(i, p.webp)} />}
       {avif && <source type="image/avif" sizes={HERO_SIZES} {...set(i, avif)} />}
       <img
         {...(i === 0 ? { src: s.src } : { 'data-src': s.src })}
