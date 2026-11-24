@@ -1,0 +1,158 @@
+---
+// Unsubscribe page for the outreach emails sent from David's mailbox. Not linked anywhere, not in the sitemap, not tracked.
+// Link in the email: /unsubscribe/?e=<email, base64url>&k=<signature>, made per buyer by the Apps Script in the
+// DC buyers sheet (Unsubscribe.gs). The page shows the address and one button. Nothing is recorded until the button is
+// pressed, because the link scanners in buyers' mail systems open every link in an email before the buyer sees it.
+// The button calls public.talastudio_unsubscribe() in the Talastudio Supabase project, which checks the signature and
+// writes public.outreach_optouts. The script then sets the buyer's Status to "Not interested" on the Email Tracker tab.
+// Uses PUBLIC_TRACKER_URL / PUBLIC_TRACKER_KEY, the same pair as the visitor tracker. Guide: docs/unsubscribe.md
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Unsubscribe | TalaStudio</title>
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="us">
+      <p class="us-mark"><a href="/">TalaStudio</a></p>
+
+      <!-- One of these is shown by the script below -->
+      <section id="ask" hidden>
+        <h1 tabindex="-1">Unsubscribe</h1>
+        <p>Stop emails from TalaStudio to <strong data-who></strong>?</p>
+        <button class="btn" id="go" type="button">Unsubscribe</button>
+        <p class="us-quiet">Opened this by mistake? Close the page. Nothing changes until you press the button.</p>
+      </section>
+
+      <section id="done" hidden>
+        <h1 tabindex="-1">You are unsubscribed</h1>
+        <p>We will not email <strong data-who></strong> again.</p>
+        <form id="why">
+          <fieldset>
+            <legend>If you have a moment, it helps us to know why. This is optional.</legend>
+            <div class="us-opt"><input type="radio" name="reason" id="r1" value="Not the right person" /><label for="r1">I am not the right person for this</label></div>
+            <div class="us-opt"><input type="radio" name="reason" id="r2" value="Already have suppliers" /><label for="r2">We already have our suppliers</label></div>
+            <div class="us-opt"><input type="radio" name="reason" id="r3" value="Not buying now, try later" /><label for="r3">Not buying now, but try again later</label></div>
+            <div class="us-opt"><input type="radio" name="reason" id="r4" value="Not interested" /><label for="r4">Not interested</label></div>
+          </fieldset>
+          <button class="btn us-second" type="submit">Send reason</button>
+        </form>
+      </section>
+
+      <section id="thanks" hidden>
+        <h1 tabindex="-1">Thank you</h1>
+        <p>Your note has reached us. You can close this page.</p>
+      </section>
+
+      <section id="bad" hidden>
+        <h1 tabindex="-1">This link did not work</h1>
+        <p>Reply to our email with the word "unsubscribe", or write to <a href="mailto:david@talastudio.net?subject=Unsubscribe">david@talastudio.net</a>, and we will take you off the list by hand.</p>
+      </section>
+
+      <noscript>
+        <h1>Unsubscribe</h1>
+        <p>Reply to our email with the word "unsubscribe", or write to <a href="mailto:david@talastudio.net?subject=Unsubscribe">david@talastudio.net</a>, and we will take you off the list by hand.</p>
+      </noscript>
+
+      <!-- Only for a failed request: read out at once -->
+      <p id="fail" class="us-fail" role="alert"></p>
+    </main>
+
+    <style>
+      body { min-height: 100vh; display: grid; place-items: center; padding: 2rem 1.25rem; }
+      .us { width: min(30rem, 100%); }
+      .us-mark { font-size: .8rem; letter-spacing: .22em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 2.5rem; }
+      .us-mark a { text-decoration: none; }
+      h1 { font-size: clamp(2rem, 6vw, 2.6rem); margin-bottom: 1rem; }
+      h1:focus { outline: none; }
+      p { margin-bottom: 1.25rem; }
+      strong { font-weight: 500; overflow-wrap: anywhere; }
+      .btn[disabled] { opacity: .55; cursor: default; filter: none; }
+      .btn:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+      .us-quiet { font-size: .85rem; color: var(--text-soft); margin-top: 1.5rem; }
+      form { margin-top: 2.25rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+      fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; }
+      legend { padding: 0; margin-bottom: .9rem; font-size: .9rem; color: var(--text-soft); }
+      .us-opt { display: flex; align-items: baseline; gap: .65rem; padding-block: .3rem; }
+      .us-opt input { accent-color: var(--accent); flex: none; }
+      .us-opt label { cursor: pointer; }
+      .us-second { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+      .us-fail { color: #8c2f1b; margin-top: 1.25rem; }
+      .us-fail:empty { display: none; }
+    </style>
+
+    <script>
+      const api = import.meta.env.PUBLIC_TRACKER_URL;
+      const key = import.meta.env.PUBLIC_TRACKER_KEY;
+
+      const sections = [...document.querySelectorAll<HTMLElement>('main > section')];
+      const fail = document.getElementById('fail')!;
+      // The first state is shown without moving focus; later ones move it to the new heading so it is read out.
+      const show = (id: string, focus = true) => {
+        sections.forEach((s) => { s.hidden = s.id !== id; });
+        fail.textContent = '';
+        if (focus) document.querySelector<HTMLElement>(`#${id} h1`)?.focus();
+      };
+
+      // ?e= is the address in base64url, ?k= the signature that goes with it
+      const q = new URLSearchParams(location.search);
+      const sig = (q.get('k') ?? '').trim().toLowerCase();
+      let email = '';
+      try {
+        const b64 = (q.get('e') ?? '').replace(/-/g, '+').replace(/_/g, '/');
+        email = new TextDecoder().decode(Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))).trim().toLowerCase();
+      } catch {}
+      const valid = Boolean(api && key) && /^[0-9a-f]{20}$/.test(sig) && email.length <= 254 && /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/.test(email);
+
+      type Result = { ok: boolean; already?: boolean; email?: string };
+      const send = async (reason: string | null): Promise<Result> => {
+        const res = await fetch(`${api}/rest/v1/rpc/talastudio_unsubscribe`, {
+          method: 'POST',
+          headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ p_email: email, p_key: sig, p_reason: reason }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        return res.json();
+      };
+
+      if (!valid) {
+        show('bad', false);
+      } else {
+        document.querySelectorAll('[data-who]').forEach((el) => { el.textContent = email; });
+        show('ask', false);
+
+        const go = document.getElementById('go') as HTMLButtonElement;
+        go.addEventListener('click', async () => {
+          go.disabled = true; // one request per press
+          fail.textContent = '';
+          try {
+            show((await send(null)).ok ? 'done' : 'bad');
+          } catch {
+            go.disabled = false;
+            fail.textContent = 'That did not go through. Please try again, or reply to our email and we will take you off the list by hand.';
+          }
+        });
+
+        const why = document.getElementById('why') as HTMLFormElement;
+        why.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const reason = new FormData(why).get('reason');
+          const button = why.querySelector('button')!;
+          button.disabled = true;
+          // They are already unsubscribed: a reason that fails to save is not worth an error
+          if (typeof reason === 'string' && reason) await send(reason).catch(() => {});
+          show('thanks');
+        });
+      }
+    </script>
+  </body>
+</html>

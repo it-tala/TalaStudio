@@ -89,3 +89,10 @@ one literal produced by `json.dumps`.
 - Dashboard access: `insert into talastudio_visitor_tracker.admins (user_id, note) select id, email from auth.users where email = '...';`
   Never set or read passwords; the user resets them in the SQL Editor or the Supabase dashboard.
 - Website keys: only the publishable key (`sb_publishable_...`) goes in the site. Never a secret or service_role key.
+
+# Unsubscribe link (outreach emails)
+
+`/unsubscribe/?e=<address, base64url>&k=<signature>` records an opt-out in `public.outreach_optouts` when the buyer presses
+the button (`public.talastudio_unsubscribe`). The Apps Script in the DC buyers sheet makes the links and sets the buyer's
+Status to "Not interested". Guide: `docs/unsubscribe.md`. SQL: `supabase/visitor-tracker/006_unsubscribe.sql`.
+Keep the page free of the header, footer and visit tracker, and never record anything on page load.
